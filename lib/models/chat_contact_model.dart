@@ -17,5 +17,4 @@ class ChatContact {
       @required this.isRead
   });
 
-
 }

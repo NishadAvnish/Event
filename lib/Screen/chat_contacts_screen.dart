@@ -2,7 +2,7 @@ import 'package:event/models/chat_contact_model.dart';
 import 'package:event/widgets/chat_contact_widget.dart';
 import 'package:flutter/material.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatContactsScreen extends StatelessWidget {
   final _chatContactsList = [
     ChatContact(
       id: "1",

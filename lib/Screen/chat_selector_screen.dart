@@ -1,4 +1,4 @@
-import 'package:event/Screen/chat_screen.dart';
+import 'chat_contacts_screen.dart';
 import 'package:flutter/material.dart';
 
 class ChatSelectorScreen extends StatefulWidget {
@@ -27,8 +27,8 @@ class _ChatSelectorScreenState extends State<ChatSelectorScreen> {
         ),
         body: TabBarView(
           children: <Widget>[
-            ChatScreen(),
-            ChatScreen(),
+            ChatContactsScreen(),
+            ChatContactsScreen(),
           ],
         ),
       ),
