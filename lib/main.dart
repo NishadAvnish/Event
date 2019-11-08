@@ -1,3 +1,5 @@
+import 'package:event/Screen/login_screen.dart';
+
 import './Screen/chat_selector_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ChatSelectorScreen(),
+      home: LoginSignupScreen(),
       theme: ThemeData(
         primaryColor: Colors.blue,
         primaryColorDark: Colors.blue[900],
@@ -21,6 +23,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         ChatDetailsScreen.route : (_) => ChatDetailsScreen(),
+        ChatSelectorScreen.route : (_) => ChatSelectorScreen(),
       },
     );
   }

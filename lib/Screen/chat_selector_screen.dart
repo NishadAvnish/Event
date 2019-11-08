@@ -2,6 +2,7 @@ import 'chat_contacts_screen.dart';
 import 'package:flutter/material.dart';
 
 class ChatSelectorScreen extends StatefulWidget {
+  static const route = "/chat_selector_screen";
   @override
   _ChatSelectorScreenState createState() => _ChatSelectorScreenState();
 }
