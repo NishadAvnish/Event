@@ -52,6 +52,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "202231522124-vlt99uh4u41og4g377c5ujt5g8fpbsur.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "nishad.avnish.event",
+            "certificate_hash": "5ba34a864119a4b61f41ea90e85292fcae4d0e51"
+          }
+        },
+        {
           "client_id": "202231522124-5kl55evin75a3igmd9jigninh00lf4om.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

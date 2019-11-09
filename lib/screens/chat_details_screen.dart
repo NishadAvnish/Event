@@ -29,7 +29,7 @@ class _ChatDetailsScreenState extends State<ChatDetailsScreen> {
       appBar: AppBar(
         title: Text("Contact Name"),
       ),
-      body: ListView.separated(//TODO messages from same member have less margin
+      body: ListView.separated(
         separatorBuilder: (_,index) => SizedBox(
           height: 5,
         ),
