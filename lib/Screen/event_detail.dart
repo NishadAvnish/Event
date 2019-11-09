@@ -1,5 +1,7 @@
+import 'package:event/provider/pallete_generator.dart';
 import 'package:event/widgets/event_detail_speakers_listitems.dart';
 import 'package:flutter/material.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 class EventDetail extends StatefulWidget {
   @override
@@ -7,6 +9,8 @@ class EventDetail extends StatefulWidget {
 }
 
 class _EventDetailState extends State<EventDetail> {
+
+
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
@@ -162,4 +166,6 @@ class _EventDetailState extends State<EventDetail> {
       ]),
     );
   }
+
+  
 }
