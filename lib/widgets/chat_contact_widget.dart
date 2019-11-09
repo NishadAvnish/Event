@@ -1,4 +1,4 @@
-import 'package:event/Screen/chat_details_screen.dart';
+import '../screens/chat_details_screen.dart';
 
 import '../models/chat_contact_model.dart';
 import 'package:flutter/material.dart';

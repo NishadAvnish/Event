@@ -1,6 +1,6 @@
 import 'package:event/widgets/seemore_items.dart';
 
-import '../provider/ChoiceChipProvider.dart' show DashBoardProvider;
+import '../provider/choice_chip_provider.dart' show DashBoardProvider;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +20,7 @@ enum monthDay {
 }
 
 class SeeMore extends StatefulWidget {
+  static const String route='/Seemore';
   @override
   _SeeMoreState createState() => _SeeMoreState();
 }

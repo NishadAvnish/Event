@@ -1,11 +1,13 @@
-
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:event/screens/see_more.dart';
+import 'package:event/widgets/dashboard_drawer.dart';
 import '../widgets/choicechip.dart';
-import '../provider/ChoiceChipProvider.dart';
+import '../provider/choice_chip_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DashBoard extends StatefulWidget {
+  static const route = "/dashboard_screen";
   @override
   _DashBoardState createState() => _DashBoardState();
 }
@@ -17,50 +19,14 @@ class _DashBoardState extends State<DashBoard> {
     final _height = MediaQuery.of(context).size.longestSide;
     final _carouselItem = Provider.of<DashBoardProvider>(context).carouselItem;
     return Scaffold(
+      // for appBar search and menu
+      drawer: DashBoardDrawer(),
+      appBar: AppBar(
+        title: Text("Dashboard"),
+      ),
       body: Stack(
         children: <Widget>[
           Positioned(
-            right: -_height * 0.12,
-            top: -_height * 0.1,
-            child: Container(
-              width: _width,
-              height: _height * 0.5,
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.01),
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
-
-          // for appBar search and menu
-          Positioned(
-            left: _width * 0.01,
-            top: MediaQuery.of(context).padding.top,
-            right: _width * 0.01,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    Icons.menu,
-                    size: _height * 0.03,
-                  ),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.search,
-                    size: _height * 0.03,
-                  ),
-                  onPressed: () {},
-                )
-              ],
-            ),
-          ),
-
-          //Body
-          Positioned(
-            top: _height * 0.1,
             left: _width * 0.03,
             right: _width * 0.03,
             child: Container(
@@ -125,24 +91,19 @@ class _DashBoardState extends State<DashBoard> {
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
                               return Container(
-
-                                 height: _height * 0.22,
-                                        width: _width * 0.5,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(_width * 0.035),
-                                         
-                                        ),
-
+                                height: _height * 0.22,
+                                width: _width * 0.5,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.circular(_width * 0.035),
+                                ),
                                 child: Stack(
                                   children: <Widget>[
-                                     Positioned.fill(
-                                      
+                                    Positioned.fill(
                                       child: Container(
-                                       
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(_width * 0.035),
+                                          borderRadius: BorderRadius.circular(
+                                              _width * 0.035),
                                           image: DecorationImage(
                                               fit: BoxFit.cover,
                                               image: AssetImage(
@@ -160,7 +121,6 @@ class _DashBoardState extends State<DashBoard> {
                                               .subhead
                                               .copyWith(color: Colors.white),
                                         )),
-                                   
                                   ],
                                 ),
                               );
@@ -178,12 +138,18 @@ class _DashBoardState extends State<DashBoard> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
-                              Text(
-                                "See More",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .body2
-                                    .copyWith(color: Colors.red),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .pushNamed(SeeMore.route);
+                                },
+                                child: Text(
+                                  "See More",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .body2
+                                      .copyWith(color: Colors.red),
+                                ),
                               ),
                             ],
                           ),

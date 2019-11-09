@@ -1,12 +1,12 @@
-import 'package:event/Modal/DashBoardModal.dart';
+import 'package:event/Models/DashBoardModal.dart';
 import 'package:flutter/material.dart';
 
 class ChoiceItemProvider with ChangeNotifier{
   
-
   int value=0;
   String name;
   String previousCategory;
+  
 List<String> _category=[
    "School",
    "Hospital",
@@ -39,6 +39,7 @@ class DashBoardProvider with ChangeNotifier{
     List<String> get carouselItem{
       return [..._carouselImage];
     }
+
     
   
    List<DashboardDataModel> _dashdataitems=[

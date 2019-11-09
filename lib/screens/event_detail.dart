@@ -1,7 +1,6 @@
-import 'package:event/provider/pallete_generator.dart';
+
 import 'package:event/widgets/event_detail_speakers_listitems.dart';
 import 'package:flutter/material.dart';
-import 'package:palette_generator/palette_generator.dart';
 
 class EventDetail extends StatefulWidget {
   @override
