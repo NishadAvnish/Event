@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        //home: SeeMore(),
         home: EventDetail(),
         //home:DashBoard(),
         theme: ThemeData(

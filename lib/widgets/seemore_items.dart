@@ -1,4 +1,5 @@
 import 'package:event/widgets/date_card.dart';
+import 'package:event/widgets/see_more_bottom_tile.dart';
 import 'package:flutter/material.dart';
 
 class SeeMoreItems extends StatelessWidget {
@@ -63,54 +64,7 @@ class SeeMoreItems extends StatelessWidget {
             Padding(
               padding:
                   EdgeInsets.only(left: _width * 0.04, right: _width * 0.06),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Icon(Icons.near_me, color: Colors.blue),
-                      Text(
-                        "Place",
-                        style: Theme.of(context)
-                            .textTheme
-                            .subhead
-                            .copyWith(color: Colors.black.withOpacity(0.8)),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        height: _height * 0.05,
-                        width: _height * 0.05,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image:
-                                    NetworkImage(_dashItems[index].eventImage),
-                                fit: BoxFit.cover)),
-                      ),
-                      ChoiceChip(
-                        label: Text("+325",
-                            style: Theme.of(context)
-                                .textTheme
-                                .body1
-                                .copyWith(color: Color.fromRGBO(2, 0, 121, 1))),
-                        selected: true,
-                        selectedColor: Colors.blue[50],
-                      ),
-                      SizedBox(width: 2),
-                      Text(
-                        "Interested",
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle
-                            .copyWith(color: Colors.black.withOpacity(0.4)),
-                      ),
-                    ],
-                  )
-                ],
-              ),
+              child: BottomTile(_dashItems,index),
             )
           ],
         ),
