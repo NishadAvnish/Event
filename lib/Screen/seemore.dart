@@ -1,3 +1,5 @@
+import 'package:event/widgets/seemore_items.dart';
+
 import '../provider/ChoiceChipProvider.dart' show DashBoardProvider;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -61,48 +63,10 @@ class _SeeMoreState extends State<SeeMore> {
               child: ListView.separated(
             itemCount: _dashItems.length,
             itemBuilder: (context, index) {
-              return Container(
-                padding: EdgeInsets.symmetric(horizontal: _width * 0.02),
-                height: _height * 0.26,
-                width: _width,
-                
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(_width * 0.05)),
-                  // for date and time    
-                  child: Stack(
-                    children: <Widget>[
-
-                      Positioned.fill(child:Container(
-                        height: _height * 0.26,
-                        width: _width,
-                        decoration: BoxDecoration(
-                        image: DecorationImage(image:NetworkImage(_dashItems[index].eventImage),fit: BoxFit.cover),
-                        ),
-                       ),
-                      ), 
-                      
-                      
-                      Positioned(
-                          left: _width * 0.02,
-                          top: _height * 0.002,
-                          child: Container(
-                            height: _height * 0.07,
-                            width: _width * 0.1,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[Container()],
-                            ),
-                          ))
-                    ],
-                  ),
-
-                
-                ),
-              );
+              return SeeMoreItems(_dashItems, index);
             },
             separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(height: _height * 0.03);
+              return SizedBox(height: _height * 0.002);
             },
           )),
         ],

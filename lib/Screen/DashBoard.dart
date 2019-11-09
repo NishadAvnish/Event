@@ -1,3 +1,4 @@
+
 import 'package:carousel_slider/carousel_slider.dart';
 import '../widgets/choicechip.dart';
 import '../provider/ChoiceChipProvider.dart';
@@ -16,21 +17,8 @@ class _DashBoardState extends State<DashBoard> {
     final _height = MediaQuery.of(context).size.longestSide;
     final _carouselItem = Provider.of<DashBoardProvider>(context).carouselItem;
     return Scaffold(
-      
       body: Stack(
         children: <Widget>[
-          // Positioned(
-          //   left: 0,
-          //   right: 0,
-          //   top: 0,
-          //   bottom: 0,
-          //   // child: Container(
-          //   //   decoration: BoxDecoration(
-          //   //     color: Colors.white,
-          //   //   ),
-          //   // ),
-          // ),
-
           Positioned(
             right: -_height * 0.12,
             top: -_height * 0.1,
@@ -113,18 +101,9 @@ class _DashBoardState extends State<DashBoard> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  "Choose",
-                                  style: Theme.of(context).textTheme.subtitle,
-                                ),
-                                Text(
-                                  "a category",
-                                  style: Theme.of(context).textTheme.subtitle,
-                                ),
-                              ],
+                            Text(
+                              "Choose a Category",
+                              style: Theme.of(context).textTheme.subtitle,
                             ),
                             ChoiceChipItems(),
                           ],
@@ -145,21 +124,45 @@ class _DashBoardState extends State<DashBoard> {
                             itemCount: 10,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
-                              return Stack(
-                                children: <Widget>[
-                                  Container(
-                                    height: _height * 0.22,
-                                    width: _width * 0.5,
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(_width * 0.035),
-                                      image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: AssetImage(
-                                              "Asset/Image/pic1.jpg")),
+                              return Container(
+
+                                 height: _height * 0.22,
+                                        width: _width * 0.5,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(_width * 0.035),
+                                         
+                                        ),
+
+                                child: Stack(
+                                  children: <Widget>[
+                                     Positioned.fill(
+                                      
+                                      child: Container(
+                                       
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(_width * 0.035),
+                                          image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: AssetImage(
+                                                  "Asset/Image/pic1.jpg")),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    Positioned(
+                                        left: _width * 0.05,
+                                        bottom: _height * 0.02,
+                                        child: Text(
+                                          "Title",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subhead
+                                              .copyWith(color: Colors.white),
+                                        )),
+                                   
+                                  ],
+                                ),
                               );
                             },
                           ),
@@ -214,65 +217,63 @@ class _DashBoardState extends State<DashBoard> {
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
                               return Card(
-                                  shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(_width * 0.035), ),
-                                  elevation: 10,
-                                    child: Container(
-
-                                         
-                                width: _width * 0.4,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
+                                shape: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.circular(_width * 0.035),
                                 ),
-
-                                      child: Column(
-                                      children: <Widget>[
-                                   
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              top: _height * 0.005,
-                                              left: _height * 0.005,
-                                              right: _height * 0.005),
-                                          child: Container(
-                                            height: _height * 0.2,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(
-                                                  _width * 0.035),
-                                              image: DecorationImage(
-                                                  fit: BoxFit.cover,
-                                                  image: AssetImage(
-                                                      "Asset/Image/pic2.jpg")),
+                                elevation: 10,
+                                child: Container(
+                                  width: _width * 0.4,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:
+                                        BorderRadius.circular(_width * 0.035),
+                                  ),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: _height * 0.005,
+                                            left: _height * 0.005,
+                                            right: _height * 0.005),
+                                        child: Container(
+                                          height: _height * 0.2,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                                _width * 0.035),
+                                            image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: AssetImage(
+                                                    "Asset/Image/pic2.jpg")),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          left: _height * 0.005,
+                                          right: 0,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Text("Name",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .subtitle),
+                                            IconButton(
+                                              icon: Icon(Icons.favorite_border,
+                                                  color: Colors.red),
+                                              onPressed: () {
+                                                //favourite button
+                                              },
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              left: _height * 0.005,
-                                              right: 0,
-                                             ),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: <Widget>[
-                                              Text("Name",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .subtitle),
-
-                                               IconButton(
-                                                 icon: Icon(Icons.favorite_border,color:Colors.red),
-                                                 onPressed: (){
-                                                   //favourite button
-                                                 },
-                                               ),       
-                                            ],
-                                          ),
-                                        ),
-
-                                      ],
-                                  
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                    ),
                               );
                             },
                           ),

@@ -1,12 +1,14 @@
 
 import 'package:event/Screen/dashboard.dart';
+import 'package:event/Screen/event_detail.dart';
+import 'package:event/widgets/date_card.dart';
 
 import './Screen/chat_selector_screen.dart';
 import 'package:flutter/material.dart';
 import './provider/ChoiceChipProvider.dart';
-import 'package:event/Screen/seemore.dart';
 import 'package:provider/provider.dart';
 import 'Screen/chat_details_screen.dart';
+import 'Screen/seemore.dart';
 
 main() {
   runApp(MyApp());
@@ -28,8 +30,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        //home: SeeMore(),
-        home:DashBoard(),
+        home: EventDetail(),
+        //home:DashBoard(),
         theme: ThemeData(
           primaryColor: Colors.blue,
           primaryColorDark: Colors.blue[900],
