@@ -1,3 +1,4 @@
+import 'package:event/Modal/DashBoardModal.dart';
 import 'package:flutter/material.dart';
 
 class ChoiceItemProvider with ChangeNotifier{
@@ -25,11 +26,7 @@ List<String> _category=[
    
     }
 }
-class CategoryModal{
-  final String eventName,createrName,createdTime,timeline,description,eventImage,createrImage;
 
-  CategoryModal(this.eventName, this.createrName, this.createdTime, this.timeline, this.description, this.eventImage, this.createrImage);
-}
 
 class DashBoardProvider with ChangeNotifier{
    
@@ -43,5 +40,30 @@ class DashBoardProvider with ChangeNotifier{
       return [..._carouselImage];
     }
     
+  
+   List<DashboardDataModel> _dashdataitems=[
+     DashboardDataModel("Event1", "Avnish",DateTime.now().toString(), DateTime.now().toString(), "Delhi", "This is a test","https://images.unsplash.com/photo-1517263904808-5dc91e3e7044?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+     "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSubu9E-kenyCU50qhNJGrFZ4Afpe43-2l_az9oQXleYQ8vF-SF",) ,  
+
+     DashboardDataModel("Event1", "Avnish",DateTime.now().toString(), DateTime.now().toString(), "Delhi", "This is a test","https://images.unsplash.com/photo-1517263904808-5dc91e3e7044?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+     "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSubu9E-kenyCU50qhNJGrFZ4Afpe43-2l_az9oQXleYQ8vF-SF",) ,  
+
+     DashboardDataModel("Event1", "Avnish",DateTime.now().toString(), DateTime.now().toString(), "Delhi", "This is a test","https://images.unsplash.com/photo-1517263904808-5dc91e3e7044?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+     "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSubu9E-kenyCU50qhNJGrFZ4Afpe43-2l_az9oQXleYQ8vF-SF",) ,  
+
+     DashboardDataModel("Event1", "Avnish",DateTime.now().toString(), DateTime.now().toString(), "Delhi", "This is a test","https://images.unsplash.com/photo-1517263904808-5dc91e3e7044?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+     "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSubu9E-kenyCU50qhNJGrFZ4Afpe43-2l_az9oQXleYQ8vF-SF",) ,  
+
+     DashboardDataModel("Event1", "Avnish",DateTime.now().toString(), DateTime.now().toString(), "Delhi", "This is a test","https://images.unsplash.com/photo-1517263904808-5dc91e3e7044?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+     "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSubu9E-kenyCU50qhNJGrFZ4Afpe43-2l_az9oQXleYQ8vF-SF",) ,  
+
+     DashboardDataModel("Event1", "Avnish",DateTime.now().toString(), DateTime.now().toString(), "Delhi", "This is a test","https://images.unsplash.com/photo-1517263904808-5dc91e3e7044?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+     "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSubu9E-kenyCU50qhNJGrFZ4Afpe43-2l_az9oQXleYQ8vF-SF",) ,    
+
+   ];
+
+   List<DashboardDataModel> get dashdataItems{
+     return [..._dashdataitems];
+   }
     
 }
