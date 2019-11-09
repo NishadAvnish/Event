@@ -1,4 +1,4 @@
-import 'package:event/Modal/ChoiceChipProvider.dart' show DashBoardProvider;
+import '../provider/ChoiceChipProvider.dart' show DashBoardProvider;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

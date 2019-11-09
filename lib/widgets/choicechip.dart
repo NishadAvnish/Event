@@ -1,5 +1,5 @@
 
-import 'package:event/Modal/ChoiceChipProvider.dart';
+import '../provider/ChoiceChipProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +36,7 @@ class _ChoiceChipItemsState extends State<ChoiceChipItems> {
                         label: Text(_choiceProvider.categoryItem[index],style: TextStyle(color:Colors.black,fontSize: 15),),
                         selected: _value==index,
                         selectedColor: Colors.blue[200],
-                        disabledColor: Colors.white,
+                        backgroundColor: Colors.white,
                         onSelected: (selected){
                           setState(() {
                              _value=index;
