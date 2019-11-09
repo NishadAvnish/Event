@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class ChoiceItemProvider with ChangeNotifier{
   
-
   int value=0;
   String name;
   String previousCategory;
+  
 List<String> _category=[
    "School",
    "Hospital",
@@ -42,6 +42,4 @@ class DashBoardProvider with ChangeNotifier{
     List<String> get carouselItem{
       return [..._carouselImage];
     }
-    
-    
 }
