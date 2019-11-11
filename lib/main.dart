@@ -1,7 +1,9 @@
 import 'package:event/provider/event_detail_provider.dart';
 import 'package:event/provider/see_more_provider.dart';
+import 'package:event/screens/event_detail.dart';
 import 'package:event/screens/login_screen.dart';
 import 'package:event/screens/see_more.dart';
+import 'package:event/screens/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'provider/user_profile_provider.dart';
@@ -60,6 +62,8 @@ class MyApp extends StatelessWidget {
           DashBoard.route: (_) => DashBoard(),
           LoginSignupScreen.route: (_) => LoginSignupScreen(),
           SeeMore.route:(_)=>SeeMore(),
+          EventDetail.route:(_)=>EventDetail(),
+          UserProfile.route:(_)=>UserProfile(),
         },
       ),
     );
