@@ -1,6 +1,8 @@
-
+import 'package:event/provider/event_detail_provider.dart';
+import 'package:event/widgets/dottedBox.dart';
 import 'package:event/widgets/event_detail_speakers_listitems.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class EventDetail extends StatefulWidget {
   @override
@@ -8,13 +10,13 @@ class EventDetail extends StatefulWidget {
 }
 
 class _EventDetailState extends State<EventDetail> {
-
+  int index = 0;
 
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
-
+    final _item = Provider.of<EventDetailProvider>(context).item;
     return Container(
       height: _height,
       width: _width,
@@ -24,10 +26,11 @@ class _EventDetailState extends State<EventDetail> {
             color: Colors.white,
           ),
         ),
+        
         Positioned(
-          top: 0,
           left: 0,
           right: 0,
+          top: 0,
           child: LimitedBox(
             maxHeight: _height,
             child:
@@ -36,15 +39,10 @@ class _EventDetailState extends State<EventDetail> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Container(
-                    height: _height * 0.36,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(
-                              "https://images.unsplash.com/photo-1555445091-5a8b655e8a4a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"),
-                          fit: BoxFit.cover),
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(_width * 0.1)),
+                  LimitedBox(
+                    maxHeight: _height * 0.36,
+                    child: DottedBox(
+                      index: index,
                     ),
                   ),
                   SizedBox(
@@ -55,20 +53,22 @@ class _EventDetailState extends State<EventDetail> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-
                         //details of the event include body,title,seen by etc from line 57 to 100
-                        Text(
-                          "Name of the event",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline
-                              .copyWith(fontSize: _height * 0.04),
+                        ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: _width * 0.8),
+                          child: Text(
+                            "${_item[0].title}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline
+                                .copyWith(fontSize: _height * 0.04),
+                          ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              "21 october 2019",
+                              "${DateTime.parse(_item[0].date)..toString().split(" ")[0]}",
                               style: Theme.of(context).textTheme.body2.copyWith(
                                   fontSize: _height * 0.02,
                                   color: Colors.black.withOpacity(0.5)),
@@ -77,13 +77,20 @@ class _EventDetailState extends State<EventDetail> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Icon(Icons.remove_red_eye,
-                                      color: Colors.black),
+                                  Material(
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.favorite_border,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {},
+                                    ),
+                                  ),
                                   SizedBox(
                                     width: 5,
                                   ),
                                   Text(
-                                    "321 ",
+                                    "${_item[0].seenBy} ",
                                     style: Theme.of(context)
                                         .textTheme
                                         .body2
@@ -99,11 +106,11 @@ class _EventDetailState extends State<EventDetail> {
                           height: _height * 0.03,
                         ),
                         Text(
-                          "Wikipedia was launched on January 15, 2001, by Jimmy Wales and Larry Sanger.[13] Sanger coined its name,[14][15] as a portmanteau of  (the Hawaiian word for  and . While it was Initially an English-language encyclopedia, versions in other languages were quickly developed. With at least 5,967,345 articles,[note 3] the English Wikipedia is the largest of the more than 290 Wikipedia encyclopedias. Overall, Wikipedia comprises more than 40 million articles in 301 different languages[17] and by February 2014 it had reached 18 billion page views and nearly 500 million unique visitors per month.[18]",
+                          "${_item[0].description}",
                           style: Theme.of(context).textTheme.body2,
                         ),
 
-                      //This is for speaker list form 104 to 123
+                        //This is for speaker list form 104 to 123
                         SizedBox(
                           height: _height * 0.02,
                         ),
@@ -120,9 +127,9 @@ class _EventDetailState extends State<EventDetail> {
                                 return SizedBox(width: _width * 0.01);
                               },
                               scrollDirection: Axis.horizontal,
-                              itemCount: 10,
+                              itemCount: _item[0].speakerList.length,
                               itemBuilder: (context, index) {
-                                return SpeakerList(index);
+                                return SpeakerList(index, _item[0].speakerList);
                               }),
                         ),
 
@@ -131,7 +138,7 @@ class _EventDetailState extends State<EventDetail> {
                         ),
 
                         //this is for showing about auther details
-                        
+
                         Text("Authors",
                             style: Theme.of(context)
                                 .textTheme
@@ -149,7 +156,7 @@ class _EventDetailState extends State<EventDetail> {
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
                                     image: NetworkImage(
-                                      "https://images.unsplash.com/photo-1555445091-5a8b655e8a4a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+                                      "${_item[0].authorImageUrl}",
                                     ),
                                     fit: BoxFit.cover)),
                           ),
@@ -161,10 +168,19 @@ class _EventDetailState extends State<EventDetail> {
               ),
             ]),
           ),
-        )
+        ),
+        Positioned(
+          left: 2,
+          top: MediaQuery.of(context).padding.top,
+          
+            
+            child: GestureDetector(
+              child: Icon(Icons.arrow_back,size: _height*0.04,),
+              onTap: () {},
+            ),
+         
+        ),
       ]),
     );
   }
-
-  
 }
