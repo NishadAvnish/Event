@@ -8,13 +8,6 @@ import 'dashboard.dart';
 import '../helpers/firebase_auth.dart';
 import '../helpers/google_sign_in.dart' show googleSignIn;
 
-/* GoogleSignIn _googleSignIn = GoogleSignIn(
-  scopes: <String>[
-    'email',
-    'https://www.googleapis.com/auth/contacts.readonly',
-  ],
-); */
-
 class LoginSignupScreen extends StatefulWidget {
   static const route = "/login_screen";
   @override
@@ -45,28 +38,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
 
     _checkEmailVerification();
   }
-
-  /* String _pickFirstNamedContact(Map<String, dynamic> data) {
-    final List<dynamic> connections = data['connections'];
-
-    final Map<String, dynamic> contact = connections?.firstWhere(
-      (dynamic contact) => contact['names'] != null,
-      orElse: () => null,
-    );
-
-    if (contact != null) {
-      final Map<String, dynamic> name = contact['names'].firstWhere(
-        (dynamic name) => name['displayName'] != null,
-        orElse: () => null,
-      );
-
-      if (name != null) {
-        return name['displayName'];
-      }
-    }
-
-    return null;
-  } */
 
   Future<void> _handleSignIn() async {
     try {
@@ -133,7 +104,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           break;
 
         case "ERROR_USER_NOT_FOUND":
-          message = "Please sign in first.";
+          message = "Please sign up first.";
           break;
 
         case "ERROR_WEAK_PASSWORD":
@@ -157,7 +128,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             color: Theme.of(ctx).errorColor,
           ),
           content: Text(message),
-          titleTextStyle: TextStyle(),
         ),
       );
       setState(() {

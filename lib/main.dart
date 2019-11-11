@@ -1,20 +1,16 @@
-
 import 'package:event/provider/event_detail_provider.dart';
 import 'package:event/provider/see_more_provider.dart';
-import 'package:event/screens/event_detail.dart';
-import 'package:event/screens/google_sign_in.dart';
 import 'package:event/screens/login_screen.dart';
 import 'package:event/screens/see_more.dart';
-import 'package:event/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'provider/user_profile_provider.dart';
 import 'screens/dashboard.dart';
 import './provider/choice_chip_provider.dart';
 import 'screens/chat_details_screen.dart';
 import 'screens/chat_selector_screen.dart';
-import 'screens/user_profile.dart';
+import 'screens/splash_screen.dart';
+
 
 main() {
   runApp(MyApp());
@@ -49,9 +45,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         //home: SeeMore(),
         // home: EventDetail(),
-        home:UserProfile(),
+        //home:UserProfile(),
         //home:DashBoard(),
-        //home: SplashScreen(),
+        home: SplashScreen(),
         theme: ThemeData(
           primaryColor: Colors.blue,
           primaryColorDark: Colors.blue[900],
@@ -63,7 +59,6 @@ class MyApp extends StatelessWidget {
           ChatSelectorScreen.route: (_) => ChatSelectorScreen(),
           DashBoard.route: (_) => DashBoard(),
           LoginSignupScreen.route: (_) => LoginSignupScreen(),
-          SignInDemo.route: (_) => SignInDemo(),
           SeeMore.route:(_)=>SeeMore(),
         },
       ),
