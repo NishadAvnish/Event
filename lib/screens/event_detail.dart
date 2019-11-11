@@ -1,10 +1,13 @@
 import 'package:event/provider/event_detail_provider.dart';
+import 'package:event/screens/user_profile.dart';
 import 'package:event/widgets/dottedBox.dart';
 import 'package:event/widgets/event_detail_speakers_listitems.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 class EventDetail extends StatefulWidget {
+  static const route="/eventScreen";
   @override
   _EventDetailState createState() => _EventDetailState();
 }
@@ -149,16 +152,20 @@ class _EventDetailState extends State<EventDetail> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(left: _width * 0.03),
-                          child: Container(
-                            height: _height * 0.09,
-                            width: _height * 0.09,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                      "${_item[0].authorImageUrl}",
-                                    ),
-                                    fit: BoxFit.cover)),
+                          child: GestureDetector(
+                            onTap: () => Navigator.of(context)
+                              .pushNamed(UserProfile.route),
+                                                      child: Container(
+                              height: _height * 0.09,
+                              width: _height * 0.09,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                        "${_item[0].authorImageUrl}",
+                                      ),
+                                      fit: BoxFit.cover)),
+                            ),
                           ),
                         ),
                       ],
@@ -170,13 +177,38 @@ class _EventDetailState extends State<EventDetail> {
           ),
         ),
         Positioned(
-          left: 2,
-          top: MediaQuery.of(context).padding.top,
+          left: 8,
+          top: MediaQuery.of(context).padding.top+2,
           
             
-            child: GestureDetector(
-              child: Icon(Icons.arrow_back,size: _height*0.04,),
-              onTap: () {},
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.black),
+              ),
+              child: GestureDetector(
+                child: Icon(Icons.arrow_back,size:35,),
+                onTap: () {Navigator.of(context).pop();},
+              ),
+            ),
+         
+        ),
+        Positioned(
+          right: 8,
+          top: MediaQuery.of(context).padding.top+2,
+          
+            
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.black),
+              ),
+              child: GestureDetector(
+                child: Icon(Icons.share,size:30,),
+                onTap: () {
+                  Share.share("this is our first application");
+                },
+              ),
             ),
          
         ),

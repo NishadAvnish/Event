@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class UserProfile extends StatelessWidget {
+  static const route="/usreProfile";
   @override
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
@@ -37,7 +38,7 @@ class UserProfile extends StatelessWidget {
                               shape: BoxShape.circle,
                               color: Colors.red,
                               image: DecorationImage(
-                                  image: AssetImage("Asset/Image/pic1.jpg"),
+                                  image: AssetImage("asset/images/pic2.jpg"),
                                   fit: BoxFit.cover),
                             ),
                           ),

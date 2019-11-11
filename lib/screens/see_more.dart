@@ -5,6 +5,8 @@ import '../provider/choice_chip_provider.dart' show DashBoardProvider;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'event_detail.dart';
+
 
 class SeeMore extends StatefulWidget {
   static const String route='/Seemore';
@@ -51,7 +53,8 @@ class _SeeMoreState extends State<SeeMore> {
               child: ListView.separated(
             itemCount: _items.length,
             itemBuilder: (context, index) {
-              return SeeMoreItems(_items, index);
+              return GestureDetector(onTap: () => Navigator.of(context)
+                              .pushNamed(EventDetail.route),child: SeeMoreItems(_items, index));
             },
             separatorBuilder: (BuildContext context, int index) {
               return SizedBox(height: _height * 0.002);
