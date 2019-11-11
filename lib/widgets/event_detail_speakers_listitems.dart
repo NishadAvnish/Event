@@ -1,8 +1,10 @@
+import 'package:event/models/event_detial_model.dart';
 import 'package:flutter/material.dart';
 
 class SpeakerList extends StatelessWidget {
   final index;
-  SpeakerList(this.index);
+  final List<SpeakersModel> _list1;
+  SpeakerList(this.index,this._list1);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class SpeakerList extends StatelessWidget {
                         borderRadius: BorderRadius.circular(_width * 0.03),
                         image: DecorationImage(
                             image: NetworkImage(
-                              "https://images.unsplash.com/photo-1555445091-5a8b655e8a4a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+                              _list1[index].speakerImage,
                             ),
                             fit: BoxFit.cover)),
                   )),
@@ -41,14 +43,14 @@ class SpeakerList extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      "Name",
+                      "${_list1[index].speakerName}",
                       style: Theme.of(context).textTheme.headline,
                     ),
                     SizedBox(
                       height: _height * 0.01,
                     ),
                     Text(
-                      "Best Describe about the use ",
+                      "${_list1[index].about}",
                       style: Theme.of(context).textTheme.body2,
                     )
                   ],

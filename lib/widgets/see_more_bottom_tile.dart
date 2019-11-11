@@ -1,14 +1,14 @@
+import 'package:event/models/see_more_model.dart';
 import 'package:flutter/material.dart';
 
 class BottomTile extends StatelessWidget {
-  var _dashItems;
+  List<SeeMoreModel> _items;
   int index;
-  BottomTile(this._dashItems,this.index);
+  BottomTile(this._items,this.index);
 
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.longestSide;
-    final _width = MediaQuery.of(context).size.shortestSide;
     return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -16,7 +16,7 @@ class BottomTile extends StatelessWidget {
                     children: <Widget>[
                       Icon(Icons.near_me, color: Colors.blue),
                       Text(
-                        "Place",
+                        "${_items[index].place}",
                         style: Theme.of(context)
                             .textTheme
                             .subhead
@@ -33,11 +33,11 @@ class BottomTile extends StatelessWidget {
                             shape: BoxShape.circle,
                             image: DecorationImage(
                                 image:
-                                    NetworkImage(_dashItems[index].eventImage),
+                                    NetworkImage(_items[index].seePersonImage),
                                 fit: BoxFit.cover)),
                       ),
                       ChoiceChip(
-                        label: Text("+325",
+                        label: Text("+ ${_items[index].totalSeen}",
                             style: Theme.of(context)
                                 .textTheme
                                 .body1
