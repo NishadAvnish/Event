@@ -1,13 +1,18 @@
+import 'package:event/provider/event_detail_provider.dart';
+import 'package:event/provider/see_more_provider.dart';
+import 'package:event/screens/event_detail.dart';
+import 'package:event/screens/login_screen.dart';
+import 'package:event/screens/see_more.dart';
+import 'package:event/screens/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'provider/user_profile_provider.dart';
 import 'screens/dashboard.dart';
 import './provider/choice_chip_provider.dart';
 import 'screens/chat_details_screen.dart';
 import 'screens/chat_selector_screen.dart';
-import 'screens/login_screen.dart';
-import 'screens/see_more.dart';
 import 'screens/splash_screen.dart';
+
 
 main() {
   runApp(MyApp());
@@ -26,12 +31,23 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: DashBoardProvider(),
-        )
+        ),
+
+        ChangeNotifierProvider.value(
+          value: SeeMoreProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value:EventDetailProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value:UserProfileProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         //home: SeeMore(),
-        //home: EventDetail(),
+        // home: EventDetail(),
+        //home:UserProfile(),
         //home:DashBoard(),
         home: SplashScreen(),
         theme: ThemeData(
@@ -46,6 +62,8 @@ class MyApp extends StatelessWidget {
           DashBoard.route: (_) => DashBoard(),
           LoginSignupScreen.route: (_) => LoginSignupScreen(),
           SeeMore.route:(_)=>SeeMore(),
+          EventDetail.route:(_)=>EventDetail(),
+          UserProfile.route:(_)=>UserProfile(),
         },
       ),
     );

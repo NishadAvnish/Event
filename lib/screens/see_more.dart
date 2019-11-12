@@ -1,23 +1,12 @@
+import 'package:event/provider/see_more_provider.dart';
 import 'package:event/widgets/seemore_items.dart';
 
 import '../provider/choice_chip_provider.dart' show DashBoardProvider;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-enum monthDay {
-  Jan,
-  Feb,
-  March,
-  April,
-  May,
-  June,
-  July,
-  Aug,
-  Sept,
-  Oct,
-  Nov,
-  Dec
-}
+import 'event_detail.dart';
+
 
 class SeeMore extends StatefulWidget {
   static const String route='/Seemore';
@@ -30,7 +19,7 @@ class _SeeMoreState extends State<SeeMore> {
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.shortestSide;
     final _height = MediaQuery.of(context).size.longestSide;
-    final _dashItems = Provider.of<DashBoardProvider>(context).dashdataItems;
+    final _items = Provider.of<SeeMoreProvider>(context).seeMoreItems;
 
     return Scaffold(
       appBar: AppBar(
@@ -62,9 +51,10 @@ class _SeeMoreState extends State<SeeMore> {
         children: <Widget>[
           Expanded(
               child: ListView.separated(
-            itemCount: _dashItems.length,
+            itemCount: _items.length,
             itemBuilder: (context, index) {
-              return SeeMoreItems(_dashItems, index);
+              return GestureDetector(onTap: () => Navigator.of(context)
+                              .pushNamed(EventDetail.route),child: SeeMoreItems(_items, index));
             },
             separatorBuilder: (BuildContext context, int index) {
               return SizedBox(height: _height * 0.002);
