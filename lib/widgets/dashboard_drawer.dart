@@ -7,6 +7,7 @@ import '../helpers/google_sign_in.dart';
 import '../helpers/firebase_auth.dart';
 import '../screens/login_screen.dart';
 import '../screens/chat_selector_screen.dart';
+import '../screens/edit_event_screen.dart';
 
 class DashBoardDrawer extends StatefulWidget {
   @override
@@ -68,7 +69,6 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                     children: <Widget>[
                       GoogleUserCircleAvatar(
                         identity: _currentGoogleUser,
-                        placeholderPhotoUrl: _currentGoogleUser.photoUrl,
                       ),
                       SizedBox(height: 5),
                       Text(_currentGoogleUser.displayName ?? '',style: TextStyle(fontWeight: FontWeight.bold),),
@@ -130,7 +130,6 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
               ),
               title: Text(
                 "Chat",
-                style: Theme.of(context).textTheme.title,
               ),
               onTap: () =>
                   Navigator.of(context).pushNamed(ChatSelectorScreen.route),
@@ -142,9 +141,18 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
               ),
               title: Text(
                 "Log Out",
-                style: Theme.of(context).textTheme.title,
               ),
               onTap: () => _handleSignOut(context),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.add,
+                color: Colors.grey,
+              ),
+              title: Text(
+                "Add Event",
+              ),
+              onTap: () => Navigator.of(context).pushNamed(EditEventScreen.route),
             ),
           ],
         ),

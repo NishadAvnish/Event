@@ -7,8 +7,7 @@ class EventDetailModel{
 }
 
 class SpeakersModel {
-  final String speakerImage, speakerName,about;
+  String speakerImage, speakerName,about;
 
   SpeakersModel(this.speakerImage, this.speakerName, this.about);
 }
-

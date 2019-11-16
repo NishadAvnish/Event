@@ -61,7 +61,10 @@ class _DashBoardState extends State<DashBoard> {
                   //this is for choose category horizontal listview
                   Text(
                     "Choose a Category",
-                    style: Theme.of(context).textTheme.subtitle.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
 
                   SizedBox(
@@ -161,7 +164,10 @@ class _DashBoardState extends State<DashBoard> {
 
                   Text(
                     "Recommended for you",
-                    style: Theme.of(context).textTheme.subtitle.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     height: 5,
@@ -176,9 +182,10 @@ class _DashBoardState extends State<DashBoard> {
                         return GestureDetector(
                           onTap: () => Navigator.of(context)
                               .pushNamed(EventDetail.route),
-                                                  child: Card(
+                          child: Card(
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(_width * 0.035),
+                              borderRadius:
+                                  BorderRadius.circular(_width * 0.035),
                             ),
                             elevation: 10,
                             child: Container(
@@ -198,12 +205,12 @@ class _DashBoardState extends State<DashBoard> {
                                     child: Container(
                                       height: _height * 0.2,
                                       decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(_width * 0.035),
+                                        borderRadius: BorderRadius.circular(
+                                            _width * 0.035),
                                         image: DecorationImage(
                                             fit: BoxFit.cover,
                                             image: AssetImage(
-                                                "Asset/images/pic2.jpg")),
+                                                "asset/images/pic2.jpg")),
                                       ),
                                     ),
                                   ),

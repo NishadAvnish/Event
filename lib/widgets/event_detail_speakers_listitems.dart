@@ -1,4 +1,4 @@
-import 'package:event/models/event_detial_model.dart';
+import 'package:event/models/event_detail_model.dart';
 import 'package:flutter/material.dart';
 
 class SpeakerList extends StatelessWidget {
