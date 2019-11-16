@@ -15,15 +15,20 @@ class SeeMore extends StatefulWidget {
 class _SeeMoreState extends State<SeeMore> {
   ScrollController _scrollController=ScrollController();
   List<SeeMoreModel> _items;
-  bool isLoading=false;
+  bool isLoading=true;
  bool isItemPresent=true;
   
   _getData([String getMore]){
-    Future.delayed(Duration(seconds:0)).then((_){ getMore==null?Provider.of<SeeMoreProvider>(context).fetchSeeMoreData():Provider.of<SeeMoreProvider>(context).fetchSeeMoreData(getMore);});
+    Future.delayed(Duration(seconds:0)).then((_){ getMore==null?Provider.of<SeeMoreProvider>(context).fetchSeeMoreData():Provider.of<SeeMoreProvider>(context).fetchSeeMoreData(getMore);}).then((_){
+      setState(() {
+        isLoading=false;
+      });
+    });
   }
 
   @override
   void initState() {
+    print(isLoading);
     _getData();
     _scrollController.addListener((){
           final maxExtent=_scrollController.position.maxScrollExtent;
@@ -37,6 +42,7 @@ class _SeeMoreState extends State<SeeMore> {
 
   @override
   Widget build(BuildContext context) {
+    print(isLoading);
     final _width = MediaQuery.of(context).size.shortestSide;
     final _height = MediaQuery.of(context).size.longestSide;
     _items = Provider.of<SeeMoreProvider>(context).seeMoreItems;
@@ -68,7 +74,7 @@ class _SeeMoreState extends State<SeeMore> {
           ),
         ],
       ),
-      body:isLoading?Center(child:Text("Loading....")):Column(
+      body:isLoading?Center(child:CircularProgressIndicator()):Column(
         children: <Widget>[
           Expanded(
               child: ListView.separated(
@@ -76,7 +82,7 @@ class _SeeMoreState extends State<SeeMore> {
             itemCount: _items.length,
             itemBuilder: (context, index) {
               return GestureDetector(onTap: () => Navigator.of(context)
-                              .pushNamed(EventDetail.route),child: SeeMoreItems(_items, index));
+                              .pushNamed(EventDetail.route,arguments:_items[index].id ),child: SeeMoreItems(_items, index));
             },
             separatorBuilder: (BuildContext context, int index) {
               return SizedBox(height: _height * 0.002);

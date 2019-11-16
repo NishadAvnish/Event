@@ -1,11 +1,11 @@
 
+import 'package:event/provider/dash_board_provider.dart';
 import 'package:event/provider/event_detail_provider.dart';
 import 'package:event/widgets/choicechip.dart';
 import 'package:event/widgets/choose_category_item.dart';
 import 'package:event/widgets/recommanded_items.dart';
 import 'package:event/widgets/slider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'see_more.dart';
 import '../widgets/dashboard_drawer.dart';
@@ -22,7 +22,7 @@ class _DashBoardState extends State<DashBoard> {
   
   @override
   void didChangeDependencies() {
-  
+    
     super.didChangeDependencies();
   }
 
@@ -37,10 +37,8 @@ class _DashBoardState extends State<DashBoard> {
           body: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-              //  StreamBuilder(
-              //    stream: Provider.of<CarouselProvider>(context).carouselFetch().asStream(),
-              //    builder:(context,snapshot){return CarouselSlide();}
-              //    ),
+              
+              CarouselSlide(),
                SizedBox(
               height: 20,
                ),

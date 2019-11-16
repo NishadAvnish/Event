@@ -20,8 +20,6 @@ class _EventDetailState extends State<EventDetail> {
    
    @override
   void initState() {
-   // Future.delayed(Duration(seconds: 0)).then((_){
-       
     
     super.initState();
   }
@@ -29,8 +27,6 @@ class _EventDetailState extends State<EventDetail> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print("did ChangeDependecies call again");
-    print(i);
    if(i==0){ id=ModalRoute.of(context).settings.arguments as String;
 
     Provider.of<EventDetailProvider>(context).recommandedFetch(id).then((_){

@@ -22,8 +22,8 @@ class CrudOperation {
   }
 
 
-  static Future<void> fetch(){
-    Firestore.instance.collection("Post/Category/InformationTech").getDocuments().then((snapshot){
+  static Future<void> fetch() async {
+    await Firestore.instance.collection("Post/Category/InformationTech").getDocuments().then((snapshot){
              if(snapshot!=null){
                snapshot.documents.forEach((doc){
                   print(doc.data['speaker'][0]["image"]);

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event/models/dashboard_model.dart';
 import 'package:flutter/material.dart';
@@ -12,19 +10,16 @@ class DashBoardProvider with ChangeNotifier{
 
   DashBoardProvider( this.choiceCategory,//this._categoryItems
   ); 
-   List<DashboardDataModel> _recommandedItem=[];
+  
 
    List<DashboardDataModel> get CategoryItems{
      return [..._categoryItems];
    }
 
-   List<DashboardDataModel> get recommandedItems{
-     return [..._recommandedItem];
-   }
+  
 
    Future<void> categoryFetch(index) async {
         List<DashboardDataModel> _tempList=[];
-        
         if(previousIndex!=index)
          {try{ await _documentRef.collection("Post").where("Category", isEqualTo:choiceCategory[index]).limit(10).getDocuments().then((snapShot){
            _categoryItems.clear();
@@ -50,26 +45,38 @@ class DashBoardProvider with ChangeNotifier{
       notifyListeners();
    }}  
 
-Future<void> recommandedFetch() async {
-        List<DashboardDataModel> _tempList=[];
-        
-        
+
+}
+
+class RecommandedProvider with ChangeNotifier{
+   List<DashboardDataModel> _recommandedItem=[];
+
+   List<DashboardDataModel> get recommandedItems{
+     return [..._recommandedItem];
+   }
+  Future<void> recommandedFetch() async {
+        List<DashboardDataModel> _tempList1=[];
          try{ await _documentRef.collection("Post").orderBy("Seenby",descending: true).limit(45).getDocuments().then((snapShot){
-           _categoryItems.clear();
+           
+           
              if(snapShot!=null){
                snapShot.documents.forEach((doc){
-                  
-                  print(doc.data); 
-               }
-               );
 
-             }
-         });}catch(e){
+                  _tempList1.add(DashboardDataModel(
+                      eventName: doc.data["title"],
+                      id: doc.documentID,
+                      eventImage:doc.data["EventImages"][0],
+                      category:doc.data["Category"],
+                  ));   
+               }        
+               ); }
+
+         });
+         }catch(e){
+           print(e);
          }
-
-      _categoryItems=_tempList;
+      _recommandedItem=_tempList1; 
       notifyListeners();
-     
    } 
 
 }
@@ -82,18 +89,21 @@ class CarouselProvider with ChangeNotifier{
 
     Future<Stream> carouselFetch() async {
        
-       List<dynamic> list1=[];
-       try{await _documentRef.collection("Carousal").getDocuments().then((ds){
-         if(ds!=null){
-                ds.documents.forEach((document){
+       List<String> list1=[];
+       try{await _documentRef.collection("Carousal").getDocuments().then((snapshot){
+         if(snapshot!=null){
+                snapshot.documents.forEach((document){
                 list1=[...document.data["Images"]];
                 });
          }
+
+          
+          
        });}catch(e){
          print(e);
        }   
        _carouselImage=[];
-       _carouselImage=[...list1];
+      _carouselImage=[...list1];
        notifyListeners();
   }
 }
