@@ -6,13 +6,13 @@ import 'package:event/screens/see_more.dart';
 import 'package:event/screens/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'provider/dash_board_provider.dart';
 import 'provider/user_profile_provider.dart';
 import 'screens/dashboard.dart';
 import './provider/choice_chip_provider.dart';
 import 'screens/chat_details_screen.dart';
 import 'screens/chat_selector_screen.dart';
 import 'screens/splash_screen.dart';
-
 
 main() {
   runApp(MyApp());
@@ -21,26 +21,35 @@ main() {
 }
 
 class MyApp extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
-          value: ChoiceItemProvider(),
+          value: ChoiceChipProvider(),
+        ),
+        ChangeNotifierProxyProvider<ChoiceChipProvider, DashBoardProvider>(
+          builder: (ctx, cpro, previousState) => DashBoardProvider(
+             
+              cpro.chooseCategoryItem,
+             // previousState == null ? [] : previousState.dashboardCategoryItems
+             ),
+          
+        ),
+       ChangeNotifierProxyProvider<ChoiceChipProvider, SeeMoreProvider>(
+          builder: (ctx, cpro, previousState) => SeeMoreProvider(
+              cpro.chooseCategoryItem,cpro.value
+             // previousState == null ? [] : previousState.dashboardCategoryItems
+             ),
+       ),     
+        ChangeNotifierProvider.value(
+          value: EventDetailProvider(),
         ),
         ChangeNotifierProvider.value(
-          value: DashBoardProvider(),
-        ),
-
-        ChangeNotifierProvider.value(
-          value: SeeMoreProvider(),
+          value: UserProfileProvider(),
         ),
         ChangeNotifierProvider.value(
-          value:EventDetailProvider(),
-        ),
-        ChangeNotifierProvider.value(
-          value:UserProfileProvider(),
+          value: CarouselProvider(),
         ),
       ],
       child: MaterialApp(
@@ -61,9 +70,9 @@ class MyApp extends StatelessWidget {
           ChatSelectorScreen.route: (_) => ChatSelectorScreen(),
           DashBoard.route: (_) => DashBoard(),
           LoginSignupScreen.route: (_) => LoginSignupScreen(),
-          SeeMore.route:(_)=>SeeMore(),
-          EventDetail.route:(_)=>EventDetail(),
-          UserProfile.route:(_)=>UserProfile(),
+          SeeMore.route: (_) => SeeMore(),
+          EventDetail.route: (_) => EventDetail(),
+          UserProfile.route: (_) => UserProfile(),
         },
       ),
     );

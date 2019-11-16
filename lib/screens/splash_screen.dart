@@ -1,4 +1,7 @@
+
+import 'package:event/helpers/firestore_crud.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'dashboard.dart';
 import 'login_screen.dart';
@@ -16,7 +19,18 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     _checkLogInStatus();
+    //CrudOperation.add();
+   // CrudOperation.fetch();
+   
   }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+ 
+   
+  }
+ 
 
   void _checkLogInStatus() async {
     final auth = Auth();
