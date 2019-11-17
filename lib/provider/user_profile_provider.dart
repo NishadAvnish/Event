@@ -1,9 +1,47 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event/models/user_profile_model.dart';
 import 'package:flutter/cupertino.dart';
 
 class UserProfileProvider with ChangeNotifier{
-  List<UserProfileModel> userItem=[
-     UserProfileModel("https://images.unsplash.com/photo-1514575110897-1253ff7b2ccb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60", "Avnish", "An Engineer, Creater", ["https://images.unsplash.com/photo-1514575110897-1253ff7b2ccb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60","https://images.unsplash.com/photo-1514575110897-1253ff7b2ccb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60","https://images.unsplash.com/photo-1514575110897-1253ff7b2ccb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60","https://images.unsplash.com/photo-1514575110897-1253ff7b2ccb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60","https://images.unsplash.com/photo-1514575110897-1253ff7b2ccb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"], "avnish"),
+  final _documentRef=Firestore.instance;
+  List<UserProfileModel> _userItem=[];
 
-  ];
+  List<UserProfileModel> get userItem{
+    return[..._userItem];
+  }
+
+  Future<void> fetch(String id) async {
+        print("fetch called");
+        List<String> _tempPostImage=[];
+        List<String> _productId=[];
+        String _userName;
+        String _imageUrl;
+        String _bioData;
+        try{await _documentRef.collection("User").document("$id").get().then((snapShot1){
+          print(snapShot1);
+             _userName=snapShot1.data["name"];
+             _imageUrl=snapShot1.data["photoUrl"];
+             _bioData=snapShot1.data["bioData"];
+
+        });
+        }catch(e){
+          print(e);
+        }
+        
+         try{ await _documentRef.collection("Post").where("createrId", isEqualTo: id).getDocuments().then((snapShot){
+             if(snapShot!=null){
+               snapShot.documents.forEach((doc){
+                _tempPostImage.add(doc.data["EventImages"][0]);
+                _productId.add(doc.documentID);
+               }
+               );
+             }
+         });
+         }catch(e){
+         }
+
+     _userItem.insert(0, UserProfileModel(_imageUrl, _userName, _bioData, _tempPostImage, _productId));
+    
+    notifyListeners();
+   }  
 }

@@ -26,7 +26,7 @@ class DashBoardProvider with ChangeNotifier{
              if(snapShot!=null){
                snapShot.documents.forEach((doc){
                  _tempList.add(DashboardDataModel(
-                   eventName:doc.data["Creater"],
+                   eventName:doc.data["title"],
                    id:doc.documentID,
                    eventImage:doc.data["EventImages"][0],
                    category:doc.data["Category"],

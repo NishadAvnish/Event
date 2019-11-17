@@ -17,7 +17,7 @@ class RecommandedItem extends StatelessWidget {
                       future: Provider.of<RecommandedProvider>(context,listen: false).recommandedFetch(),
                       builder:(context,snapShot) {
                      if(snapShot.connectionState==ConnectionState.waiting)
-                     {print(snapShot.connectionState);
+                     {
                       return Align(alignment: Alignment.center,child:CircularProgressIndicator());}
                       else if(snapShot.error!=null)
                       return  Align(alignment: Alignment.center,child:Text("An Error Occurs",style: Theme.of(context).textTheme.body2,));

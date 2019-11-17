@@ -16,21 +16,33 @@ List<EventDetailModel> get item{
 Future<void> recommandedFetch(String id) async {
         List<EventDetailModel> _tempitemList=[];
         List<SpeakersModel> _tempspeakerlist=[];
+        String userProfile;
         
         
-        try{ await _documentRef.collection("Post").document(id).get().then((snapShot){
+        try{ await _documentRef.collection("Post").document(id).get().then((snapShot) async {
  
                    snapShot.data["speaker"].forEach((doc){
                       
                        _tempspeakerlist.add(SpeakersModel(speakerImage:doc["image"],speakerName: doc["name"],about: doc["pos"]));
                        
                    });
+
+                 try { 
+                   await _documentRef.collection("User").document(snapShot.data["createrId"]).get().then((sShot){
+                    
+                     userProfile=sShot.data["photoUrl"];
+                  });}catch(e){
+                    print(e);
+                  }
+
                    _tempitemList.insert(0,EventDetailModel(
                      snapShot.data["title"],
                      snapShot.data["Date"],
                      snapShot.data["Seenby"].toString(),
-                     snapShot.data["createrImage"],
+                     userProfile,
                      snapShot.data["Description"],
+                     snapShot.data["createrId"],
+                     
                      _tempspeakerlist,
                      [...snapShot.data["EventImages"]],
                    ));

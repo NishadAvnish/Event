@@ -1,21 +1,48 @@
 import 'package:event/provider/user_profile_provider.dart';
+import 'package:event/screens/event_detail.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
-class UserProfile extends StatelessWidget {
-  static const route="/usreProfile";
+class UserProfile extends StatefulWidget {
+  static const route = "/usreProfile";
+
+  @override
+  _UserProfileState createState() => _UserProfileState();
+}
+
+class _UserProfileState extends State<UserProfile> {
+  String _currentUserId;
+  String createrId;
+  int i = 0;
+  bool isloading=true;
+  @override
+  Future<void> didChangeDependencies() async {
+    final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    _currentUserId = user.uid;
+
+    createrId = ModalRoute.of(context).settings.arguments.toString();
+    Provider.of<UserProfileProvider>(context).fetch(createrId).then((_){
+      setState((){
+        isloading=false;
+      });
+    });
+
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
     final _items = Provider.of<UserProfileProvider>(context).userItem[0];
-    String _currentUserId = "avnish";
+
     return Scaffold(
       appBar: AppBar(
         title: Text("profile"),
       ),
-      body: ListView(
+      body:isloading?Align(alignment:Alignment.center,child: Center(child:CircularProgressIndicator())) :ListView(
         children: <Widget>[
           Padding(
               padding: EdgeInsets.only(
@@ -38,7 +65,7 @@ class UserProfile extends StatelessWidget {
                               shape: BoxShape.circle,
                               color: Colors.red,
                               image: DecorationImage(
-                                  image: AssetImage("asset/images/pic2.jpg"),
+                                  image: NetworkImage(_items.userImage),
                                   fit: BoxFit.cover),
                             ),
                           ),
@@ -47,7 +74,7 @@ class UserProfile extends StatelessWidget {
                       Positioned(
                         right: 0,
                         bottom: 0,
-                        child: _currentUserId == _items.userid
+                        child: _currentUserId == createrId
                             ? IconButton(
                                 icon: Icon(
                                   Icons.add_a_photo,
@@ -68,7 +95,7 @@ class UserProfile extends StatelessWidget {
             height: _height * 0.01,
           ),
           Text(
-            "Avnish Kumar",
+            _items.name,
             style: Theme.of(context)
                 .textTheme
                 .headline
@@ -81,7 +108,7 @@ class UserProfile extends StatelessWidget {
               constraints: BoxConstraints(
                   minWidth: _width * 0.3, maxWidth: _width * 0.6),
               child: Text(
-                "Engineer,Reader",
+                _items.biodata,
                 style: Theme.of(context).textTheme.subhead,
                 textAlign: TextAlign.center,
               ),
@@ -111,7 +138,8 @@ class UserProfile extends StatelessWidget {
                     ),
                   ),
                   content: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 5.0),
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 5.0),
                     constraints: BoxConstraints(
                         minHeight: _height * 0.2, maxHeight: _height * 0.8),
                     width: _width,
@@ -125,11 +153,17 @@ class UserProfile extends StatelessWidget {
                           mainAxisSpacing: _height * 0.005),
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: NetworkImage(_items.posts[index]),
-                                fit: BoxFit.cover),
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(EventDetail.route,
+                                arguments: _items.productid[index]);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(_items.posts[index]),
+                                  fit: BoxFit.cover),
+                            ),
                           ),
                         );
                       },

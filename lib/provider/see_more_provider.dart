@@ -11,6 +11,7 @@ class SeeMoreProvider with ChangeNotifier{
    final List<String>choiceCategory;
    final value;
    bool _isItemPresent=true;
+   
 
   SeeMoreProvider( this.choiceCategory,this.value); 
 
@@ -24,6 +25,10 @@ class SeeMoreProvider with ChangeNotifier{
        return _isItemPresent;
   }
 
+  String get categoryValue{
+    return choiceCategory[value];
+  }
+
   void changeItemPresent(){
  _isItemPresent=false;
  notifyListeners();
@@ -31,7 +36,6 @@ class SeeMoreProvider with ChangeNotifier{
 
   Future<void> fetchSeeMoreData([String getMore]) async {
         List<SeeMoreModel> _tempList=[];
-        print(choiceCategory[value]);
         Query q;
         if(getMore==null)
         q=docRef.collection("Post").where("Category", isEqualTo:choiceCategory[value]).limit(5);
@@ -66,8 +70,6 @@ class SeeMoreProvider with ChangeNotifier{
       QuerySnapshot querySnapshot=await q.getDocuments();
       lastSnapshot=querySnapshot.documents[querySnapshot.documents.length-1];
       _seeMoreList=_tempList;
-      print("getDataProvidercalled");
-      print(_seeMoreList);
 
       notifyListeners();
    }

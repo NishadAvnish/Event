@@ -1,3 +1,4 @@
+import 'package:event/screens/dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -135,6 +136,19 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
               onTap: () =>
                   Navigator.of(context).pushNamed(ChatSelectorScreen.route),
             ),
+           
+           ListTile(
+              leading: Icon(
+                Icons.home,
+                color: Colors.grey,
+              ),
+              title: Text(
+                "Home",
+                style: Theme.of(context).textTheme.title,
+              ),
+              onTap: () => Navigator.of(context).pushReplacementNamed(DashBoard.route),
+            ),
+
             ListTile(
               leading: Icon(
                 Icons.power_settings_new,

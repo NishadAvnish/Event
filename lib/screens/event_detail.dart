@@ -179,7 +179,7 @@ class _EventDetailState extends State<EventDetail> {
                           padding: EdgeInsets.only(left: _width * 0.03),
                           child: GestureDetector(
                             onTap: () => Navigator.of(context)
-                              .pushNamed(UserProfile.route),
+                              .pushNamed(UserProfile.route,arguments:_item[0].createrId),
                                                       child: Container(
                               height: _height * 0.09,
                               width: _height * 0.09,

@@ -1,5 +1,6 @@
 import 'package:event/models/see_more_model.dart';
 import 'package:event/provider/see_more_provider.dart';
+import 'package:event/widgets/dashboard_drawer.dart';
 import 'package:event/widgets/seemore_items.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,33 +43,26 @@ class _SeeMoreState extends State<SeeMore> {
 
   @override
   Widget build(BuildContext context) {
-    print(isLoading);
+  
     final _width = MediaQuery.of(context).size.shortestSide;
     final _height = MediaQuery.of(context).size.longestSide;
     _items = Provider.of<SeeMoreProvider>(context).seeMoreItems;
      isItemPresent=Provider.of<SeeMoreProvider>(context).isItemPresent;
    
     return Scaffold(
+      drawer: DashBoardDrawer(),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(
-            Icons.menu,
-            color: Colors.black,
-          ),
-          iconSize: _width * 0.05,
-          onPressed: () {},
-        ),
+        
         title: Text(
-          "CATEGORY",
-          style: TextStyle(color: Colors.black),
+          Provider.of<SeeMoreProvider>(context,listen: false).categoryValue,
+          style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
             icon: Icon(
               Icons.search,
-              color: Colors.black,
+              color: Colors.white,
             ),
             onPressed: () {},
           ),
