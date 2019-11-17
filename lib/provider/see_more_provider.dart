@@ -11,17 +11,22 @@ class SeeMoreProvider with ChangeNotifier{
    final List<String>choiceCategory;
    final value;
    bool _isItemPresent=true;
+   
 
   SeeMoreProvider( this.choiceCategory,this.value); 
 
-   List<SeeMoreModel> _seeMoreModel=[];
+   List<SeeMoreModel> _seeMoreList=[];
 
    List<SeeMoreModel> get seeMoreItems{
-     return [..._seeMoreModel];
+     return [..._seeMoreList];
    }
 
   bool get isItemPresent{
        return _isItemPresent;
+  }
+
+  String get categoryValue{
+    return choiceCategory[value];
   }
 
   void changeItemPresent(){
@@ -51,7 +56,7 @@ class SeeMoreProvider with ChangeNotifier{
                    place:doc.data["place"],
                    eventImageUrl: doc.data["EventImages"][0],
                    seePersonImage: "https://images.unsplash.com/photo-1573848700501-f909e91dbe13?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-                   totalSeen: doc.data["Seenby"]
+                   totalSeen: doc.data["Seenby"].toString()
                  ),
                  );
                }
@@ -59,12 +64,12 @@ class SeeMoreProvider with ChangeNotifier{
 
              }
          });}catch(e){
+           print(e);
          }
 
       QuerySnapshot querySnapshot=await q.getDocuments();
       lastSnapshot=querySnapshot.documents[querySnapshot.documents.length-1];
-      _seeMoreModel=_tempList;
-      print("getDataProvidercalled");
+      _seeMoreList=_tempList;
 
       notifyListeners();
    }

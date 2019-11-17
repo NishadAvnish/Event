@@ -1,8 +1,9 @@
 class UserProfileModel {
-    String userImage,name,biodata,current, userid;
+    String userImage,name,biodata,current;
+    List<String> productid;
 
     List<String>posts;
 
-  UserProfileModel(this.userImage, this.name, this.biodata, this.posts,this.userid);
+  UserProfileModel(this.userImage, this.name, this.biodata, this.posts,this.productid);
 
 }

@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -35,7 +35,6 @@ dependencies:
   share: ^0.6.3+1
   intl: ^0.16.0
   firebase_storage:
-  flutter_swiper: ^1.1.6
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +57,7 @@ flutter:
    - asset/images/pic1.jpg
    - asset/images/pic2.jpg
    - asset/images/pic3.jpg
+   - asset/progress.flr
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

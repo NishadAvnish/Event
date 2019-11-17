@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event/models/dashboard_model.dart';
 import 'package:flutter/material.dart';
@@ -15,19 +13,13 @@ class DashBoardProvider with ChangeNotifier {
   DashBoardProvider(
     this.choiceCategory, //this._categoryItems
   );
-  List<DashboardDataModel> _recommandedItem = [];
 
-  List<DashboardDataModel> get CategoryItems {
+  List<DashboardDataModel> get categoryItems {
     return [..._categoryItems];
-  }
-
-  List<DashboardDataModel> get recommandedItems {
-    return [..._recommandedItem];
   }
 
   Future<void> categoryFetch(index) async {
     List<DashboardDataModel> _tempList = [];
-
     if (previousIndex != index) {
       try {
         await _documentRef
@@ -41,7 +33,7 @@ class DashBoardProvider with ChangeNotifier {
             snapShot.documents.forEach((doc) {
               _tempList.add(
                 DashboardDataModel(
-                  eventName: doc.data["Creater"],
+                  eventName: doc.data["title"],
                   id: doc.documentID,
                   eventImage: doc.data["EventImages"][0],
                   category: doc.data["Category"],
@@ -58,10 +50,17 @@ class DashBoardProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+}
+
+class RecommandedProvider with ChangeNotifier {
+  List<DashboardDataModel> _recommandedItem = [];
+
+  List<DashboardDataModel> get recommandedItems {
+    return [..._recommandedItem];
+  }
 
   Future<void> recommandedFetch() async {
-    List<DashboardDataModel> _tempList = [];
-
+    List<DashboardDataModel> _tempList1 = [];
     try {
       await _documentRef
           .collection("Post")
@@ -69,16 +68,21 @@ class DashBoardProvider with ChangeNotifier {
           .limit(45)
           .getDocuments()
           .then((snapShot) {
-        _categoryItems.clear();
         if (snapShot != null) {
           snapShot.documents.forEach((doc) {
-            print(doc.data);
+            _tempList1.add(DashboardDataModel(
+              eventName: doc.data["title"],
+              id: doc.documentID,
+              eventImage: doc.data["EventImages"][0],
+              category: doc.data["Category"],
+            ));
           });
         }
       });
-    } catch (e) {}
-
-    _categoryItems = _tempList;
+    } catch (e) {
+      print(e);
+    }
+    _recommandedItem = _tempList1;
     notifyListeners();
   }
 }

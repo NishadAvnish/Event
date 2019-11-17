@@ -1,3 +1,4 @@
+import 'package:event/screens/dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -125,6 +126,16 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
             _buildHeader(context, _headerHeight),
             ListTile(
               leading: Icon(
+                Icons.add,
+                color: Colors.grey,
+              ),
+              title: Text(
+                "Add Event",
+              ),
+              onTap: () => Navigator.of(context).pushNamed(EditEventScreen.route),
+            ),
+            ListTile(
+              leading: Icon(
                 Icons.chat_bubble,
                 color: Colors.grey,
               ),
@@ -143,16 +154,6 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                 "Log Out",
               ),
               onTap: () => _handleSignOut(context),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.add,
-                color: Colors.grey,
-              ),
-              title: Text(
-                "Add Event",
-              ),
-              onTap: () => Navigator.of(context).pushNamed(EditEventScreen.route),
             ),
           ],
         ),

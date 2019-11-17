@@ -53,6 +53,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: CarouselProvider(),
         ),
+        ChangeNotifierProvider.value(
+          value: RecommandedProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

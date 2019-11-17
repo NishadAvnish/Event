@@ -1,5 +1,5 @@
 class EventDetailModel {
-  final String title, date, seenBy, authorImageUrl, description;
+  final String title, date, seenBy, authorImageUrl, description,createrId;
   final List<SpeakersModel> speakerList;
   final List<String> eventImageUrls;
 
@@ -8,6 +8,7 @@ class EventDetailModel {
   this.seenBy, 
   this.authorImageUrl,
   this.description, 
+  this.createrId,
   this.speakerList, 
   this.eventImageUrls
   );

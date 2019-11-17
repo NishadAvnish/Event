@@ -1,4 +1,3 @@
-
 import 'package:event/widgets/choicechip.dart';
 import 'package:event/widgets/choose_category_item.dart';
 import 'package:event/widgets/recommanded_items.dart';
@@ -8,37 +7,34 @@ import 'package:flutter/material.dart';
 import 'see_more.dart';
 import '../widgets/dashboard_drawer.dart';
 
-
 class DashBoard extends StatefulWidget {
   static const route = "/dashboard_screen";
-  
+
   @override
   _DashBoardState createState() => _DashBoardState();
 }
 
 class _DashBoardState extends State<DashBoard> {
-  
   @override
   void didChangeDependencies() {
-  
     super.didChangeDependencies();
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
-        return Scaffold(
-          // for appBar search and menu
-          drawer: DashBoardDrawer(),
-          appBar: AppBar(
-            title: Text("Dashboard"),
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-              CarouselSlide(),
-               SizedBox(
+    return Scaffold(
+      // for appBar search and menu
+      drawer: DashBoardDrawer(),
+      appBar: AppBar(
+        title: Text("Dashboard"),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            CarouselSlide(),
+            SizedBox(
               height: 20,
-               ),
+            ),
             Padding(
               padding: const EdgeInsets.only(
                 left: 10,
@@ -55,7 +51,7 @@ class _DashBoardState extends State<DashBoard> {
                         .subtitle
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
-                  
+
                   SizedBox(
                     height: 5,
                   ),
