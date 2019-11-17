@@ -1,13 +1,20 @@
-class EventDetailModel{
-  final String title, date, seenBy,authorImageUrl,description;
+class EventDetailModel {
+  final String title, date, seenBy, authorImageUrl, description;
   final List<SpeakersModel> speakerList;
   final List<String> eventImageUrls;
 
-  EventDetailModel(this.title, this.date, this.seenBy, this.authorImageUrl, this.description, this.speakerList, this.eventImageUrls);
+  EventDetailModel(this.title, 
+  this.date, 
+  this.seenBy, 
+  this.authorImageUrl,
+  this.description, 
+  this.speakerList, 
+  this.eventImageUrls
+  );
 }
 
 class SpeakersModel {
-  String speakerImage, speakerName,about;
+  String speakerImage, speakerName,profile;
 
-  SpeakersModel(this.speakerImage, this.speakerName, this.about);
+  SpeakersModel({this.speakerImage, this.speakerName, this.profile});
 }

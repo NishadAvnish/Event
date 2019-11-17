@@ -1,7 +1,9 @@
-import 'package:event/models/event_detail_model.dart';
-import 'package:event/widgets/event_speakers_list.dart';
+import 'package:event/widgets/add_event_categories.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../models/event_detail_model.dart';
+import '../widgets/event_speakers_list.dart';
 
 import '../widgets/event_image_url_list.dart';
 
@@ -14,7 +16,8 @@ class EditEventScreen extends StatefulWidget {
 class _EditEventScreenState extends State<EditEventScreen> {
   var _selectedDate = "";
   var _urlsList = [""];
-  var _speakersList = [SpeakersModel("", "", "")];
+  var _speakersList = [SpeakersModel(speakerName: "", profile: "", speakerImage: "",)];
+  List<String>_categoriesList = [];
   final _form = GlobalKey<FormState>();
 
   void _addUrl(String url) {
@@ -23,6 +26,14 @@ class _EditEventScreenState extends State<EditEventScreen> {
 
   void _addSpeaker(SpeakersModel speaker){
     _speakersList.insert(0, speaker);
+  }
+
+  void _addCategory(String category){
+    _categoriesList.add(category);
+  }
+
+  void _deleteCategory(String category){
+    _categoriesList.remove(category);
   }
 
   Future<void> _showDateSelector() async {
@@ -67,7 +78,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
                     labelText: "Event Name",
                   ),
                   validator: (value) {
-                    if (value.isEmpty) return 'Please provide a value.';
+                    if (value.isEmpty) return 'Please provide event name.';
                     return null;
                   },
                 ),
@@ -91,10 +102,12 @@ class _EditEventScreenState extends State<EditEventScreen> {
                     labelText: "Event Description",
                   ),
                   validator: (value) {
-                    if (value.isEmpty) return 'Please provide a value.';
+                    if (value.isEmpty) return 'Please provide description.';
                     return null;
                   },
                 ),
+                SizedBox(height: 10),
+                AddEventCategory(_categoriesList, _addCategory, _deleteCategory,),
                 SizedBox(height: 10),
                 EventImageUrlList(_urlsList, _addUrl),
                 SizedBox(height: 10),

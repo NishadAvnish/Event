@@ -8,6 +8,7 @@ import 'screens/event_detail.dart';
 import 'screens/login_screen.dart';
 import 'screens/see_more.dart';
 import 'screens/user_profile.dart';
+import 'provider/dash_board_provider.dart';
 import 'provider/user_profile_provider.dart';
 import 'screens/dashboard.dart';
 import './provider/choice_chip_provider.dart';
@@ -27,19 +28,30 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
-          value: ChoiceItemProvider(),
+          value: ChoiceChipProvider(),
         ),
-        ChangeNotifierProvider.value(
-          value: DashBoardProvider(),
+        ChangeNotifierProxyProvider<ChoiceChipProvider, DashBoardProvider>(
+          builder: (ctx, cpro, previousState) => DashBoardProvider(
+             
+              cpro.chooseCategoryItem,
+             // previousState == null ? [] : previousState.dashboardCategoryItems
+             ),
+          
         ),
-        ChangeNotifierProvider.value(
-          value: SeeMoreProvider(),
-        ),
+       ChangeNotifierProxyProvider<ChoiceChipProvider, SeeMoreProvider>(
+          builder: (ctx, cpro, previousState) => SeeMoreProvider(
+              cpro.chooseCategoryItem,cpro.value
+             // previousState == null ? [] : previousState.dashboardCategoryItems
+             ),
+       ),     
         ChangeNotifierProvider.value(
           value: EventDetailProvider(),
         ),
         ChangeNotifierProvider.value(
           value: UserProfileProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: CarouselProvider(),
         ),
       ],
       child: MaterialApp(

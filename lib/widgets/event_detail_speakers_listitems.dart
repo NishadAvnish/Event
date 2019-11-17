@@ -50,7 +50,7 @@ class SpeakerList extends StatelessWidget {
                       height: _height * 0.01,
                     ),
                     Text(
-                      "${_list1[index].about}",
+                      "${_list1[index].profile}",
                       style: Theme.of(context).textTheme.body2,
                     )
                   ],

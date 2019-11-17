@@ -54,7 +54,11 @@ class _EventSpeakerItemState extends State<EventSpeakerItem> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.only(
+                  left: 8,
+                  right: 8,
+                  top: 8,
+                ),
                 child: Row(
                   children: <Widget>[
                     CircleAvatar(
@@ -114,12 +118,12 @@ class _EventSpeakerItemState extends State<EventSpeakerItem> {
                     bottom: 5,
                   ),
                   child: TextFormField(
-                    decoration: InputDecoration(labelText: 'About'),
+                    decoration: InputDecoration(labelText: 'Profile'),
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                     focusNode: _aboutFocusNode,
                     validator: (value) {
-                      if (value.isEmpty) return 'Please enter about details.';
+                      if (value.isEmpty) return 'Please enter profile.';
                       return null;
                     },
                   ),

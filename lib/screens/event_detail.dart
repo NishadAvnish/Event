@@ -14,16 +14,45 @@ class EventDetail extends StatefulWidget {
 
 class _EventDetailState extends State<EventDetail> {
   int index = 0;
+  bool isLoading=true;
+  String id;
+  int i=0;
+   
+   @override
+  void initState() {
+   // Future.delayed(Duration(seconds: 0)).then((_){
+       
+    
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    print("did ChangeDependecies call again");
+    print(i);
+   if(i==0){ id=ModalRoute.of(context).settings.arguments as String;
+
+    Provider.of<EventDetailProvider>(context).recommandedFetch(id).then((_){
+      i++;
+      setState(() {
+        isLoading=false;
+      });
+    });}
+    
+  }
+
 
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
+    
     final _item = Provider.of<EventDetailProvider>(context).item;
     return Container(
       height: _height,
       width: _width,
-      child: Stack(children: <Widget>[
+      child:Stack(children: <Widget>[
         Positioned.fill(
           child: Container(
             color: Colors.white,
@@ -36,7 +65,7 @@ class _EventDetailState extends State<EventDetail> {
           top: 0,
           child: LimitedBox(
             maxHeight: _height,
-            child:
+            child: isLoading?Center(child: Text("Loading...",style: Theme.of(context).textTheme.body2,),):
                 ListView(padding: EdgeInsets.only(top: 0), children: <Widget>[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +100,7 @@ class _EventDetailState extends State<EventDetail> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              "${DateTime.parse(_item[0].date)..toString().split(" ")[0]}",
+                              "${DateTime.parse(_item[0].date).toString().split(".")[0]}",
                               style: Theme.of(context).textTheme.body2.copyWith(
                                   fontSize: _height * 0.02,
                                   color: Colors.black.withOpacity(0.5)),

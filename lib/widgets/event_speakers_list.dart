@@ -33,7 +33,7 @@ class _EventSpeakersListState extends State<EventSpeakersList> {
               label: Text("Add Speaker"),
               onPressed: () {
                 setState(() {
-                  widget._addSpeaker(SpeakersModel("", "", ""));
+                  widget._addSpeaker(SpeakersModel(speakerName: "",profile: "",speakerImage: ""));
                 });
               },
             ),

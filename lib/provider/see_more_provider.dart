@@ -1,23 +1,72 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event/models/see_more_model.dart';
 import 'package:flutter/material.dart';
 
 class SeeMoreProvider with ChangeNotifier{
+  final docRef=Firestore.instance;
+  DocumentSnapshot lastSnapshot;
 
-   List<SeeMoreModel> _seeMoreModel=[
 
-       SeeMoreModel("this is a  asjdhkad kjdskands askjsdjhakjs Task","1969-07-20 20:18:04Z", "Delhi", "https://images.unsplash.com/photo-1503428593586-e225b39bddfe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60", "https://s4.reutersmedia.net/resources/r/?m=02&d=20191111&t=2&i=1450928911&w=780&fh=&fw=&ll=&pl=&sq=&r=2019-11-11T121501Z_34692_MRPRC2E8D983GGW_RTRMADP_0_CLIMATE-CHANGE-BRITAIN-PROTESTS", "238"),
-       SeeMoreModel("this is a Task","1969-07-20 20:18:04Z", "Delhi", "https://images.unsplash.com/photo-1503428593586-e225b39bddfe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60", "https://s4.reutersmedia.net/resources/r/?m=02&d=20191111&t=2&i=1450928911&w=780&fh=&fw=&ll=&pl=&sq=&r=2019-11-11T121501Z_34692_MRPRC2E8D983GGW_RTRMADP_0_CLIMATE-CHANGE-BRITAIN-PROTESTS", "238"),
-       SeeMoreModel("this is a Task","1969-07-20 20:18:04Z", "Delhi", "https://images.unsplash.com/photo-1503428593586-e225b39bddfe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60", "https://s4.reutersmedia.net/resources/r/?m=02&d=20191111&t=2&i=1450928911&w=780&fh=&fw=&ll=&pl=&sq=&r=2019-11-11T121501Z_34692_MRPRC2E8D983GGW_RTRMADP_0_CLIMATE-CHANGE-BRITAIN-PROTESTS", "238"),
-       SeeMoreModel("this is a Task","1969-07-20 20:18:04Z", "Delhi", "https://images.unsplash.com/photo-1503428593586-e225b39bddfe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60", "https://s4.reutersmedia.net/resources/r/?m=02&d=20191111&t=2&i=1450928911&w=780&fh=&fw=&ll=&pl=&sq=&r=2019-11-11T121501Z_34692_MRPRC2E8D983GGW_RTRMADP_0_CLIMATE-CHANGE-BRITAIN-PROTESTS", "238"),
-       SeeMoreModel("this is a Task","1969-07-20 20:18:04Z", "Delhi", "https://images.unsplash.com/photo-1503428593586-e225b39bddfe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60", "https://s4.reutersmedia.net/resources/r/?m=02&d=20191111&t=2&i=1450928911&w=780&fh=&fw=&ll=&pl=&sq=&r=2019-11-11T121501Z_34692_MRPRC2E8D983GGW_RTRMADP_0_CLIMATE-CHANGE-BRITAIN-PROTESTS", "238"),
-       SeeMoreModel("this is a Task","1969-07-20 20:18:04Z", "Delhi", "https://images.unsplash.com/photo-1503428593586-e225b39bddfe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60", "https://s4.reutersmedia.net/resources/r/?m=02&d=20191111&t=2&i=1450928911&w=780&fh=&fw=&ll=&pl=&sq=&r=2019-11-11T121501Z_34692_MRPRC2E8D983GGW_RTRMADP_0_CLIMATE-CHANGE-BRITAIN-PROTESTS", "238"),
-       SeeMoreModel("this is a Task","1969-07-20 20:18:04Z", "Delhi", "https://images.unsplash.com/photo-1503428593586-e225b39bddfe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60", "https://s4.reutersmedia.net/resources/r/?m=02&d=20191111&t=2&i=1450928911&w=780&fh=&fw=&ll=&pl=&sq=&r=2019-11-11T121501Z_34692_MRPRC2E8D983GGW_RTRMADP_0_CLIMATE-CHANGE-BRITAIN-PROTESTS", "238"),
-       SeeMoreModel("this is a Task","1969-07-20 20:18:04Z", "Delhi", "https://images.unsplash.com/photo-1503428593586-e225b39bddfe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60", "https://s4.reutersmedia.net/resources/r/?m=02&d=20191111&t=2&i=1450928911&w=780&fh=&fw=&ll=&pl=&sq=&r=2019-11-11T121501Z_34692_MRPRC2E8D983GGW_RTRMADP_0_CLIMATE-CHANGE-BRITAIN-PROTESTS", "238"),
-       SeeMoreModel("this is a Task","1969-07-20 20:18:04Z", "Delhi", "https://images.unsplash.com/photo-1503428593586-e225b39bddfe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60", "https://s4.reutersmedia.net/resources/r/?m=02&d=20191111&t=2&i=1450928911&w=780&fh=&fw=&ll=&pl=&sq=&r=2019-11-11T121501Z_34692_MRPRC2E8D983GGW_RTRMADP_0_CLIMATE-CHANGE-BRITAIN-PROTESTS", "238"),
-   ];
+  List<SeeMoreModel> _categoryItems=[];
+   final List<String>choiceCategory;
+   final value;
+   bool _isItemPresent=true;
+
+  SeeMoreProvider( this.choiceCategory,this.value); 
+
+   List<SeeMoreModel> _seeMoreModel=[];
 
    List<SeeMoreModel> get seeMoreItems{
      return [..._seeMoreModel];
+   }
+
+  bool get isItemPresent{
+       return _isItemPresent;
+  }
+
+  void changeItemPresent(){
+ _isItemPresent=false;
+ notifyListeners();
+  }
+
+  Future<void> fetchSeeMoreData([String getMore]) async {
+        List<SeeMoreModel> _tempList=[];
+        Query q;
+        if(getMore==null)
+        q=docRef.collection("Post").where("Category", isEqualTo:choiceCategory[value]).limit(5);
+
+        else{
+             q=docRef.collection("Post").where("Category", isEqualTo:choiceCategory[value]).startAfter([lastSnapshot.data]).limit(5);
+        }
+
+        try{
+           await q.getDocuments().then((snapShot){
+           _categoryItems.clear();
+             if(snapShot!=null){
+               snapShot.documents.forEach((doc){
+                 _tempList.add(SeeMoreModel(
+                   title:doc.data["title"],
+                   id:doc.documentID,
+                   timeLine:doc.data["Date"],
+                   place:doc.data["place"],
+                   eventImageUrl: doc.data["EventImages"][0],
+                   seePersonImage: "https://images.unsplash.com/photo-1573848700501-f909e91dbe13?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+                   totalSeen: doc.data["Seenby"]
+                 ),
+                 );
+               }
+               );
+
+             }
+         });}catch(e){
+         }
+
+      QuerySnapshot querySnapshot=await q.getDocuments();
+      lastSnapshot=querySnapshot.documents[querySnapshot.documents.length-1];
+      _seeMoreModel=_tempList;
+      print("getDataProvidercalled");
+
+      notifyListeners();
    }
 
 }
