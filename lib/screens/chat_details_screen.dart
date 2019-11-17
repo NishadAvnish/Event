@@ -19,7 +19,7 @@ class _ChatDetailsScreenState extends State<ChatDetailsScreen> {
     ChatDetails(creatorId: "0",time: "9:11 am",content: "Fine..."),
     ChatDetails(creatorId: "0",time: "9:12 am",content: "What about you?"),
     ChatDetails(creatorId: "1",time: "9:13 am",content: "Badhiya... or angrezi jhaadna band kar!"),
-    ChatDetails(creatorId: "0",time: "9:14 am",content: "*hutiye tune shuru ki thi, mar khaega bta rha hu. Kal mil tu fir batata hu tuje."),
+    ChatDetails(creatorId: "0",time: "9:14 am",content: " tune shuru ki thi, mar khaega bta rha hu. Kal mil tu fir batata hu tuje."),
     ChatDetails(creatorId: "1",time: "9:15 am",content: "Hehehehehehehhehe"),
   ];
 

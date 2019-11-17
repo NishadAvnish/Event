@@ -4,55 +4,44 @@ import 'package:flutter/material.dart';
 
 class ChatContactsScreen extends StatelessWidget {
   final _chatContactsList = [
-    ChatContact(
+    ChatContactModel(
       id: "1",
       imageUrl:
           "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png",
       name: "Name",
-      latestChat:
-          "This is the latest chat and its length is increased to check.",
-      latestChatTime: "8:30 PM",
-      isRead: true,
+      
+     
     ),
-    ChatContact(
+    ChatContactModel(
       id: "2",
       imageUrl:
           "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png",
       name: "Name",
-      latestChat:
-          "This is the latest chat and its length is increased to check.",
-      latestChatTime: "8:30 PM",
-      isRead: true,
+    
     ),
-    ChatContact(
+    ChatContactModel(
       id: "3",
       imageUrl:
           "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png",
       name: "Name",
-      latestChat:
-          "This is the latest chat and its length is increased to check.",
-      latestChatTime: "8:30 PM",
-      isRead: false,
+      
+     
     ),
-    ChatContact(
+    ChatContactModel(
       id: "4",
       imageUrl:
           "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png",
       name: "Name",
-      latestChat:
-          "This is the latest chat and its length is increased to check.",
-      latestChatTime: "8:30 PM",
-      isRead: true,
+     
+      
     ),
-    ChatContact(
+    ChatContactModel(
       id: "5",
       imageUrl:
           "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png",
       name: "Name",
-      latestChat:
-          "This is the latest chat and its length is increased to check.",
-      latestChatTime: "8:30 PM",
-      isRead: false,
+     
+      
     ),
   ];
 

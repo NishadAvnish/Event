@@ -1,5 +1,6 @@
 
 import 'package:event/helpers/firestore_crud.dart';
+import 'package:event/provider/chat_contact_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void didChangeDependencies() {
+    Provider.of<ChatContactProvider>(context).fetchContact("xgySFHPrQ3feOWu9orsTEsBv4Fu1");
     super.didChangeDependencies();
  
    

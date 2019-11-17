@@ -1,3 +1,5 @@
+import 'package:event/provider/chat_contact_provider.dart';
+import 'package:event/provider/chat_detail_provider.dart';
 import 'package:event/provider/event_detail_provider.dart';
 import 'package:event/provider/see_more_provider.dart';
 import 'package:event/screens/event_detail.dart';
@@ -53,6 +55,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: RecommandedProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: ChatContactProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: ChatDetailProvider(),
         ),
       ],
       child: MaterialApp(

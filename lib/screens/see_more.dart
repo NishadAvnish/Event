@@ -73,7 +73,7 @@ class _SeeMoreState extends State<SeeMore> {
           Expanded(
               child: ListView.separated(
                 controller: _scrollController,
-            itemCount: _items.length,
+            itemCount: _items?.length,
             itemBuilder: (context, index) {
               return GestureDetector(onTap: () => Navigator.of(context)
                               .pushNamed(EventDetail.route,arguments:_items[index].id ),child: SeeMoreItems(_items, index));
