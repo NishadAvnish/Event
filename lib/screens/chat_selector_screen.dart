@@ -23,9 +23,10 @@ class _ChatSelectorScreenState extends State<ChatSelectorScreen> {
           ),
         ),
         body: TabBarView(
+          physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
-            ChatContactsScreen(),
-            ChatContactsScreen(),
+            ChatContactsScreen(1),
+            ChatContactsScreen(2),
           ],
         ),
       ),

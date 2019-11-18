@@ -24,7 +24,7 @@ class DashBoardProvider with ChangeNotifier {
       try {
         await _documentRef
             .collection("Post")
-            .where("Category", isEqualTo: choiceCategory[index])
+            .where("Category", arrayContains: choiceCategory[index])
             .limit(10)
             .getDocuments()
             .then((snapShot) {
@@ -36,7 +36,7 @@ class DashBoardProvider with ChangeNotifier {
                   eventName: doc.data["title"],
                   id: doc.documentID,
                   eventImage: doc.data["EventImages"][0],
-                  category: doc.data["Category"][0],
+                  //category: doc.data["Category"][0],
                 ),
               );
             });
@@ -74,7 +74,7 @@ class RecommandedProvider with ChangeNotifier {
               eventName: doc.data["title"],
               id: doc.documentID,
               eventImage: doc.data["EventImages"][0],
-              category: doc.data["Category"],
+              
             ));
           });
         }

@@ -38,12 +38,12 @@ class SeeMoreProvider with ChangeNotifier {
     if (getMore == null)
       q = docRef
           .collection("Post")
-          .where("Category", isEqualTo: choiceCategory[value])
+          .where("Category", arrayContains: choiceCategory[value])
           .limit(5);
     else {
       q = docRef
           .collection("Post")
-          .where("Category", isEqualTo: choiceCategory[value])
+          .where("Category", arrayContains: choiceCategory[value])
           .startAfter([lastSnapshot.data]).limit(5);
     }
 

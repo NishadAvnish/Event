@@ -49,7 +49,7 @@ class EventDetailProvider with ChangeNotifier {
               seenBy:snapShot.data["Seenby"].toString(),
               authorImageUrl: userProfile,
               description: snapShot.data["Description"],
-              createrId: snapShot.data["createrId"],
+              createrId: snapShot.data["creatorId"],
               speakerList: _tempspeakerlist,
               eventImageUrls:[...snapShot.data["EventImages"]],
               place: "Place",

@@ -7,6 +7,9 @@ class ChoiceChipProvider with ChangeNotifier {
   String previousCategory;
 
   List<String> _chooseCategory = [
+    "category",
+    "Hospital",
+    "InfomationTech"
   ];
   int get value {
     return _value;
@@ -29,8 +32,7 @@ class ChoiceChipProvider with ChangeNotifier {
            doc.data["Category"].forEach((doc){
              _tempSet.add(doc);
            });
-           
-            
+                      
         });
     });
     _chooseCategory=_tempSet.toList();
