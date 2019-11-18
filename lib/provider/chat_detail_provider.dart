@@ -13,22 +13,43 @@ class ChatDetailProvider with ChangeNotifier{
 
   Future<void>fetchDetail(String chatId,String currentUserId) async {
     bool isAdmin=false;
+    String lastMessage,lastTime;
+
        List<ChatDetails> _tempMsgList=[];
        try{ await docRef.collection("Chat").document(chatId).get().then((doc){
            doc["admin"].contains(currentUserId)?isAdmin=true:isAdmin=false;
-           doc.data["Msg"].forEach((vl){
+          
+        });
+              
+           try{await docRef.collection("Chat").document(chatId).collection("Message").orderBy("time",descending:true).getDocuments().then((snapShot1){
+           snapShot1.documents.forEach((vl){
                _tempMsgList.add(ChatDetails(
-                    content:vl["msg"],
-                    time: vl["time"],
-                    creatorId:vl["creater"],
+                    content:vl.data["msg"],
+                    time: vl.data["time"],
+                    creatorId:vl.data["creater"],
                     isAdmin: isAdmin,
                   ));
-            },);    
-        });} catch(e){print(e);}
+                  
+            },);   
+
+            }); }catch(e){
+              print(e);
+            }
+        
+        }catch(e){print(e);}
+        
         _chatDetaiList=_tempMsgList;
-        print(_chatDetaiList[0].isAdmin);
         notifyListeners();
    }
   
+  Future<void> addNewMsg(chatId,Map<String,dynamic> msg) async {
+    
+     try{await docRef.collection("Chat").document(chatId).collection("Message").add(
+      msg
+    );}catch(e){
+      print(e);
+    }
+     
+  }
   
 }

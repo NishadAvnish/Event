@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<ChatContactProvider>(context).fetchContact("xgySFHPrQ3feOWu9orsTEsBv4Fu1");
+    // Provider.of<ChatContactProvider>(context).fetchContact("xgySFHPrQ3feOWu9orsTEsBv4Fu1");
     super.didChangeDependencies();
  
    
