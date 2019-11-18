@@ -7,14 +7,19 @@ class ChatContactProvider with ChangeNotifier {
   final docRef = Firestore.instance;
 
   List<ChatContactModel> _contactList = [];
+  List<ChatContactModel> _groupList=[];
 
-  List<ChatContactModel> get contactList {
+  List<ChatContactModel> get messagecontactList {
+    return [..._contactList];
+  }
+  List<ChatContactModel> get groupcontactList {
     return [..._contactList];
   }
 
   Future<void> fetchContact(String currentUserId) async {
-    print("Called  fetchContact");
+    
     List<ChatContactModel> _tempList = [];
+    List<ChatContactModel> _tempList1 = [];
     List<MsgModel> _tempMsgList = [];
 
     final snapShot = await docRef
@@ -37,7 +42,7 @@ class ChatContactProvider with ChangeNotifier {
           createrId: vl.data["creater"],
         ));
       });
-
+       if(doc.data["users"].length<=2){
       _tempList.add(
         ChatContactModel(
           id: doc.documentID,
@@ -46,10 +51,25 @@ class ChatContactProvider with ChangeNotifier {
           msgList: _tempMsgList,
           userList: [...doc.data["users"]],
         ),
-      );
+      );}
 
+      else{
+          _tempList1.add(
+        ChatContactModel(
+          id: doc.documentID,
+          imageUrl: doc.data["imageUrl"],
+          name: doc.documentID,
+          msgList: _tempMsgList,
+          userList: [...doc.data["users"]],
+        ),
+      );
+      }
+      
       _contactList = _tempList;
-      print(_contactList.length);
+      _groupList=_tempList1;
+
+      print("contactList:${_contactList.length}");
+      print("groupList:${_groupList.length}");
       notifyListeners();
     });
   }

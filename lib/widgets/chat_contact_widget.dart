@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 class ChatContactWidget extends StatefulWidget {
   final ChatContactModel _chatContact;
   final int index;
-  ChatContactWidget(this.index,this._chatContact);
+  final int flag;
+  ChatContactWidget(this.index,this._chatContact,this.flag);
 
   @override
   _ChatContactWidgetState createState() => _ChatContactWidgetState();
@@ -17,11 +18,13 @@ class ChatContactWidget extends StatefulWidget {
 
 class _ChatContactWidgetState extends State<ChatContactWidget> {
   
-
+  
   @override
   Widget build(BuildContext context) {
-  final _items=Provider.of<ChatContactProvider>(context).contactList;
+    print("flag: ${widget.flag}");
+  final _items=widget.flag==1?Provider.of<ChatContactProvider>(context).messagecontactList:Provider.of<ChatContactProvider>(context).groupcontactList;
   final _content=_items[widget.index].msgList[(_items[widget.index].msgList.length)-1];
+  
 
     return Container(
       decoration: BoxDecoration(

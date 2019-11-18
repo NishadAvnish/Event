@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ChatContactsScreen extends StatefulWidget {
+  final int flag;
+
+  ChatContactsScreen( this.flag);
   @override
   _ChatContactsScreenState createState() => _ChatContactsScreenState();
 }
@@ -19,37 +22,8 @@ class _ChatContactsScreenState extends State<ChatContactsScreen> {
       
      
     ),
-    ChatContactModel(
-      id: "2",
-      imageUrl:
-          "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png",
-      name: "Name",
     
-    ),
-    ChatContactModel(
-      id: "3",
-      imageUrl:
-          "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png",
-      name: "Name",
-      
-     
-    ),
-    ChatContactModel(
-      id: "4",
-      imageUrl:
-          "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png",
-      name: "Name",
-     
-      
-    ),
-    ChatContactModel(
-      id: "5",
-      imageUrl:
-          "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png",
-      name: "Name",
-     
-      
-    ),
+    
   ];
 
   bool isLoading=true;
@@ -71,6 +45,7 @@ class _ChatContactsScreenState extends State<ChatContactsScreen> {
         itemBuilder: (_, index) => ChatContactWidget(
           index,
           _chatContactsList[index],
+          widget.flag
         ),
       ),
     );
