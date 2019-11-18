@@ -17,9 +17,12 @@ class ChatContactProvider with ChangeNotifier{
      print("Called  fetchContact");
      List<ChatContactModel> _tempList=[];
      List<MsgModel> _tempMsgList=[];
-      await docRef.collection("Chat").where("users",arrayContains: currentUserId).getDocuments().then((snapShot){
-          snapShot.documents.forEach((doc){
-            docRef.collection("Chat").document(doc.documentID).collection("Message").orderBy("time").getDocuments().then((snapShot1){
+     List<MsgModel>_msgList=[];
+      try{await docRef.collection("Chat").where("users",arrayContains: currentUserId).getDocuments().then((snapShot){
+        
+          snapShot.documents.forEach((doc) async {
+            
+            await docRef.collection("Chat").document(doc.documentID).collection("Message").orderBy("time").getDocuments().then((snapShot1){
                 snapShot1.documents.forEach((vl){
                
                _tempMsgList.add(MsgModel(
@@ -30,22 +33,25 @@ class ChatContactProvider with ChangeNotifier{
 
             }
             );
+            
             });
-
+                 print(_tempMsgList.length);
+               
                _tempList.add(ChatContactModel(
                 id: doc.documentID,
                 imageUrl: doc.data["imageUrl"],
                 name: doc.documentID,
-                msgList:_tempMsgList,
+                msgList:[..._tempMsgList],
                 userList:[... doc.data["users"]],
                ),);
+               
           });
+      
+               print(_tempList.length);
 
-       
+      });}catch(e){print(e);}
 
-      });
       _contactList=_tempList;
-      print(_contactList.length);
      notifyListeners();
    }
 }
