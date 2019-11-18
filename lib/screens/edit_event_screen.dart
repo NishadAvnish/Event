@@ -1,11 +1,11 @@
-import 'package:event/widgets/add_event_categories.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-import '../models/event_detail_model.dart';
+import '../widgets/add_event_categories.dart';
+import '../widgets/basic_event_details.dart';
 import '../widgets/event_speakers_list.dart';
-
 import '../widgets/event_image_url_list.dart';
+import '../provider/event_provider.dart';
 
 class EditEventScreen extends StatefulWidget {
   static const route = "/edit_event_screen";
@@ -14,109 +14,98 @@ class EditEventScreen extends StatefulWidget {
 }
 
 class _EditEventScreenState extends State<EditEventScreen> {
-  var _selectedDate = "";
-  var _urlsList = [""];
-  var _speakersList = [SpeakersModel(speakerName: "", profile: "", speakerImage: "",)];
-  List<String>_categoriesList = [];
   final _form = GlobalKey<FormState>();
+  final _scaffold = GlobalKey<ScaffoldState>();
+  bool _isLoading = false;
 
-  void _addUrl(String url) {
-    _urlsList.insert(0, url);
-  }
-
-  void _addSpeaker(SpeakersModel speaker){
-    _speakersList.insert(0, speaker);
-  }
-
-  void _addCategory(String category){
-    _categoriesList.add(category);
-  }
-
-  void _deleteCategory(String category){
-    _categoriesList.remove(category);
-  }
-
-  Future<void> _showDateSelector() async {
-    final response = await showDatePicker(
-      context: context,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2021),
-      initialDate: DateTime.now(),
-    );
-    if (response != null)
-      setState(() {
-        _selectedDate = DateFormat.yMMMd().format(response);
-      });
-  }
-
-  void _saveForm() {
+  void _saveForm() async {
     if (!_form.currentState.validate()) return;
-    print("saving");
+    final _event = Provider.of<EventProvider>(context, listen: false);
+    if (_event.event.date.isEmpty) {
+      _showSnackBar("No date selected!");
+      return;
+    }
+    if (_event.event.categories.isEmpty) {
+      _showSnackBar("No categories added!");
+      return;
+    }
+    if (_event.event.eventImageUrls.isEmpty) {
+      _showSnackBar("No images added!");
+      return;
+    }
+    if (_event.event.speakerList.isEmpty) {
+      _showSnackBar("No speakers added!");
+      return;
+    }
+
+    _form.currentState.save();
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _event.addEvent();
+      _event.clear();
+      Navigator.of(context).pop();
+    } catch (error) {
+      print(error.toString());
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  void _showSnackBar(String message) {
+    _scaffold.currentState.showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(
+          seconds: 2,
+        ),
+        backgroundColor: Theme.of(context).errorColor,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    print("parent");
     return Scaffold(
+      key: _scaffold,
       appBar: AppBar(
         title: Text("Add Event"),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
             onPressed: _saveForm,
-          )
+          ),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(10),
-        child: Form(
-          key: _form,
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: "Event Name",
+      body: _isLoading
+          ? Center(child: Text("Loading..."))
+          : Padding(
+              padding: EdgeInsets.all(10),
+              child: Form(
+                key: _form,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      BasicEventDetails(),
+                      SizedBox(height: 15),
+                      AddEventCategory(),
+                      SizedBox(height: 10),
+                      EventImageUrlList(),
+                      SizedBox(height: 10),
+                      EventSpeakersList(),
+                    ],
                   ),
-                  validator: (value) {
-                    if (value.isEmpty) return 'Please provide event name.';
-                    return null;
-                  },
                 ),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      _selectedDate.isEmpty ? "No date chosen!" : _selectedDate,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    FlatButton(
-                      child: Text("Select Date"),
-                      color: Theme.of(context).primaryColorLight,
-                      onPressed: () => _showDateSelector(),
-                    ),
-                  ],
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: "Event Description",
-                  ),
-                  validator: (value) {
-                    if (value.isEmpty) return 'Please provide description.';
-                    return null;
-                  },
-                ),
-                SizedBox(height: 10),
-                AddEventCategory(_categoriesList, _addCategory, _deleteCategory,),
-                SizedBox(height: 10),
-                EventImageUrlList(_urlsList, _addUrl),
-                SizedBox(height: 10),
-                EventSpeakersList(_speakersList, _addSpeaker),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

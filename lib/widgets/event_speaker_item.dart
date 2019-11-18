@@ -17,6 +17,7 @@ class _EventSpeakerItemState extends State<EventSpeakerItem> {
   void initState() {
     super.initState();
     _imageFocusNode.addListener(_updateImage);
+    _imageController.text = widget._speaker.speakerImage;
   }
 
   @override
@@ -51,7 +52,6 @@ class _EventSpeakerItemState extends State<EventSpeakerItem> {
         child: Container(
           width: _screenWidth * 0.7,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(
@@ -73,11 +73,13 @@ class _EventSpeakerItemState extends State<EventSpeakerItem> {
                         child: TextFormField(
                           decoration: InputDecoration(labelText: 'Name'),
                           keyboardType: TextInputType.text,
+                          initialValue: widget._speaker.speakerName,
+                          onSaved: (value) => widget._speaker.speakerName = value,
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) => FocusScope.of(context)
                               .requestFocus(_imageFocusNode),
                           validator: (value) {
-                            if (value.isEmpty) return 'Please enter name.';
+                            if (value.isEmpty) return 'Enter name.';
                             return null;
                           },
                         ),
@@ -96,15 +98,16 @@ class _EventSpeakerItemState extends State<EventSpeakerItem> {
                     decoration: InputDecoration(labelText: 'Image URL'),
                     keyboardType: TextInputType.url,
                     textInputAction: TextInputAction.next,
+                    onSaved: (value) => widget._speaker.speakerImage = value,
                     controller: _imageController,
                     focusNode: _imageFocusNode,
                     onFieldSubmitted: (_) =>
                         FocusScope.of(context).requestFocus(_aboutFocusNode),
                     validator: (value) {
-                      if (value.isEmpty) return 'Please enter an image URL.';
+                      if (value.isEmpty) return 'Enter image URL.';
                       if (!value.startsWith('http') &&
                           !value.startsWith('https'))
-                        return 'Please enter a valid URL.';
+                        return 'Invalid URL.';
                       return null;
                     },
                   ),
@@ -121,9 +124,11 @@ class _EventSpeakerItemState extends State<EventSpeakerItem> {
                     decoration: InputDecoration(labelText: 'Profile'),
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.done,
+                    initialValue: widget._speaker.profile,
+                    onSaved: (value) => widget._speaker.profile = value,
                     focusNode: _aboutFocusNode,
                     validator: (value) {
-                      if (value.isEmpty) return 'Please enter profile.';
+                      if (value.isEmpty) return 'Enter profile.';
                       return null;
                     },
                   ),

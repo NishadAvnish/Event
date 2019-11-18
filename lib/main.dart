@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'provider/event_detail_provider.dart';
+import 'provider/event_provider.dart';
 import 'provider/see_more_provider.dart';
 import 'screens/edit_event_screen.dart';
 import 'screens/event_detail.dart';
@@ -56,6 +57,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: RecommandedProvider(),
         ),
+        ChangeNotifierProvider.value(
+          value: EventProvider(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/event_provider.dart';
 
 class EventImageUrlItem extends StatefulWidget {
-  final String _url;
-  EventImageUrlItem(this._url);
+  final int _index;
+  EventImageUrlItem(this._index);
   @override
   _EventImageUrlItemState createState() => _EventImageUrlItemState();
 }
 
 class _EventImageUrlItemState extends State<EventImageUrlItem> {
-  var _eventUrl = "";
   final _imageFocusNode = FocusNode();
   final _imageController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    if (widget._url.isNotEmpty) _eventUrl = widget._url;
     _imageFocusNode.addListener(_updateImage);
+    _initUrl();
+  }
+
+  void _initUrl(){
+    _imageController.text = Provider.of<EventProvider>(context,listen: false).event.eventImageUrls[widget._index];
   }
 
   @override
@@ -34,7 +40,7 @@ class _EventImageUrlItemState extends State<EventImageUrlItem> {
         return;
       }
       setState(() {
-        _eventUrl = _imageController.text;
+        Provider.of<EventProvider>(context,listen: false).event.eventImageUrls[widget._index] = _imageController.text;
       });
     }
   }
@@ -42,6 +48,8 @@ class _EventImageUrlItemState extends State<EventImageUrlItem> {
   @override
   Widget build(BuildContext context) {
     final _screenWidth = MediaQuery.of(context).size.width;
+    final _event = Provider.of<EventProvider>(context,listen: false).event;
+
     return InkWell(
       child: Card(
         shape: RoundedRectangleBorder(
@@ -62,9 +70,9 @@ class _EventImageUrlItemState extends State<EventImageUrlItem> {
                   ),
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: _eventUrl.isEmpty
+                    image: _event.eventImageUrls[widget._index].isEmpty
                         ? AssetImage("asset/images/pic2.jpg")
-                        : NetworkImage(_eventUrl),
+                        : NetworkImage(_event.eventImageUrls[widget._index]),
                   ),
                 ),
               ),
@@ -76,16 +84,17 @@ class _EventImageUrlItemState extends State<EventImageUrlItem> {
                     bottom: 5,
                   ),
                   child: TextFormField(
-                    decoration: InputDecoration(labelText: 'Image URL'),
+                    decoration: InputDecoration(labelText: 'URL'),
                     keyboardType: TextInputType.url,
                     textInputAction: TextInputAction.done,
+                    onSaved: (value) => _event.eventImageUrls[widget._index] = value,
                     controller: _imageController,
                     focusNode: _imageFocusNode,
                     validator: (value) {
-                      if (value.isEmpty) return 'Please enter an image URL.';
+                      if (value.isEmpty) return 'Enter URL.';
                       if (!value.startsWith('http') &&
                           !value.startsWith('https'))
-                        return 'Please enter a valid URL.';
+                        return 'Invalid URL.';
                       return null;
                     },
                   ),

@@ -44,14 +44,16 @@ class EventDetailProvider with ChangeNotifier {
         _tempitemList.insert(
             0,
             EventDetailModel(
-              snapShot.data["title"],
-              snapShot.data["Date"],
-              snapShot.data["Seenby"].toString(),
-              userProfile,
-              snapShot.data["Description"],
-              snapShot.data["createrId"],
-              _tempspeakerlist,
-              [...snapShot.data["EventImages"]],
+              title:snapShot.data["title"],
+              date:snapShot.data["Date"],
+              seenBy:snapShot.data["Seenby"].toString(),
+              authorImageUrl: userProfile,
+              description: snapShot.data["Description"],
+              createrId: snapShot.data["createrId"],
+              speakerList: _tempspeakerlist,
+              eventImageUrls:[...snapShot.data["EventImages"]],
+              place: "Place",
+              categories: [],
             ));
       });
     } catch (e) {

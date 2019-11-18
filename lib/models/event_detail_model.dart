@@ -1,21 +1,27 @@
-class EventDetailModel {
-  final String title, date, seenBy, authorImageUrl, description,createrId;
-  final List<SpeakersModel> speakerList;
-  final List<String> eventImageUrls;
+import 'package:flutter/foundation.dart';
 
-  EventDetailModel(this.title, 
-  this.date, 
-  this.seenBy, 
-  this.authorImageUrl,
-  this.description, 
-  this.createrId,
-  this.speakerList, 
-  this.eventImageUrls
-  );
+class EventDetailModel {
+  String title, date, seenBy, authorImageUrl, description, createrId, place;
+  List<SpeakersModel> speakerList;
+  List<String> eventImageUrls;
+  List<String> categories;
+
+  EventDetailModel({
+    @required this.title,
+    @required this.place,
+    @required this.date,
+    @required this.seenBy,
+    @required this.authorImageUrl,
+    @required this.description,
+    @required this.createrId,
+    @required this.speakerList,
+    @required this.eventImageUrls,
+    @required this.categories,
+  });
 }
 
 class SpeakersModel {
-  String speakerImage, speakerName,profile;
+  String speakerImage, speakerName, profile;
 
   SpeakersModel({this.speakerImage, this.speakerName, this.profile});
 }

@@ -1,11 +1,10 @@
+import '../provider/event_provider.dart';
+import 'package:provider/provider.dart';
+
 import '../widgets/event_image_url_item.dart';
 import 'package:flutter/material.dart';
 
 class EventImageUrlList extends StatefulWidget {
-  final List<String> _urlsList;
-  final Function _addUrl;
-  EventImageUrlList(this._urlsList, this._addUrl);
-
   @override
   _EventImageUrlListState createState() => _EventImageUrlListState();
 }
@@ -13,6 +12,8 @@ class EventImageUrlList extends StatefulWidget {
 class _EventImageUrlListState extends State<EventImageUrlList> {
   @override
   Widget build(BuildContext context) {
+    final _event = Provider.of<EventProvider>(context, listen: false).event;
+
     print("building");
     return Column(
       children: <Widget>[
@@ -25,13 +26,11 @@ class _EventImageUrlListState extends State<EventImageUrlList> {
             ),
             FlatButton.icon(
               color: Theme.of(context).primaryColorLight,
-              icon: Icon(
-                Icons.add,
-              ),
-              label: Text("Add URL"),
+              icon: Icon(Icons.add),
+              label: Text("Add"),
               onPressed: () {
                 setState(() {
-                  widget._addUrl("");
+                  _event.eventImageUrls.add("");
                 });
               },
             ),
@@ -43,8 +42,10 @@ class _EventImageUrlListState extends State<EventImageUrlList> {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: widget._urlsList.map((url) => EventImageUrlItem(url)).toList()
-            ),
+                children: _event.eventImageUrls
+                    .map((url) =>
+                        EventImageUrlItem(_event.eventImageUrls.indexOf(url)))
+                    .toList()),
           ),
         ),
       ],
