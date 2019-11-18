@@ -55,6 +55,7 @@ class _DashBoardState extends State<DashBoard> {
                   SizedBox(
                     height: 5,
                   ),
+                  
                   ChoiceChipItems(),
 
                   SizedBox(

@@ -1,4 +1,4 @@
-import 'package:event/provider/dash_board_provider.dart';
+import '../provider/dash_board_provider.dart';
 import '../provider/choice_chip_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,17 +9,40 @@ class ChoiceChipItems extends StatefulWidget {
 }
 
 class _ChoiceChipItemsState extends State<ChoiceChipItems> {
+  var _value = -1;
+  bool _isLoading = true;
 
-  var _value = 0;
+  @override
+  void initState() {
+    super.initState();
+    _fetchCategories();
+  }
+
+  void _fetchCategories() async{
+    try{
+      await Provider.of<ChoiceChipProvider>(context, listen: false).fetchCategory();
+      setState(() {
+        _isLoading = false;
+        _value = 0;
+      });
+    }catch(error){
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
-    final _choiceProvider =Provider.of<ChoiceChipProvider>(context, listen: false);
-    Provider.of<DashBoardProvider>(context,listen: false).categoryFetch(_value);
+    final _choiceProvider = Provider.of<ChoiceChipProvider>(context, listen: false);
+
+    if(_value != -1)
+      Provider.of<DashBoardProvider>(context, listen: false).categoryFetch(_value);
+
     return Container(
       height: _height * 0.05,
-      child: ListView.builder(
+      child: _isLoading ? Center(child: Text("Loading..."),) : ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: _choiceProvider.chooseCategoryItem.length,
         physics: BouncingScrollPhysics(),
@@ -36,7 +59,7 @@ class _ChoiceChipItemsState extends State<ChoiceChipItems> {
                 backgroundColor: Colors.white,
                 onSelected: (selected) {
                   _choiceProvider.changeValue(index);
-                
+
                   setState(() {
                     _value = index;
                   });

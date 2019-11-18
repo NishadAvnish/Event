@@ -35,18 +35,16 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<ChoiceChipProvider, DashBoardProvider>(
           builder: (ctx, cpro, previousState) => DashBoardProvider(
-             
-              cpro.chooseCategoryItem,
-             // previousState == null ? [] : previousState.dashboardCategoryItems
-             ),
-          
+            cpro.chooseCategoryItem,
+            // previousState == null ? [] : previousState.dashboardCategoryItems
+          ),
         ),
-       ChangeNotifierProxyProvider<ChoiceChipProvider, SeeMoreProvider>(
+        ChangeNotifierProxyProvider<ChoiceChipProvider, SeeMoreProvider>(
           builder: (ctx, cpro, previousState) => SeeMoreProvider(
-              cpro.chooseCategoryItem,cpro.value
-             // previousState == null ? [] : previousState.dashboardCategoryItems
-             ),
-       ),     
+              cpro.chooseCategoryItem, cpro.value
+              // previousState == null ? [] : previousState.dashboardCategoryItems
+              ),
+        ),
         ChangeNotifierProvider.value(
           value: EventDetailProvider(),
         ),

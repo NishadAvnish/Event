@@ -19,35 +19,36 @@ class DashBoardProvider with ChangeNotifier {
   }
 
   Future<void> categoryFetch(index) async {
+    print(index);
     List<DashboardDataModel> _tempList = [];
     if (previousIndex != index) {
       try {
-        await _documentRef
+        final snapShot = await _documentRef
             .collection("Post")
-            .where("Category", isEqualTo: choiceCategory[index])
-            .limit(10)
-            .getDocuments()
-            .then((snapShot) {
-          _categoryItems.clear();
-          if (snapShot != null) {
-            snapShot.documents.forEach((doc) {
-              _tempList.add(
-                DashboardDataModel(
-                  eventName: doc.data["title"],
-                  id: doc.documentID,
-                  eventImage: doc.data["EventImages"][0],
-                  category: doc.data["Category"][0],
-                ),
-              );
-            });
-          }
-        });
-      } catch (e) {}
+            .where("Category", arrayContains: choiceCategory[index])
+            .getDocuments();
 
-      previousIndex = index;
-      _categoryItems = _tempList;
+        _categoryItems.clear();
+        if (snapShot != null) {
+          snapShot.documents.forEach((doc) {
+            _tempList.add(
+              DashboardDataModel(
+                eventName: doc.data["title"],
+                id: doc.documentID,
+                eventImage: doc.data["EventImages"][0],
+                //category: doc.data["Category"][0],
+              ),
+            );
+          });
+        }
+        previousIndex = index;
+        _categoryItems = _tempList;
 
-      notifyListeners();
+        notifyListeners();
+      } catch (e) {
+        print(e.toString());
+        throw e;
+      }
     }
   }
 }
@@ -74,7 +75,7 @@ class RecommandedProvider with ChangeNotifier {
               eventName: doc.data["title"],
               id: doc.documentID,
               eventImage: doc.data["EventImages"][0],
-              category: doc.data["Category"],
+              //category: doc.data["Category"],
             ));
           });
         }

@@ -6,8 +6,8 @@ class ChoiceChipProvider with ChangeNotifier {
   String name;
   String previousCategory;
 
-  List<String> _chooseCategory = [
-  ];
+  List<String> _chooseCategory = [];
+
   int get value {
     return _value;
   }
@@ -21,19 +21,23 @@ class ChoiceChipProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
   Future<void> fetchCategory() async {
-    Set<String> _tempSet= Set();
-    final docRef= await Firestore.instance.collection("Post").getDocuments().then((snapShot){
-        snapShot.documents.forEach((doc){
-           doc.data["Category"].forEach((doc){
-             _tempSet.add(doc);
-           });
-           
-            
-        });
-    });
-    _chooseCategory=_tempSet.toList();
+    Set<String> _tempSet = Set();
 
+    try {
+      final snapShot = await Firestore.instance.collection("Post").getDocuments();
+      print(snapShot.documents);
+      snapShot.documents.forEach((event) {
+        event.data["Category"].forEach((category) {
+          _tempSet.add(category);
+        });
+      });
+
+      print(_tempSet);
+      _chooseCategory = _tempSet.toList();
+    } catch (error) {
+      print("errorrrrr... ${error.toString()}");
+      throw error;
+    }
   }
 }
