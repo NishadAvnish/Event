@@ -35,6 +35,7 @@ class ChoiceChipProvider with ChangeNotifier {
 
       print(_tempSet);
       _chooseCategory = _tempSet.toList();
+      notifyListeners();
     } catch (error) {
       print("errorrrrr... ${error.toString()}");
       throw error;

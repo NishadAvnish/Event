@@ -32,10 +32,11 @@ class EventDetailProvider with ChangeNotifier {
         try {
           await _documentRef
               .collection("User")
-              .document(snapShot.data["createrId"])
+              .document(snapShot.data["creatorId"])
               .get()
               .then((sShot) {
             userProfile = sShot.data["photoUrl"];
+            print(sShot.data["photoUrl"]);
           });
         } catch (e) {
           print(e);
@@ -49,7 +50,7 @@ class EventDetailProvider with ChangeNotifier {
               seenBy:snapShot.data["Seenby"].toString(),
               authorImageUrl: userProfile,
               description: snapShot.data["Description"],
-              createrId: snapShot.data["createrId"],
+              createrId: snapShot.data["creatorId"],
               speakerList: _tempspeakerlist,
               eventImageUrls:[...snapShot.data["EventImages"]],
               place: "Place",
