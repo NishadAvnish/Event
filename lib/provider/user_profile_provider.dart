@@ -11,18 +11,17 @@ class UserProfileProvider with ChangeNotifier{
   }
 
   Future<void> fetch(String id) async {
-        print("fetch called");
         List<String> _tempPostImage=[];
         List<String> _productId=[];
         String _userName;
         String _imageUrl;
         String _bioData;
         try{await _documentRef.collection("User").document("$id").get().then((snapShot1){
-          print(snapShot1);
+            if(snapShot1!=null){
              _userName=snapShot1.data["name"];
              _imageUrl=snapShot1.data["photoUrl"];
              _bioData=snapShot1.data["bioData"];
-
+            }
         });
         }catch(e){
           print(e);

@@ -1,20 +1,18 @@
 import 'package:flutter/foundation.dart';
 
-class ChatContact {
+class ChatContactModel {
   final String id;
   final String imageUrl;
   final String name;
-  final String latestChat;
-  final String latestChatTime;
-  bool isRead;
+  final List<MsgModel> msgList;
+  final List<String> userList;
 
-  ChatContact({
-      @required this.id,
-      @required this.imageUrl,
-      @required this.name,
-      @required this.latestChat,
-      @required this.latestChatTime,
-      @required this.isRead
-  });
+  ChatContactModel({this.id, this.imageUrl, this.name, this.msgList,this.userList});
 
+}
+
+class MsgModel {
+  final String msg, time,createrId;
+
+  MsgModel({this.msg, this.time, this.createrId});
 }

@@ -1,6 +1,8 @@
+import 'package:event/provider/chat_contact_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'provider/chat_detail_provider.dart';
 import 'provider/event_detail_provider.dart';
 import 'provider/event_provider.dart';
 import 'provider/see_more_provider.dart';
@@ -59,7 +61,13 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: EventProvider(),
-        )
+        ),
+        ChangeNotifierProvider.value(
+          value: ChatDetailProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: ChatContactProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -65,7 +65,7 @@ class _UserProfileState extends State<UserProfile> {
                               shape: BoxShape.circle,
                               color: Colors.red,
                               image: DecorationImage(
-                                  image: NetworkImage(_items.userImage),
+                                  image: NetworkImage(_items?.userImage),
                                   fit: BoxFit.cover),
                             ),
                           ),
@@ -95,7 +95,7 @@ class _UserProfileState extends State<UserProfile> {
             height: _height * 0.01,
           ),
           Text(
-            _items.name,
+            _items?.name,
             style: Theme.of(context)
                 .textTheme
                 .headline
@@ -108,7 +108,7 @@ class _UserProfileState extends State<UserProfile> {
               constraints: BoxConstraints(
                   minWidth: _width * 0.3, maxWidth: _width * 0.6),
               child: Text(
-                _items.biodata,
+                _items?.biodata,
                 style: Theme.of(context).textTheme.subhead,
                 textAlign: TextAlign.center,
               ),
@@ -145,7 +145,7 @@ class _UserProfileState extends State<UserProfile> {
                     width: _width,
                     child: GridView.builder(
                       shrinkWrap: true,
-                      itemCount: _items.posts.length,
+                      itemCount: _items.posts?.length,
                       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                           crossAxisSpacing: _height * 0.005,
                           maxCrossAxisExtent: 170,
@@ -156,12 +156,12 @@ class _UserProfileState extends State<UserProfile> {
                         return GestureDetector(
                           onTap: () {
                             Navigator.of(context).pushNamed(EventDetail.route,
-                                arguments: _items.productid[index]);
+                                arguments: _items?.productid[index]);
                           },
                           child: Container(
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                  image: NetworkImage(_items.posts[index]),
+                                  image: NetworkImage(_items?.posts[index]),
                                   fit: BoxFit.cover),
                             ),
                           ),
