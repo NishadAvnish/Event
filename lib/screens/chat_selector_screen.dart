@@ -17,12 +17,8 @@ class _ChatSelectorScreenState extends State<ChatSelectorScreen> {
           title: Text("Chats"),
           bottom: TabBar(
             tabs: <Widget>[
-              Tab(
-                text: "Messages",
-              ),
-              Tab(
-                text: "Groups",
-              ),
+              Tab(text: "Messages"),
+              Tab(text: "Groups"),
             ],
           ),
         ),

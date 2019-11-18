@@ -1,13 +1,16 @@
 import 'package:event/provider/chat_contact_provider.dart';
-import 'package:event/provider/chat_detail_provider.dart';
-import 'package:event/provider/event_detail_provider.dart';
-import 'package:event/provider/see_more_provider.dart';
-import 'package:event/screens/event_detail.dart';
-import 'package:event/screens/login_screen.dart';
-import 'package:event/screens/see_more.dart';
-import 'package:event/screens/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'provider/chat_detail_provider.dart';
+import 'provider/event_detail_provider.dart';
+import 'provider/event_provider.dart';
+import 'provider/see_more_provider.dart';
+import 'screens/edit_event_screen.dart';
+import 'screens/event_detail.dart';
+import 'screens/login_screen.dart';
+import 'screens/see_more.dart';
+import 'screens/user_profile.dart';
 import 'provider/dash_board_provider.dart';
 import 'provider/user_profile_provider.dart';
 import 'screens/dashboard.dart';
@@ -57,10 +60,13 @@ class MyApp extends StatelessWidget {
           value: RecommandedProvider(),
         ),
         ChangeNotifierProvider.value(
-          value: ChatContactProvider(),
+          value: EventProvider(),
         ),
         ChangeNotifierProvider.value(
           value: ChatDetailProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: ChatContactProvider(),
         ),
       ],
       child: MaterialApp(
@@ -84,6 +90,7 @@ class MyApp extends StatelessWidget {
           SeeMore.route: (_) => SeeMore(),
           EventDetail.route: (_) => EventDetail(),
           UserProfile.route: (_) => UserProfile(),
+          EditEventScreen.route: (_) => EditEventScreen(),
         },
       ),
     );

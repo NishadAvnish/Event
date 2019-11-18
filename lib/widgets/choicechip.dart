@@ -40,8 +40,6 @@ class _ChoiceChipItemsState extends State<ChoiceChipItems> {
                   setState(() {
                     _value = index;
                   });
-               
-                 
                 },
               ));
         },

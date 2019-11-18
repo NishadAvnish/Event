@@ -1,5 +1,3 @@
-
-import 'package:event/provider/choice_chip_provider.dart';
 import 'package:event/provider/dash_board_provider.dart';
 import 'package:event/screens/event_detail.dart';
 import 'package:flutter/material.dart';
@@ -37,15 +35,15 @@ class _ChooseItemsState extends State<ChooseItems> {
                               width: _width * 0.01,
                             );
                           },
-                          itemCount: dashBo.CategoryItems.length,
+                          itemCount: dashBo.categoryItems.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
                             
                             return  InkWell(
                               onTap: ()  {
-                                print(dashBo.CategoryItems[index].id);
+                                print(dashBo.categoryItems[index].id);
                                 Navigator.of(context)
-                                  .pushNamed(EventDetail.route,arguments:dashBo.CategoryItems[index].id);},
+                                  .pushNamed(EventDetail.route,arguments:dashBo.categoryItems[index].id);},
                               child: Container(
                                 height: _height * 0.22,
                                 width: _width * 0.5,
@@ -63,7 +61,7 @@ class _ChooseItemsState extends State<ChooseItems> {
                                           image: DecorationImage(
                                               fit: BoxFit.cover,
                                               image: NetworkImage(
-                                                 dashBo.CategoryItems[index].eventImage)),
+                                                 dashBo.categoryItems[index].eventImage)),
                                         ),
                                       ),
                                     ),
@@ -71,7 +69,7 @@ class _ChooseItemsState extends State<ChooseItems> {
                                         left: _width * 0.05,
                                         bottom: _height * 0.02,
                                         child: Text(
-                                          dashBo.CategoryItems[index].eventName,
+                                          dashBo.categoryItems[index].eventName,
                                           style: Theme.of(context)
                                               .textTheme
                                               .subhead

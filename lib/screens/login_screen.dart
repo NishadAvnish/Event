@@ -30,7 +30,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     super.initState();
 
     googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
-      if(account != null)
+      if (account != null)
         Navigator.of(context).pushReplacementNamed(DashBoard.route);
     });
 
@@ -145,109 +145,110 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           title: Text(_isLoginForm ? "Log In" : "Create Account"),
         ),
         body: _emailVerificationRequired
-                ? Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30),
+            ? Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.error,
+                      size: 40,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      "Please verify your email to finalize your account setup and restart the app.",
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 20),
+                    RaisedButton(
+                      child: Text("Send verification link"),
+                      onPressed: () {
+                        _currentUser.sendEmailVerification();
+                      },
+                    ),
+                  ],
+                ),
+              )
+            : Padding(
+                padding: const EdgeInsets.all(20),
+                child: Form(
+                  key: _form,
+                  child: SingleChildScrollView(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Icon(
-                          Icons.error,
-                          size: 40,
-                          color: Theme.of(context).accentColor,
+                        CircleAvatar(
+                          child: Icon(
+                            _isLoginForm ? Icons.person : Icons.person_add,
+                            size: 100,
+                            color: Colors.white,
+                          ),
+                          backgroundColor: Theme.of(context).primaryColor,
+                          radius: 65,
                         ),
-                        SizedBox(height: 20),
-                        Text(
-                          "Please verify your email to finalize your account setup and restart the app.",
-                          textAlign: TextAlign.center,
+                        TextFormField(
+                          decoration: InputDecoration(
+                            labelText: "Email",
+                            icon: Icon(Icons.email),
+                          ),
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) => FocusScope.of(context)
+                              .requestFocus(_passwordFocusNode),
+                          validator: (value) =>
+                              value.isEmpty ? "Enter email" : null,
+                          onSaved: (value) => _email = value,
                         ),
-                        SizedBox(height: 20),
-                        RaisedButton(
-                          child: Text("Send verification link"),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            labelText: "Password",
+                            icon: Icon(Icons.lock),
+                          ),
+                          obscureText: true,
+                          focusNode: _passwordFocusNode,
+                          keyboardType: TextInputType.visiblePassword,
+                          validator: (value) =>
+                              value.isEmpty ? "Enter password" : null,
+                          onSaved: (value) => _password = value,
+                        ),
+                        const SizedBox(height: 20),
+                        Container(
+                          padding: EdgeInsets.only(top: 25),
+                          width: double.infinity,
+                          child: RaisedButton(
+                            color: Theme.of(context).primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Text(
+                              _isLoginForm ? "Log In" : "Sign Up",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: _saveForm,
+                          ),
+                        ),
+                        FlatButton(
+                          child:
+                              Text(_isLoginForm ? "Create Account" : "Sign In"),
                           onPressed: () {
-                            _currentUser.sendEmailVerification();
+                            setState(() {
+                              _isLoginForm = !_isLoginForm;
+                            });
                           },
+                        ),
+                        GoogleSignInButton(
+                          onPressed: _handleSignIn,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: _isLoading
+                              ? Center(child: CircularProgressIndicator())
+                              : SizedBox(),
                         ),
                       ],
                     ),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Form(
-                      key: _form,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: <Widget>[
-                            CircleAvatar(
-                              child: Icon(
-                                _isLoginForm ? Icons.person : Icons.person_add,
-                                size: 100,
-                                color: Colors.white,
-                              ),
-                              backgroundColor: Theme.of(context).primaryColor,
-                              radius: 65,
-                            ),
-                            const SizedBox(height: 20),
-                            TextFormField(
-                              decoration: InputDecoration(
-                                labelText: "Email",
-                                icon: Icon(Icons.email),
-                              ),
-                              textInputAction: TextInputAction.next,
-                              onFieldSubmitted: (_) => FocusScope.of(context)
-                                  .requestFocus(_passwordFocusNode),
-                              validator: (value) =>
-                                  value.isEmpty ? "Enter email" : null,
-                              onSaved: (value) => _email = value,
-                            ),
-                            const SizedBox(height: 20),
-                            TextFormField(
-                              decoration: InputDecoration(
-                                labelText: "Password",
-                                icon: Icon(Icons.lock),
-                              ),
-                              focusNode: _passwordFocusNode,
-                              keyboardType: TextInputType.visiblePassword,
-                              validator: (value) =>
-                                  value.isEmpty ? "Enter password" : null,
-                              onSaved: (value) => _password = value,
-                            ),
-                            const SizedBox(height: 20),
-                            Container(
-                              padding: EdgeInsets.only(top: 25),
-                              width: double.infinity,
-                              child: RaisedButton(
-                                color: Theme.of(context).primaryColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: Text(
-                                  _isLoginForm ? "Log In" : "Sign Up",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                onPressed: _saveForm,
-                              ),
-                            ),
-                            FlatButton(
-                              child: Text(
-                                  _isLoginForm ? "Create Account" : "Sign In"),
-                              onPressed: () {
-                                setState(() {
-                                  _isLoginForm = !_isLoginForm;
-                                });
-                              },
-                            ),
-                            GoogleSignInButton(
-                              onPressed: _handleSignIn,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(10),
-                              child:_isLoading ? Center(child: CircularProgressIndicator()) : SizedBox(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   ),
+                ),
+              ),
       ),
     );
   }

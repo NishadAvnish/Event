@@ -8,6 +8,7 @@ import '../helpers/google_sign_in.dart';
 import '../helpers/firebase_auth.dart';
 import '../screens/login_screen.dart';
 import '../screens/chat_selector_screen.dart';
+import '../screens/edit_event_screen.dart';
 
 class DashBoardDrawer extends StatefulWidget {
   @override
@@ -69,7 +70,6 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                     children: <Widget>[
                       GoogleUserCircleAvatar(
                         identity: _currentGoogleUser,
-                        placeholderPhotoUrl: _currentGoogleUser.photoUrl,
                       ),
                       SizedBox(height: 5),
                       Text(_currentGoogleUser.displayName ?? '',style: TextStyle(fontWeight: FontWeight.bold),),
@@ -126,29 +126,25 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
             _buildHeader(context, _headerHeight),
             ListTile(
               leading: Icon(
+                Icons.add,
+                color: Colors.grey,
+              ),
+              title: Text(
+                "Add Event",
+              ),
+              onTap: () => Navigator.of(context).pushNamed(EditEventScreen.route),
+            ),
+            ListTile(
+              leading: Icon(
                 Icons.chat_bubble,
                 color: Colors.grey,
               ),
               title: Text(
                 "Chat",
-                style: Theme.of(context).textTheme.title,
               ),
               onTap: () =>
                   Navigator.of(context).pushNamed(ChatSelectorScreen.route),
             ),
-           
-           ListTile(
-              leading: Icon(
-                Icons.home,
-                color: Colors.grey,
-              ),
-              title: Text(
-                "Home",
-                style: Theme.of(context).textTheme.title,
-              ),
-              onTap: () => Navigator.of(context).pushReplacementNamed(DashBoard.route),
-            ),
-
             ListTile(
               leading: Icon(
                 Icons.power_settings_new,
@@ -156,7 +152,6 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
               ),
               title: Text(
                 "Log Out",
-                style: Theme.of(context).textTheme.title,
               ),
               onTap: () => _handleSignOut(context),
             ),
