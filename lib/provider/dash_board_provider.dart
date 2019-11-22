@@ -94,7 +94,7 @@ class CarouselProvider with ChangeNotifier {
     return [..._carouselImage];
   }
 
-  Future<Stream> carouselFetch() async {
+  Future<void> carouselFetch() async {
     List<dynamic> list1 = [];
     try {
       await _documentRef.collection("Carousal").getDocuments().then((ds) {
