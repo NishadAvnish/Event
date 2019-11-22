@@ -56,7 +56,7 @@ class ChatDetailsWidget extends StatelessWidget {
                                 ? CrossAxisAlignment.end
                                 : CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(_chat[index].content),
+                              SelectableText(_chat[index].content),
                               SizedBox(
                                 height: 5,
                               ),

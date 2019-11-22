@@ -1,4 +1,5 @@
 import 'package:event/provider/chat_contact_provider.dart';
+import 'package:event/provider/helper_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -66,6 +67,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: ChatContactProvider(),
         ),
+        ChangeNotifierProvider.value(
+          value: LoadingData(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

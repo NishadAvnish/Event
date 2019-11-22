@@ -1,7 +1,5 @@
 import 'package:event/helpers/google_sign_in.dart';
 
-import 'package:event/helpers/firestore_crud.dart';
-import 'package:event/provider/chat_contact_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'dashboard.dart';

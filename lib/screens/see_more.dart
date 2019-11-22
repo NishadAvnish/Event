@@ -46,8 +46,7 @@ class _SeeMoreState extends State<SeeMore> {
 
   @override
   Widget build(BuildContext context) {
-    final _width = MediaQuery.of(context).size.shortestSide;
-    final _height = MediaQuery.of(context).size.longestSide;
+    final _height = MediaQuery.of(context).size.height;
     _items = Provider.of<SeeMoreProvider>(context).seeMoreItems;
     isItemPresent = Provider.of<SeeMoreProvider>(context).isItemPresent;
 
@@ -72,15 +71,18 @@ class _SeeMoreState extends State<SeeMore> {
           : Column(
               children: <Widget>[
                 Expanded(
-                  child: ListView.separated(
+                    child: ListView.separated(
                   controller: _scrollController,
                   itemCount: _items.length,
                   itemBuilder: (context, index) {
-                    return GestureDetector(
-                        onTap: () => Navigator.of(context).pushNamed(
-                            EventDetail.route,
-                            arguments: _items[index].id),
-                        child: SeeMoreItems(_items, index));
+                    return Hero(
+                      tag: "fromSeemore",
+                      child: GestureDetector(
+                          onTap: () => Navigator.of(context).pushNamed(
+                              EventDetail.route,
+                              arguments: _items[index].id),
+                          child: SeeMoreItems(_items, index)),
+                    );
                   },
                   separatorBuilder: (BuildContext context, int index) {
                     return SizedBox(height: _height * 0.002);

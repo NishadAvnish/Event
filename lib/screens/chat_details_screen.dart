@@ -30,11 +30,8 @@ class _ChatDetailsScreenState extends State<ChatDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _height = MediaQuery.of(context).size.height;
-    final _width = MediaQuery.of(context).size.width;
     userID();
-    final _chat = Provider.of<ChatDetailProvider>(context)
-        .chatDetailItems;
+    final _chat = Provider.of<ChatDetailProvider>(context).chatDetailItems;
     return Scaffold(
       appBar: AppBar(
         title: Text("Contact Name"),
@@ -46,8 +43,7 @@ class _ChatDetailsScreenState extends State<ChatDetailsScreen> {
               StreamBuilder<Object>(
                   stream:
                       Provider.of<ChatDetailProvider>(context, listen: false)
-                          .fetchDetail("wmHgmv2l1lVQ44rF0a06", _loggedInId)
-                          .asStream(),
+                          .fetchDetail("wmHgmv2l1lVQ44rF0a06", _loggedInId),
                   builder: (context, snapshot) {
                     return ChatDetailsWidget(_loggedInId, _chat);
                   }),
@@ -64,7 +60,6 @@ class _ChatDetailsScreenState extends State<ChatDetailsScreen> {
                         maxLines: null,
                         keyboardType: TextInputType.multiline,
                         decoration: new InputDecoration(
-                          
                           fillColor: Colors.white,
                           border: new OutlineInputBorder(
                             borderRadius: new BorderRadius.circular(25.0),
@@ -78,18 +73,25 @@ class _ChatDetailsScreenState extends State<ChatDetailsScreen> {
                       ),
                     ),
                     Flexible(
-                      
                       flex: 1,
                       child: FloatingActionButton(
                         backgroundColor: Colors.white,
                         elevation: 3,
                         onPressed: () {
-                             if(msg!=null)
-                            { Provider.of<ChatDetailProvider>(context,listen: false).addNewMsg("wmHgmv2l1lVQ44rF0a06", {"msg":msg,"time":DateTime.now().toIso8601String(),"creater":_loggedInId}).catchError((e)=>print(e)).then((_){
-                              msg=null;
-                              _textEditingController.clear();
-                             });}
-
+                          if (msg != null) {
+                            Provider.of<ChatDetailProvider>(context,
+                                    listen: false)
+                                .addNewMsg("wmHgmv2l1lVQ44rF0a06", {
+                                  "msg": msg,
+                                  "time": DateTime.now().toIso8601String(),
+                                  "creater": _loggedInId
+                                })
+                                .catchError((e) => print(e))
+                                .then((_) {
+                                  msg = null;
+                                  _textEditingController.clear();
+                                });
+                          }
                         },
                         child: Text(
                           'Send',

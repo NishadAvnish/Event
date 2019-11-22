@@ -11,9 +11,8 @@ class ChatDetailProvider with ChangeNotifier{
   }
 
 
-  Future<void>fetchDetail(String chatId,String currentUserId) async {
+  Stream<void>fetchDetail(String chatId,String currentUserId) async* {
     bool isAdmin=false;
-    String lastMessage,lastTime;
 
        List<ChatDetails> _tempMsgList=[];
        try{ await docRef.collection("Chat").document(chatId).get().then((doc){

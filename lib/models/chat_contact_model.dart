@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class ChatContactModel {
   final String id;
   final String imageUrl;

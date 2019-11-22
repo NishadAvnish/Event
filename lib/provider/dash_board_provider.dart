@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 
 Firestore _documentRef = Firestore.instance;
 
+
 class DashBoardProvider with ChangeNotifier {
   int previousIndex = -1;
+  
 
   List<DashboardDataModel> _categoryItems = [];
   final List<String> choiceCategory;
@@ -19,7 +21,6 @@ class DashBoardProvider with ChangeNotifier {
   }
 
   Future<void> categoryFetch(index) async {
-    print(index);
     List<DashboardDataModel> _tempList = [];
     if (previousIndex != index) {
       try {
@@ -94,7 +95,7 @@ class CarouselProvider with ChangeNotifier {
     return [..._carouselImage];
   }
 
-  Future<Stream> carouselFetch() async {
+  Stream<void> carouselFetch() async* {
     List<dynamic> list1 = [];
     try {
       await _documentRef.collection("Carousal").getDocuments().then((ds) {
@@ -107,7 +108,6 @@ class CarouselProvider with ChangeNotifier {
     } catch (e) {
       print(e);
     }
-    _carouselImage = [];
     _carouselImage = [...list1];
     notifyListeners();
   }
