@@ -1,3 +1,4 @@
+import 'package:event/screens/connect_screen.dart';
 import 'package:event/screens/dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -144,6 +145,17 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
               ),
               onTap: () =>
                   Navigator.of(context).pushNamed(ChatSelectorScreen.route),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.group,
+                color: Colors.grey,
+              ),
+              title: Text(
+                "Connect",
+              ),
+              onTap: () =>
+                  Navigator.of(context).pushNamed(ConnectScreen.route),
             ),
             ListTile(
               leading: Icon(

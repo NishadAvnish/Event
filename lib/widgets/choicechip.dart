@@ -18,14 +18,15 @@ class _ChoiceChipItemsState extends State<ChoiceChipItems> {
     _fetchCategories();
   }
 
-  void _fetchCategories() async{
-    try{
-      await Provider.of<ChoiceChipProvider>(context, listen: false).fetchCategory();
+  void _fetchCategories() async {
+    try {
+      await Provider.of<ChoiceChipProvider>(context, listen: false)
+          .fetchCategory();
       setState(() {
         _isLoading = false;
         _value = 0;
       });
-    }catch(error){
+    } catch (error) {
       setState(() {
         _isLoading = false;
       });
@@ -35,38 +36,44 @@ class _ChoiceChipItemsState extends State<ChoiceChipItems> {
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
-    final _choiceProvider = Provider.of<ChoiceChipProvider>(context, listen: false);
+    final _choiceProvider =
+        Provider.of<ChoiceChipProvider>(context, listen: false);
 
-    if(_value != -1)
-      Provider.of<DashBoardProvider>(context, listen: false).categoryFetch(_value);
+    if (_value != -1)
+      Provider.of<DashBoardProvider>(context, listen: false)
+          .categoryFetch(_value);
 
     return Container(
       height: _height * 0.05,
-      child: _isLoading ? Center(child: Text("Loading..."),) : ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: _choiceProvider.chooseCategoryItem.length,
-        physics: BouncingScrollPhysics(),
-        itemBuilder: (context, index) {
-          return Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: ChoiceChip(
-                label: Text(
-                  _choiceProvider.chooseCategoryItem[index],
-                  style: TextStyle(color: Colors.black, fontSize: 15),
-                ),
-                selected: _value == index,
-                selectedColor: Colors.blue[200],
-                backgroundColor: Colors.white,
-                onSelected: (selected) {
-                  _choiceProvider.changeValue(index);
+      child: _isLoading
+          ? Center(
+              child: Text("Loading..."),
+            )
+          : ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: _choiceProvider.chooseCategoryItem.length,
+              physics: BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: ChoiceChip(
+                      label: Text(
+                        _choiceProvider.chooseCategoryItem[index],
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      selected: _value == index,
+                      selectedColor: Colors.blue[200],
+                      backgroundColor: Colors.grey[200],
+                      onSelected: (selected) {
+                        _choiceProvider.changeValue(index);
 
-                  setState(() {
-                    _value = index;
-                  });
-                },
-              ));
-        },
-      ),
+                        setState(() {
+                          _value = index;
+                        });
+                      },
+                    ));
+              },
+            ),
     );
   }
 }

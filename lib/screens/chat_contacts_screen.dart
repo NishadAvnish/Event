@@ -85,12 +85,7 @@ class _ChatContactsScreenState extends State<ChatContactsScreen> {
             return ListView.builder(
               padding: EdgeInsets.all(10.0),
               itemBuilder: (context, index) =>
-                  ChatContactWidget(
-                    index,
-                    _chatContactsList[0],
-                    widget.flag,
-                    _chatContactsList
-                  ),
+                  ChatContactWidget(_chatContactsList[0]),
               itemCount: snapshot.data.documents.length,
             );
           }

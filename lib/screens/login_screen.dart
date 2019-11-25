@@ -1,3 +1,4 @@
+import 'package:event/models/new_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,13 +17,20 @@ class LoginSignupScreen extends StatefulWidget {
 
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
   final _passwordFocusNode = FocusNode();
+  final _userNameFocusNode = FocusNode();
+  final _emailFocusNode = FocusNode();
   final _form = GlobalKey<FormState>();
   final _auth = Auth();
+
   FirebaseUser _currentUser;
   bool _isLoginForm = true;
   bool _isLoading = true;
   bool _emailVerificationRequired = false;
-  String _email, _password;
+  var _newUser = NewUser(
+    email: "",
+    fullName: "",
+    userName: "",
+  );
 
   /////////// Google Sigin code
   @override
@@ -75,7 +83,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         _isLoading = true;
       });
       if (_isLoginForm) {
-        _currentUser = await _auth.signIn(_email, _password);
+        _currentUser = await _auth.signIn(_newUser.email, _newUser.password);
         if (_currentUser.uid.length > 0 && _currentUser.isEmailVerified)
           Navigator.of(context).popAndPushNamed(DashBoard.route);
         else
@@ -84,9 +92,14 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             _emailVerificationRequired = true;
           });
       } else {
-        String uid = await _auth.signUp(_email, _password);
+        await _auth.checkIfUsernameExists(_newUser.userName);
+        String uid = await _auth.signUp(_newUser.email, _newUser.password);
         if (uid.length > 0) {
-          _auth.sendEmailVerification();
+          await _auth.addUserToDatabase(
+            uid,
+            _newUser,
+          );
+          await _auth.sendEmailVerification();
           setState(() {
             _isLoading = false;
             _emailVerificationRequired = true;
@@ -118,6 +131,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         case "ERROR_WRONG_PASSWORD":
           message = "Wrong password.";
           break;
+
+        case "USER_NAME_EXISTS":
+          message = "Username already in use";
+          break;
       }
 
       showDialog(
@@ -127,7 +144,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             Icons.error,
             color: Theme.of(ctx).errorColor,
           ),
-          content: Text(message),
+          content: Text(
+            message,
+            textAlign: TextAlign.center,
+          ),
         ),
       );
       setState(() {
@@ -146,7 +166,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         ),
         body: _emailVerificationRequired
             ? Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
+                padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -186,29 +206,82 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                           backgroundColor: Theme.of(context).primaryColor,
                           radius: 65,
                         ),
+                        AnimatedContainer(
+                          height: _isLoginForm ? 0 : 177,
+                          duration: Duration(milliseconds: 300),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: <Widget>[
+                                TextFormField(
+                                  decoration: InputDecoration(
+                                    labelText: "Full Name",
+                                  ),
+                                  textInputAction: TextInputAction.next,
+                                  onFieldSubmitted: (_) =>
+                                      FocusScope.of(context)
+                                          .requestFocus(_userNameFocusNode),
+                                  validator: (value) =>
+                                      _isLoginForm ? null : value.isEmpty ? "Enter name" : null,
+                                  onSaved: (value) => _newUser.fullName = value,
+                                ),
+                                TextFormField(
+                                  decoration: InputDecoration(
+                                    labelText: "Username",
+                                  ),
+                                  textInputAction: TextInputAction.next,
+                                  onFieldSubmitted: (_) =>
+                                      FocusScope.of(context)
+                                          .requestFocus(_emailFocusNode),
+                                  focusNode: _userNameFocusNode,
+                                  validator: (value) =>
+                                      _isLoginForm ? null : value.isEmpty ? "Enter username" : null,
+                                  onSaved: (value) => _newUser.userName = value,
+                                ),
+                                const SizedBox(height: 10),
+                                DropdownButtonFormField<String>(
+                                  validator: (value) =>
+                                      _isLoginForm ? null : value.isEmpty ? "Select role" : null,
+                                  value: _newUser.role,
+                                  hint: Text("Choose Role"),
+                                  onSaved: (value) => _newUser.role = value,
+                                  onChanged: (String newValue) {
+                                    setState(() {
+                                      _newUser.role = newValue;
+                                    });
+                                  },
+                                  items: ["Teacher", "Student", "Alumni"]
+                                      .map((value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                         TextFormField(
                           decoration: InputDecoration(
                             labelText: "Email",
-                            icon: Icon(Icons.email),
                           ),
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) => FocusScope.of(context)
                               .requestFocus(_passwordFocusNode),
                           validator: (value) =>
                               value.isEmpty ? "Enter email" : null,
-                          onSaved: (value) => _email = value,
+                          onSaved: (value) => _newUser.email = value,
                         ),
                         TextFormField(
                           decoration: InputDecoration(
                             labelText: "Password",
-                            icon: Icon(Icons.lock),
                           ),
                           obscureText: true,
                           focusNode: _passwordFocusNode,
                           keyboardType: TextInputType.visiblePassword,
                           validator: (value) =>
                               value.isEmpty ? "Enter password" : null,
-                          onSaved: (value) => _password = value,
+                          onSaved: (value) => _newUser.password = value,
                         ),
                         const SizedBox(height: 20),
                         Container(

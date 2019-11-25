@@ -4,9 +4,7 @@ import '../models/chat_contact_model.dart';
 
 class ChatContactWidget extends StatelessWidget {
   final ChatContactModel _chatContact;
-  final int flag;
-  final List<ChatContactModel> _items;
-  ChatContactWidget(this.index, this._chatContact, this.flag, this._items);
+  ChatContactWidget(this._chatContact);
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +12,9 @@ class ChatContactWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        //color: _chatContact.isRead ? Colors.white : Colors.blue[50],
-        color: index % 2 == 0 ? Colors.white : Colors.blue[50],
       ),
       padding: EdgeInsets.all(5),
       margin: EdgeInsets.symmetric(
-        horizontal: 10,
         vertical: 2,
       ),
       child: ListTile(
@@ -31,11 +26,6 @@ class ChatContactWidget extends StatelessWidget {
           ),
         ),
         title: Text(_chatContact.name),
-        subtitle: Text(_lastMessage.msg.length < 30
-            ? _lastMessage.msg
-            : "${_lastMessage.msg.substring(0, 30)}..."),
-        trailing:
-            Text(_lastMessage.time/*.split("T")[1].split(".")[0].substring(0, 5)*/),
       ),
     );
   }

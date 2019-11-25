@@ -1,4 +1,6 @@
 import 'package:event/provider/chat_contact_provider.dart';
+import 'package:event/provider/connect_provider.dart';
+import 'package:event/screens/connect_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -66,6 +68,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: ChatContactProvider(),
         ),
+        ChangeNotifierProvider.value(
+          value: ConnectProvider(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -89,6 +94,7 @@ class MyApp extends StatelessWidget {
           EventDetail.route: (_) => EventDetail(),
           UserProfile.route: (_) => UserProfile(),
           EditEventScreen.route: (_) => EditEventScreen(),
+          ConnectScreen.route: (_) => ConnectScreen(),
         },
       ),
     );
