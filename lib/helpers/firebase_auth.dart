@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event/models/new_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 abstract class BaseAuth {
   Future<FirebaseUser> signIn(String email, String password);
@@ -55,4 +58,30 @@ class Auth implements BaseAuth {
 
     return user.isEmailVerified;
   }
+
+  Future<void> checkIfUsernameExists(String userName) async{
+    final response = await Firestore.instance.collection("users").where("user_name", isEqualTo: userName).getDocuments();
+    if(response.documents.isNotEmpty)
+      throw PlatformException(
+        code: "USER_NAME_EXISTS",
+        message: "User name already exists.",
+      );
+  }
+
+  Future<void> addUserToDatabase(String userId,NewUser newUser) async {
+
+    final Map<String, dynamic> userData = {
+      "full_name" : newUser.fullName,
+      "user_name" : newUser.userName,
+      "email" : newUser.email,
+      "role" : newUser.role,
+    };
+
+    try {
+      await Firestore.instance.collection("users").document(userId).setData(userData);
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }

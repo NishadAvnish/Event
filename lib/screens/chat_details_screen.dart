@@ -1,108 +1,80 @@
-import 'package:event/provider/chat_detail_provider.dart';
-import 'package:event/widgets/chat_details_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
-class ChatDetailsScreen extends StatefulWidget {
+import '../widgets/chat_details_widget.dart';
+import '../widgets/send_new_chat_widget.dart';
+import '../models/chat_contact_model.dart';
+import '../models/chat_details_model.dart';
+
+class ChatDetailsScreen extends StatelessWidget {
   static const route = "/chat_details_screen";
 
   @override
-  _ChatDetailsScreenState createState() => _ChatDetailsScreenState();
-}
-
-String _loggedInId;
-
-Future<void> userID() async {
-  final FirebaseUser x = await FirebaseAuth.instance.currentUser();
-  _loggedInId = x.uid;
-}
-
-class _ChatDetailsScreenState extends State<ChatDetailsScreen> {
-  String msg;
-
-  TextEditingController _textEditingController = TextEditingController();
-  @override
-  void dispose() {
-    super.dispose();
-    _textEditingController.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    userID();
-    final _chat = Provider.of<ChatDetailProvider>(context).chatDetailItems;
+    final ChatContactModel chatContact =
+        ModalRoute.of(context).settings.arguments;
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Contact Name"),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        title: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              StreamBuilder<Object>(
-                  stream:
-                      Provider.of<ChatDetailProvider>(context, listen: false)
-                          .fetchDetail("wmHgmv2l1lVQ44rF0a06", _loggedInId),
-                  builder: (context, snapshot) {
-                    return ChatDetailsWidget(_loggedInId, _chat);
-                  }),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Flexible(
-                      flex: 3,
-                      child: TextField(
-                        textInputAction: TextInputAction.newline,
-                        maxLines: null,
-                        keyboardType: TextInputType.multiline,
-                        decoration: new InputDecoration(
-                          fillColor: Colors.white,
-                          border: new OutlineInputBorder(
-                            borderRadius: new BorderRadius.circular(25.0),
-                          ),
-                        ),
-                        controller: _textEditingController,
-                        onChanged: (value) {
-                          //Do something with the user input.
-                          msg = value;
-                        },
-                      ),
-                    ),
-                    Flexible(
-                      flex: 1,
-                      child: FloatingActionButton(
-                        backgroundColor: Colors.white,
-                        elevation: 3,
-                        onPressed: () {
-                          if (msg != null) {
-                            Provider.of<ChatDetailProvider>(context,
-                                    listen: false)
-                                .addNewMsg("wmHgmv2l1lVQ44rF0a06", {
-                                  "msg": msg,
-                                  "time": DateTime.now().toIso8601String(),
-                                  "creater": _loggedInId
-                                })
-                                .catchError((e) => print(e))
-                                .then((_) {
-                                  msg = null;
-                                  _textEditingController.clear();
-                                });
-                          }
-                        },
-                        child: Text(
-                          'Send',
-                          style: Theme.of(context).textTheme.button,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              CircleAvatar(
+                backgroundImage: NetworkImage(chatContact.imageUrl),
               ),
-            ]),
+              SizedBox(
+                width: 10,
+              ),
+              Text(chatContact.name),
+            ],
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  height: height * 0.8,
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: Firestore.instance
+                          .collection("chats")
+                          .document(chatContact.id)
+                          .collection("messages")
+                          .orderBy("time")
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting)
+                          return Center(child: Text("Loading..."));
+                        if (snapshot.hasError)
+                          return Center(child: Text("An error occurred..."));
+                        return ListView.builder(
+                          reverse: true,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                          ),
+                          itemCount: snapshot.data.documents.length,
+                          itemBuilder: (_, index) => ChatDetailsWidget(
+                            ChatDetails(
+                              creatorId: snapshot
+                                  .data.documents[snapshot.data.documents.length - index - 1].data["creator_id"],
+                              content: snapshot
+                                  .data.documents[snapshot.data.documents.length - index - 1].data["message"],
+                              time: DateFormat.Hm().format(DateTime.parse(
+                                snapshot.data.documents[snapshot.data.documents.length - index - 1].data["time"],
+                              )),
+                              isAdmin: false,
+                            ),
+                          ),
+                        );
+                      }),
+                ),
+                SendNewChat(chatContact.id),
+              ]),
+        ),
       ),
     );
   }

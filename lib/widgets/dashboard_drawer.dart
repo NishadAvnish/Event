@@ -1,14 +1,17 @@
+import 'package:event/provider/current_user_provider.dart';
+import 'package:event/screens/chat_contacts_screen.dart';
 import 'package:event/screens/favourite_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:google_sign_in/widgets.dart';
+import 'package:provider/provider.dart';
 
 import '../helpers/google_sign_in.dart';
 import '../helpers/firebase_auth.dart';
 import '../screens/login_screen.dart';
-import '../screens/chat_selector_screen.dart';
 import '../screens/edit_event_screen.dart';
+import '../screens/connect_screen.dart';
 
 class DashBoardDrawer extends StatefulWidget {
   @override
@@ -50,12 +53,11 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
   }
 
   Widget _buildHeader(BuildContext context, double _headerHeight) {
+    final currentUser = Provider.of<CurrentUserProvider>(context).currentUser;
     return Container(
       height: _headerHeight,
       width: double.infinity,
-      color: _isSignedInWithGoogle
-          ? Theme.of(context).primaryColorLight
-          : Theme.of(context).primaryColor,
+      color: Theme.of(context).primaryColorLight,
       child: _isLoading
           ? Center(child: CircularProgressIndicator())
           : _isSignedInWithGoogle
@@ -83,30 +85,19 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                     SizedBox(height: 20),
                     CircleAvatar(
                       backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.person,
-                        color: Theme.of(context).primaryColor,
-                        size: _headerHeight * 0.4,
-                      ),
+                      backgroundImage: NetworkImage(currentUser.imageUrl),
                       radius: _headerHeight * 0.30,
                     ),
                     SizedBox(height: 10),
                     Text(
-                      _currentFirebaseAuthUser.displayName == null
-                          ? _currentFirebaseAuthUser.email
-                              .substring(0,
-                                  _currentFirebaseAuthUser.email.indexOf("@"))
-                              .toUpperCase()
-                          : _currentFirebaseAuthUser.displayName.toUpperCase(),
+                      currentUser.name,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
                       ),
                     ),
                     Text(
-                      _currentFirebaseAuthUser.email,
+                      currentUser.email,
                       style: TextStyle(
-                        color: Colors.white,
                         fontSize: 12,
                       ),
                     ),
@@ -143,7 +134,29 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                 "Chat",
               ),
               onTap: () =>
-                  Navigator.of(context).pushNamed(ChatSelectorScreen.route),
+                  Navigator.of(context).pushNamed(ChatContactsScreen.route),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.group,
+                color: Colors.grey,
+              ),
+              title: Text(
+                "Connect",
+              ),
+              onTap: () =>
+                  Navigator.of(context).pushNamed(ConnectScreen.route),
+            ),
+             ListTile(
+              leading: Icon(
+                Icons.favorite,
+                color: Colors.grey,
+              ),
+              
+              title: Text(
+                "Favourites",
+              ),
+              onTap: () => Navigator.of(context).pushNamed(FavouriteScreen.route),
             ),
             ListTile(
               leading: Icon(
@@ -156,17 +169,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
               ),
               onTap: () => _handleSignOut(context),
             ),
-            ListTile(
-              leading: Icon(
-                Icons.favorite,
-                color: Colors.grey,
-              ),
-              
-              title: Text(
-                "Favourites",
-              ),
-              onTap: () => Navigator.of(context).pushNamed(FavouriteScreen.route),
-            ),
+           
           ],
         ),
       ),

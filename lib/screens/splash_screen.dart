@@ -1,7 +1,7 @@
 import 'package:event/helpers/google_sign_in.dart';
-
+import 'package:event/provider/current_user_provider.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import 'dashboard.dart';
 import 'login_screen.dart';
 import '../helpers/firebase_auth.dart';
@@ -16,28 +16,18 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     _checkLogInStatus();
-    //CrudOperation.add();
-   // CrudOperation.fetch();
-   
-  }
-
-  @override
-  void didChangeDependencies() {
-    // Provider.of<ChatContactProvider>(context).fetchContact("xgySFHPrQ3feOWu9orsTEsBv4Fu1");
-    super.didChangeDependencies();
-   
   }
 
   void _checkLogInStatus() async {
-    if (await googleSignIn.isSignedIn()){
+    if (await googleSignIn.isSignedIn()) {
       await googleSignIn.signInSilently();
       Navigator.of(context).pushReplacementNamed(DashBoard.route);
-    }
-    else {
+    } else {
       final auth = Auth();
       final user = await auth.getCurrentUser();
       if (user != null) {
         await user.reload();
+        await Provider.of<CurrentUserProvider>(context,listen: false).getCurrentUser();
         if (user?.uid != null && user.isEmailVerified)
           Navigator.of(context).pushReplacementNamed(DashBoard.route);
         else
