@@ -1,3 +1,4 @@
+import 'package:event/provider/dash_board_provider.dart';
 import 'package:event/provider/event_detail_provider.dart';
 import 'package:event/screens/user_profile.dart';
 import 'package:event/widgets/dottedBox.dart';
@@ -15,35 +16,31 @@ class EventDetail extends StatefulWidget {
 class _EventDetailState extends State<EventDetail> {
   int index = 0;
   bool isLoading = true;
-  String id;
-  int i = 0;
 
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration(seconds:0)).then((_)=>_eventFetch());
+    
   }
+ 
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (i == 0) {
-      id = ModalRoute.of(context).settings.arguments as String;
+  void _eventFetch() async {
+    final id = ModalRoute.of(context).settings.arguments as String;
+    await Provider.of<EventDetailProvider>(context, listen: false)
+        .eventFetch(id);
 
-      Provider.of<EventDetailProvider>(context).recommandedFetch(id).then((_) {
-        i++;
-        setState(() {
-          isLoading = false;
-        });
-      });
-    }
+    if (!mounted) return;    
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
-
-    final _item = Provider.of<EventDetailProvider>(context).item;
+    final _items = Provider.of<EventDetailProvider>(context).item;
     return Container(
       height: _height,
       width: _width,
@@ -73,11 +70,8 @@ class _EventDetailState extends State<EventDetail> {
                       children: <Widget>[
                         LimitedBox(
                           maxHeight: _height * 0.36,
-                          child: Hero(
-                            tag: "fromSeemore",
-                            child: DottedBox(
-                              index: index,
-                            ),
+                          child: DottedBox(
+                            index: index,
                           ),
                         ),
                         SizedBox(
@@ -93,7 +87,7 @@ class _EventDetailState extends State<EventDetail> {
                                 constraints:
                                     BoxConstraints(maxWidth: _width * 0.8),
                                 child: Text(
-                                  "${_item[0].title}",
+                                  "${_items[0].title}",
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline
@@ -105,7 +99,7 @@ class _EventDetailState extends State<EventDetail> {
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text(
-                                    "${DateTime.parse(_item[0].date).toString().split(".")[0]}",
+                                    "${DateTime.parse(_items[0].date).toString().split(".")[0]}",
                                     style: Theme.of(context)
                                         .textTheme
                                         .body2
@@ -119,19 +113,41 @@ class _EventDetailState extends State<EventDetail> {
                                           MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                         Material(
+                                          color: Colors.transparent,
                                           child: IconButton(
-                                            icon: Icon(
-                                              Icons.favorite_border,
-                                              color: Colors.red,
-                                            ),
-                                            onPressed: () {},
+                                            icon: _items[0].isFavorite
+                                                ? Icon(
+                                                    Icons.favorite,
+                                                    color: Colors.red,
+                                                  )
+                                                : Icon(
+                                                    Icons.favorite_border,
+                                                    color: Colors.red,
+                                                  ),
+                                            onPressed: () {
+                                              bool _isFavourite =_items[0].isFavorite ? true : false;
+                                              _isFavourite =!_isFavourite;
+                                              Provider.of<EventDetailProvider>(context,listen: false)
+                                                  .toggleFavourite(
+                                                      _items[0].id,
+                                                      _items[0].seenBy,
+                                                      _isFavourite);
+                                              Provider.of<RecommandedProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .toggleFavourite(
+                                                      _items[0].id,
+                                                      _items[0].seenBy,
+                                                      _isFavourite,
+                                                      2);
+                                            },
                                           ),
                                         ),
                                         SizedBox(
                                           width: 5,
                                         ),
                                         Text(
-                                          "${_item[0].seenBy} ",
+                                          "${_items[0].seenBy} ",
                                           style: Theme.of(context)
                                               .textTheme
                                               .body2
@@ -147,7 +163,7 @@ class _EventDetailState extends State<EventDetail> {
                                 height: _height * 0.03,
                               ),
                               Text(
-                                "${_item[0].description}",
+                                "${_items[0].description}",
                                 style: Theme.of(context).textTheme.body2,
                               ),
 
@@ -168,10 +184,10 @@ class _EventDetailState extends State<EventDetail> {
                                       return SizedBox(width: _width * 0.01);
                                     },
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: _item[0].speakerList.length,
+                                    itemCount: _items[0].speakerList.length,
                                     itemBuilder: (context, index) {
                                       return SpeakerList(
-                                          index, _item[0].speakerList);
+                                          index, _items[0].speakerList);
                                     }),
                               ),
 
@@ -192,11 +208,11 @@ class _EventDetailState extends State<EventDetail> {
                               Padding(
                                 padding: EdgeInsets.only(left: _width * 0.03),
                                 child: GestureDetector(
-                                  onTap: () => _item[0].authorImageUrl == null
+                                  onTap: () => _items[0].authorImageUrl == null
                                       ? null
                                       : Navigator.of(context).pushNamed(
                                           UserProfile.route,
-                                          arguments: _item[0].createrId),
+                                          arguments: _items[0].createrId),
                                   child: Container(
                                     height: _height * 0.09,
                                     width: _height * 0.09,
@@ -204,7 +220,7 @@ class _EventDetailState extends State<EventDetail> {
                                         shape: BoxShape.circle,
                                         image: DecorationImage(
                                             image: NetworkImage(
-                                              "${_item[0].authorImageUrl}",
+                                              "${_items[0].authorImageUrl}",
                                             ),
                                             fit: BoxFit.cover)),
                                   ),

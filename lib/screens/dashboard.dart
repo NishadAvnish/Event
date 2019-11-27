@@ -26,7 +26,6 @@ class _DashBoardState extends State<DashBoard> {
 
   @override
   Widget build(BuildContext context) {
-    print("dashboard");
     return Scaffold(
       // for appBar search and menu
       drawer: DashBoardDrawer(),
@@ -36,7 +35,7 @@ class _DashBoardState extends State<DashBoard> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            CarouselSlide(isRebuildReq:isRebuildReq),
+            CarouselSlide(isRebuildReq: isRebuildReq),
             SizedBox(
               height: 20,
             ),
@@ -61,7 +60,7 @@ class _DashBoardState extends State<DashBoard> {
                     height: 5,
                   ),
 
-                  ChoiceChipItems(isRebuildReq:isRebuildReq),
+                  ChoiceChipItems(isRebuildReq: isRebuildReq),
 
                   SizedBox(
                     height: 10,
@@ -113,7 +112,7 @@ class _DashBoardState extends State<DashBoard> {
                   SizedBox(
                     height: 5,
                   ),
-                  RecommandedItem(isRebuildReq:isRebuildReq),
+                  RecommandedItem(isRebuildReq: isRebuildReq),
                 ],
               ),
             ),

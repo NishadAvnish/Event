@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 class EventProvider with ChangeNotifier {
   var _event = EventDetailModel(
+    id: "",
     title: "",
     authorImageUrl: "",
     categories: [],
@@ -14,7 +15,7 @@ class EventProvider with ChangeNotifier {
     description: "",
     eventImageUrls: [""],
     place: "",
-    seenBy: "",
+    seenBy: 0,
     speakerList: [
       SpeakersModel(speakerName: "", speakerImage: "", profile: "")
     ],
@@ -22,6 +23,7 @@ class EventProvider with ChangeNotifier {
 
   void clear() {
     _event = EventDetailModel(
+      id: "",
       title: "",
       authorImageUrl: "",
       categories: [],
@@ -30,7 +32,7 @@ class EventProvider with ChangeNotifier {
       description: "",
       eventImageUrls: [""],
       place: "",
-      seenBy: "",
+      seenBy: 0,
       speakerList: [
         SpeakersModel(speakerName: "", speakerImage: "", profile: "")
       ],
@@ -48,6 +50,7 @@ class EventProvider with ChangeNotifier {
       "Category": _event.categories,
       "Date": _event.date,
       "Description": _event.description,
+      "seenBy":0,
       "EventImages": _event.eventImageUrls,
       "creatorId": currentUser.uid,
       "place": _event.place,

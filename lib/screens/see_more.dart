@@ -75,13 +75,11 @@ class _SeeMoreState extends State<SeeMore> {
                   controller: _scrollController,
                   itemCount: _items.length,
                   itemBuilder: (context, index) {
-                    return Hero(
-                      tag: "fromSeemore",
-                      child: GestureDetector(
+                    return GestureDetector(
                           onTap: () => Navigator.of(context).pushNamed(
                               EventDetail.route,
                               arguments: _items[index].id),
-                          child: SeeMoreItems(_items, index)),
+                          child: SeeMoreItems(_items, index),
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) {

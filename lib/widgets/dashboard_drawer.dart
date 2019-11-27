@@ -1,3 +1,4 @@
+import 'package:event/screens/favourite_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -149,10 +150,22 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                 Icons.power_settings_new,
                 color: Colors.grey,
               ),
+              
               title: Text(
                 "Log Out",
               ),
               onTap: () => _handleSignOut(context),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.favorite,
+                color: Colors.grey,
+              ),
+              
+              title: Text(
+                "Favourites",
+              ),
+              onTap: () => Navigator.of(context).pushNamed(FavouriteScreen.route),
             ),
           ],
         ),

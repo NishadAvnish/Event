@@ -26,14 +26,12 @@ class ChoiceChipProvider with ChangeNotifier {
 
     try {
       final snapShot = await Firestore.instance.collection("Post").getDocuments();
-      print(snapShot.documents);
       snapShot.documents.forEach((event) {
         event.data["Category"].forEach((category) {
           _tempSet.add(category);
         });
       });
 
-      print(_tempSet);
       _chooseCategory = _tempSet.toList();
       notifyListeners();
     } catch (error) {

@@ -1,5 +1,7 @@
 import 'package:event/provider/chat_contact_provider.dart';
 import 'package:event/provider/helper_provider.dart';
+import 'package:event/screens/favourite_screen.dart';
+import 'package:event/screens/search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -69,15 +71,14 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: LoadingData(),
-        )
+        ),
+       
+      
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        //home: SeeMore(),
-        // home: EventDetail(),
-        //home:UserProfile(),
-        //home:DashBoard(),
         home: SplashScreen(),
+        
         theme: ThemeData(
           primaryColor: Colors.blue,
           primaryColorDark: Colors.blue[900],
@@ -93,6 +94,7 @@ class MyApp extends StatelessWidget {
           EventDetail.route: (_) => EventDetail(),
           UserProfile.route: (_) => UserProfile(),
           EditEventScreen.route: (_) => EditEventScreen(),
+          FavouriteScreen.route:(_)=>FavouriteScreen(),
         },
       ),
     );
