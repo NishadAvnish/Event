@@ -1,9 +1,11 @@
-import 'package:event/provider/chat_contact_provider.dart';
-import 'package:event/provider/connect_provider.dart';
-import 'package:event/screens/connect_screen.dart';
+import 'package:event/provider/current_user_provider.dart';
+import 'package:event/screens/chat_contacts_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'provider/chat_contact_provider.dart';
+import 'provider/connect_provider.dart';
+import 'screens/connect_screen.dart';
 import 'provider/chat_detail_provider.dart';
 import 'provider/event_detail_provider.dart';
 import 'provider/event_provider.dart';
@@ -16,14 +18,13 @@ import 'screens/user_profile.dart';
 import 'provider/dash_board_provider.dart';
 import 'provider/user_profile_provider.dart';
 import 'screens/dashboard.dart';
-import './provider/choice_chip_provider.dart';
+import 'provider/choice_chip_provider.dart';
 import 'screens/chat_details_screen.dart';
-import 'screens/chat_selector_screen.dart';
 import 'screens/splash_screen.dart';
 
 main() {
   runApp(MyApp());
-  // WidgetsFlutterBinding.ensureInitialized();
+  //WidgetsFlutterBinding.ensureInitialized();
   //SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 }
 
@@ -48,6 +49,12 @@ class MyApp extends StatelessWidget {
               ),
         ),
         ChangeNotifierProvider.value(
+          value: CurrentUserProvider(),
+        ),
+        ChangeNotifierProxyProvider<CurrentUserProvider,ConnectProvider>(
+          builder: (_, currentUserProvider, __) => ConnectProvider(currentUserProvider.currentUser),
+        ),
+        ChangeNotifierProvider.value(
           value: EventDetailProvider(),
         ),
         ChangeNotifierProvider.value(
@@ -68,9 +75,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: ChatContactProvider(),
         ),
-        ChangeNotifierProvider.value(
-          value: ConnectProvider(),
-        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -87,7 +91,6 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           ChatDetailsScreen.route: (_) => ChatDetailsScreen(),
-          ChatSelectorScreen.route: (_) => ChatSelectorScreen(),
           DashBoard.route: (_) => DashBoard(),
           LoginSignupScreen.route: (_) => LoginSignupScreen(),
           SeeMore.route: (_) => SeeMore(),
@@ -95,6 +98,7 @@ class MyApp extends StatelessWidget {
           UserProfile.route: (_) => UserProfile(),
           EditEventScreen.route: (_) => EditEventScreen(),
           ConnectScreen.route: (_) => ConnectScreen(),
+          ChatContactsScreen.route: (_) => ChatContactsScreen(),
         },
       ),
     );

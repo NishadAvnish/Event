@@ -8,10 +8,13 @@ import '../helpers/firebase_auth.dart';
 import '../models/connection_request_model.dart';
 
 class ConnectProvider with ChangeNotifier {
-  final dbRef = Firestore.instance;
-
+  final Connection _currentUserData;
   List<Connection> _availableConnections = [];
   List<Connection> _myConnections = [];
+
+  ConnectProvider(this._currentUserData);
+
+  final dbRef = Firestore.instance;
 
   List<Connection> get availableConnections {
     return [..._availableConnections];
@@ -21,19 +24,22 @@ class ConnectProvider with ChangeNotifier {
     return [..._myConnections];
   }
 
-  void updateConnectionStatus(Connection connection, String newStatus) {
+  void updateConnectionStatus(Connection connection, ConnectionRequest newConnectionRequest) {
     if (_availableConnections.contains(connection))
       _availableConnections[_availableConnections.indexOf(connection)]
-          .connectionRequest.status = newStatus;
+          .connectionRequest
+          = newConnectionRequest;
     else
-      _myConnections[_myConnections.indexOf(connection)].connectionRequest.status =
-          newStatus;
+      _myConnections[_myConnections.indexOf(connection)]
+          .connectionRequest
+          = newConnectionRequest;
 
     notifyListeners();
   }
 
   Future<void> findConnections() async {
     try {
+      print(_currentUserData.email);
       final currentUser = await Auth().getCurrentUser();
 
       final allUsersResponse = await dbRef.collection("users").getDocuments();
@@ -83,7 +89,9 @@ class ConnectProvider with ChangeNotifier {
                 role: doc.data["role"],
                 email: doc.data["email"],
                 userName: doc.data["user_name"],
-                connectionRequest: notConnectedConnectionRequestForId["${doc.documentID}"] ?? ConnectionRequest(status: "NOT_CONNECTED"),
+                connectionRequest:
+                    notConnectedConnectionRequestForId["${doc.documentID}"] ??
+                        ConnectionRequest(status: "NOT_CONNECTED"),
               ),
             );
           else
@@ -96,7 +104,8 @@ class ConnectProvider with ChangeNotifier {
                 role: doc.data["role"],
                 email: doc.data["email"],
                 userName: doc.data["user_name"],
-                connectionRequest: connectedConnectionRequestForId["${doc.documentID}"],
+                connectionRequest:
+                    connectedConnectionRequestForId["${doc.documentID}"],
               ),
             );
         }
@@ -105,6 +114,37 @@ class ConnectProvider with ChangeNotifier {
       notifyListeners();
     } catch (error) {
       throw error;
+    }
+  }
+
+  Future<void> sendConnectionRequest(String connectionId) async {
+    try {
+      final currentUser = await Auth().getCurrentUser();
+
+      var connectionRequest = {
+        "user_id": currentUser.uid,
+        "status": "REQUEST_RECEIVED",
+        "chat_id": "NA",
+      };
+
+      await dbRef
+          .collection("users")
+          .document("$connectionId")
+          .collection("connections")
+          .add(connectionRequest);
+
+      connectionRequest.update("status", (_) => "REQUEST_SENT");
+      connectionRequest.update("user_id", (_) => "$connectionId");
+
+      await dbRef
+          .collection("users")
+          .document("${currentUser.uid}")
+          .collection("connections")
+          .add(connectionRequest);
+
+      notifyListeners();
+    } catch (e) {
+      throw e;
     }
   }
 
@@ -139,34 +179,54 @@ class ConnectProvider with ChangeNotifier {
     }
   }
 
-  Future<void> sendConnectionRequest(String connectionId) async {
+  Future<String> startChat(Connection connection) async {
     try {
-      final currentUser = await Auth().getCurrentUser();
-
-      var connectionRequest = {
-        "user_id": currentUser.uid,
-        "status": "REQUEST_RECEIVED",
-        "chat_id": "NA",
+      final currentUserId = _currentUserData.id;
+      final chatData = {
+        "is_group": false,
+        "admins": [currentUserId],
+        "users": [currentUserId, connection.id],
+        "images": [
+          _currentUserData.imageUrl,
+          connection.imageUrl,
+        ],
+        "names": [_currentUserData.name, connection.name],
       };
 
-      await dbRef
-          .collection("users")
-          .document("$connectionId")
-          .collection("connections")
-          .add(connectionRequest);
-
-      connectionRequest.update("status", (_) => "REQUEST_SENT");
-      connectionRequest.update("user_id", (_) => "$connectionId");
+      final response = await dbRef.collection("chats").add(chatData);
 
       await dbRef
           .collection("users")
-          .document("${currentUser.uid}")
+          .document(currentUserId)
           .collection("connections")
-          .add(connectionRequest);
+          .document(connection.connectionRequest.id)
+          .updateData({
+        "chat_id": response.documentID,
+      });
 
-      notifyListeners();
+      final connectionsResponse = await dbRef
+          .collection("users")
+          .document(connection.id)
+          .collection("connections")
+          .where("user_id", isEqualTo: currentUserId)
+          .getDocuments();
+
+      await dbRef
+          .collection("users")
+          .document(connection.id)
+          .collection("connections")
+          .document(connectionsResponse.documents[0].documentID)
+          .updateData({
+        "chat_id": response.documentID,
+      });
+
+      return response.documentID;
     } catch (e) {
+      print(e.toString());
+      print(_currentUserData);
+      print(connection.email);
       throw e;
     }
+
   }
 }

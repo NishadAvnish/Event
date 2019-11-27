@@ -1,8 +1,10 @@
+import 'package:event/screens/chat_contacts_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/connect_provider.dart';
 import '../models/connection_model.dart';
+import '../models/connection_request_model.dart';
 
 class ConnectionWidgetStatusButton extends StatefulWidget {
   final Connection _connection;
@@ -18,30 +20,52 @@ class _ConnectionWidgetStatusButtonState
   var _isLoading = false;
 
   void _handleOnClick() async {
-    if (widget._connection.connectionRequest.status != "NOT_CONNECTED" &&
-        widget._connection.connectionRequest.status != "REQUEST_RECEIVED") return;
+    if (widget._connection.connectionRequest.status == "REQUEST_SENT") return;
 
     setState(() {
       _isLoading = true;
     });
 
+    String chatId;
+
     try {
-      if (widget._connection.connectionRequest.status == "NOT_CONNECTED")
-        await Provider.of<ConnectProvider>(context, listen: false)
-            .sendConnectionRequest(widget._connection.id);
-      else
-        await Provider.of<ConnectProvider>(context, listen: false)
-            .acceptConnectionRequest(widget._connection);
+      final connectProvider = Provider.of<ConnectProvider>(context, listen: false);
+      switch(widget._connection.connectionRequest.status){
+      case "NOT_CONNECTED":
+        await connectProvider
+              .sendConnectionRequest(widget._connection.id);
+        break;
+
+      case "REQUEST_RECEIVED":
+        await connectProvider
+              .acceptConnectionRequest(widget._connection);
+        break;
+
+      case "CONNECTED":
+        chatId = widget._connection.connectionRequest.chatId == "NA" ? await connectProvider
+              .startChat(widget._connection) : widget._connection.connectionRequest.chatId;
+        break;
+      }
 
       setState(() {
         _isLoading = false;
-        Provider.of<ConnectProvider>(context, listen: false).updateConnectionStatus(
-          widget._connection,
-          widget._connection.connectionRequest.status == "NOT_CONNECTED"
-              ? "REQUEST_SENT"
-              : "CONNECTED",
-        );
+        if(widget._connection.connectionRequest.status == "NOT_CONNECTED"){
+          widget._connection.connectionRequest.status = "REQUEST_SENT";
+          connectProvider.updateConnectionStatus(widget._connection, widget._connection.connectionRequest);
+        }
+        else if(widget._connection.connectionRequest.status == "REQUEST_RECEIVED"){
+          widget._connection.connectionRequest.status = "CONNECTED";
+          connectProvider.updateConnectionStatus(widget._connection, widget._connection.connectionRequest);
+        }
+        else if(widget._connection.connectionRequest.status == "CONNECTED" && widget._connection.connectionRequest.chatId == "NA"){
+          widget._connection.connectionRequest.chatId = chatId;
+          connectProvider.updateConnectionStatus(widget._connection, widget._connection.connectionRequest);
+        }
       });
+
+      if(widget._connection.connectionRequest.status == "CONNECTED")
+        _goToChatScreen(chatId);
+
     } catch (e) {
       setState(() {
         _isLoading = false;
@@ -49,14 +73,18 @@ class _ConnectionWidgetStatusButtonState
     }
   }
 
-  String getStatusToBeShown(String status) {
-    switch (status) {
+  void _goToChatScreen(String chatId){
+    Navigator.of(context).pushNamed(ChatContactsScreen.route);
+  }
+
+  String getStatusToBeShown(ConnectionRequest request) {
+    switch (request.status) {
       case "REQUEST_SENT":
         return "Pending";
       case "REQUEST_RECEIVED":
         return "Accept";
       case "CONNECTED":
-        return "Connected";
+        return request.chatId == "NA" ? "Start Chat" : "Say hi!";
       case "NOT_CONNECTED":
         return "Connect";
     }
@@ -78,7 +106,7 @@ class _ConnectionWidgetStatusButtonState
         child: Center(
           child: _isLoading
               ? CircularProgressIndicator()
-              : Text(getStatusToBeShown(widget._connection.connectionRequest.status)),
+              : Text(getStatusToBeShown(widget._connection.connectionRequest)),
         ),
       ),
     );

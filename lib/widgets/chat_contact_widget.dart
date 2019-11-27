@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../screens/chat_details_screen.dart';
 import '../models/chat_contact_model.dart';
 
@@ -18,12 +19,9 @@ class ChatContactWidget extends StatelessWidget {
         vertical: 2,
       ),
       child: ListTile(
-        onTap: () => Navigator.of(context).pushNamed(ChatDetailsScreen.route),
+        onTap: () => Navigator.of(context).pushNamed(ChatDetailsScreen.route, arguments: _chatContact),
         leading: CircleAvatar(
-          child: Image.network(
-            _chatContact.imageUrl,
-            fit: BoxFit.cover,
-          ),
+          backgroundImage: NetworkImage(_chatContact.imageUrl,),
         ),
         title: Text(_chatContact.name),
       ),

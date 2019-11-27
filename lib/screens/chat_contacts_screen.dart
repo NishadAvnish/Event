@@ -3,93 +3,66 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/chat_contact_model.dart';
-import '../provider/chat_contact_provider.dart';
+import '../provider/current_user_provider.dart';
 import '../widgets/chat_contact_widget.dart';
 
-class ChatContactsScreen extends StatefulWidget {
-  final int flag;
+class ChatContactsScreen extends StatelessWidget {
+  static const route = "/chat_contacts_screen";
 
-  ChatContactsScreen(this.flag);
-  @override
-  _ChatContactsScreenState createState() => _ChatContactsScreenState();
-}
-
-class _ChatContactsScreenState extends State<ChatContactsScreen> {
-  final _chatContactsList = [
-    ChatContactModel(
-      id: "1",
-      imageUrl:
-          "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png",
-      name: "Name",
-      lastMessage: MsgModel(
-        createrId: "1",
-        msg: "hello",
-        time: "10:21",
-      ),
-      userList: ["user1"],
-    ),
-  ];
-
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    //_fetchContacts();
-  }
-
-  Future<void> _fetchContacts() async {
-    try {
-      await Provider.of<ChatContactProvider>(context, listen: false)
-          .fetchContact("VsfZbVdbwHuYqtlqOdhHKtZbBo273");
-    } catch (e) {
-      print(e.toString());
-    }
-
-    setState(() {
-      isLoading = false;
-    });
+  ChatContactModel getChatContact(
+      DocumentSnapshot snapshot, BuildContext context, String currentUserId) {
+    Map<String, dynamic> data = snapshot.data;
+    int index = data["is_group"] ? 0 : 1 - data["users"].indexOf(currentUserId);
+    return ChatContactModel(
+      id: snapshot.documentID,
+      name: data["names"][index],
+      imageUrl: data["images"][index],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    /* final _items = widget.flag == 1
-        ? Provider.of<ChatContactProvider>(context).messagecontactList
-        : Provider.of<ChatContactProvider>(context).groupcontactList; 
-
-    return isLoading
-        ? Align(alignment: Alignment.center, child: CircularProgressIndicator())
-        : Center(
-            child: ListView.builder(
-              itemCount: _chatContactsList.length,
-              itemBuilder: (_, index) => ChatContactWidget(
-                index,
-                _chatContactsList[index],
-                widget.flag,
-                _items
-              ),
-            ),
-          );*/
-
-    return Container(
-      child: StreamBuilder(
-        stream: Firestore.instance.collection('Chat').snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-              ),
-            );
-          } else {
+    String currentUserId =
+        Provider.of<CurrentUserProvider>(context).currentUser.id;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Chat"),
+      ),
+      body: Container(
+        child: StreamBuilder<QuerySnapshot>(
+          stream: Firestore.instance
+              .collection('chats')
+              .where("users", arrayContains: currentUserId)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting)
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                ),
+              );
+            if (snapshot.hasError)
+              return Center(
+                child: Text("Something went wrong..."),
+              );
             return ListView.builder(
               padding: EdgeInsets.all(10.0),
-              itemBuilder: (context, index) =>
-                  ChatContactWidget(_chatContactsList[0]),
+              itemBuilder: (context, index) => Column(
+                children: <Widget>[
+                  ChatContactWidget(
+                    getChatContact(
+                      snapshot.data.documents[index],
+                      context,
+                      currentUserId,
+                    ),
+                  ),
+                  Divider(),
+                ],
+              ),
               itemCount: snapshot.data.documents.length,
             );
-          }
-        },
+          },
+        ),
       ),
     );
   }

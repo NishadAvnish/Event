@@ -1,9 +1,11 @@
 import 'package:event/models/new_user.dart';
+import 'package:event/provider/current_user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 import 'dashboard.dart';
 import '../helpers/firebase_auth.dart';
@@ -94,6 +96,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       } else {
         await _auth.checkIfUsernameExists(_newUser.userName);
         String uid = await _auth.signUp(_newUser.email, _newUser.password);
+
         if (uid.length > 0) {
           await _auth.addUserToDatabase(
             uid,
@@ -106,6 +109,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           });
         }
       }
+      await Provider.of<CurrentUserProvider>(context,listen: false).getCurrentUser();
     } catch (error) {
       PlatformException e = error;
 
