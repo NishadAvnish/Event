@@ -1,49 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event/models/dashboard_model.dart';
+import 'package:event/provider/favouite_provider.dart';
 import 'package:event/widgets/recommande_fav_itesm.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FavouriteScreen extends StatelessWidget {
   static const route = "/favourite_screen";
-  List<DashboardDataModel> _favouriteList = [];
-
-  Future<void> _getData() async {
-    _favouriteList.clear();
-    String userId;
-    FirebaseAuth.instance.currentUser().then((_idRef) {
-      userId = _idRef.uid;
-    });
-    final snapshot = await Firestore.instance
-        .collection("Post")
-        .where("likedBy", arrayContains: userId)
-        .getDocuments();
-
-    snapshot.documents.forEach((doc) {
-      _favouriteList.add(
-        DashboardDataModel(
-          eventName: doc.data["title"],
-          id: doc.documentID,
-          eventImage: doc.data["EventImages"][0],
-          isfavourite: _checkBool(doc, userId),
-          seenBy: doc.data["Seenby"],
-        ),
-      );
-    });
-  }
-
-  bool _checkBool(DocumentSnapshot snapshot, String userId) {
-    if (snapshot.data["likedBy"] != null) {
-      if (snapshot.data["likedBy"].contains(userId)) {
-        return true;
-      } else
-        return false;
-    }
-    return false;
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
+    final _favouriteProvider=Provider.of<FavouriteProvider>(context,listen: false);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -60,16 +26,16 @@ class FavouriteScreen extends StatelessWidget {
             MediaQuery.of(context).padding.top,
         width: double.infinity,
         child: FutureBuilder(
-            future: _getData(),
-            builder: (context, snapShot) {
-              if (snapShot.connectionState == ConnectionState.waiting ||
-                  snapShot.error != null)
+            future: Provider.of<FavouriteProvider>(context).getData(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting ||
+                  snapshot.error != null)
                 return Align(
                   alignment: Alignment.center,
-                  child: CircularProgressIndicator(),
-                );
+                  child: CircularProgressIndicator(),);
+              else
               return GridView.builder(
-                itemCount: _favouriteList.length,
+                itemCount: _favouriteProvider.favouriteList.length,
                 scrollDirection: Axis.vertical,
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 180,
@@ -79,7 +45,7 @@ class FavouriteScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return HelperFunction().recFavItems(
                         context,
-                        _favouriteList[index],3,_favouriteList
+                        _favouriteProvider.favouriteList[index],3
                       );
                 },
               );

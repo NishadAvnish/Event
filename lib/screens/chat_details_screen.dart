@@ -32,8 +32,7 @@ class ChatDetailsScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -74,7 +73,7 @@ class ChatDetailsScreen extends StatelessWidget {
                 ),
                 SendNewChat(chatContact.id),
               ]),
-        ),
+        
       ),
     );
   }

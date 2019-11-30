@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../provider/dash_board_provider.dart' show RecommandedProvider;
 
 class HelperFunction {
-  recFavItems(BuildContext context, DashboardDataModel _list,int flag,[List<DashboardDataModel>_favouriteList]) {
+  recFavItems(BuildContext context, DashboardDataModel _list,int flag) {
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
     return GestureDetector(
@@ -35,7 +35,14 @@ class HelperFunction {
                     borderRadius: BorderRadius.circular(_width * 0.035),
                     image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: NetworkImage(_list.eventImage)),
+                        image: NetworkImage(_list.eventImage)
+                        ),
+                  ),
+                  child: FadeInImage.assetNetwork(
+                    fadeInCurve: Curves.ease,
+                    fit: BoxFit.cover,
+                    placeholder:"asset/images/place.jpg",
+                    image:_list.eventImage,
                   ),
                 ),
               ),
@@ -59,9 +66,8 @@ class HelperFunction {
                       onPressed: () {
                         bool _isFavourite = _list.isfavourite ? true : false;
                         _isFavourite = !_isFavourite;
-                        Provider.of<RecommandedProvider>(context, listen: false)
-                            .toggleFavourite(
-                                _list.id, _list.seenBy, _isFavourite, flag,_favouriteList);
+                        Provider.of<RecommandedProvider>(context, listen: false).toggleFavourite(
+                                _list.id, _list.seenBy, _isFavourite, flag);
                       },
                     ),
                   ],

@@ -94,8 +94,7 @@ class RecommandedProvider with ChangeNotifier {
   }
 
   Future<void> toggleFavourite(
-      String prodId, int seenBy, bool isFavourite, int flag,
-      [List<DashboardDataModel> list1]) async {
+      String prodId, int seenBy, bool isFavourite, int flag,) async {
     //flag=1 from recommanded
     //flag=2 from event detail
     //flag=3 from favourite
@@ -105,10 +104,8 @@ class RecommandedProvider with ChangeNotifier {
       userId = user.uid;
     });
 
-    List<DashboardDataModel> _tempItem = flag == 3 ? list1 : _recommandedItem;
-
-    int index = _tempItem.indexWhere((recommanded) => recommanded.id == prodId);
-    DashboardDataModel _tempDashboardModel = _tempItem[index];
+    int index = _recommandedItem.indexWhere((recommanded) => recommanded.id == prodId);
+    DashboardDataModel _tempDashboardModel = _recommandedItem[index];
 
     //if flag is 2 then seenBy is already decrements or increments that's why we need not to change it here
     //!To-Do
@@ -148,7 +145,7 @@ class RecommandedProvider with ChangeNotifier {
           });
         }
       } catch (e) {
-        _tempItem[0].isfavourite = _tempDashboardModel.isfavourite;
+        _recommandedItem[index].isfavourite = _tempDashboardModel.isfavourite;
         notifyListeners();
         throw e;
       }

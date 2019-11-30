@@ -1,4 +1,5 @@
 import 'package:event/provider/current_user_provider.dart';
+import 'package:event/provider/favouite_provider.dart';
 import 'package:event/provider/helper_provider.dart';
 import 'package:event/screens/chat_contacts_screen.dart';
 import 'package:event/screens/favourite_screen.dart';
@@ -78,6 +79,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: LoadingData(),
+        ),
+        ChangeNotifierProvider.value(
+          value: FavouriteProvider(),
         ),
        
       
