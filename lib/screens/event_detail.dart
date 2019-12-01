@@ -1,5 +1,6 @@
 import 'package:event/provider/dash_board_provider.dart';
 import 'package:event/provider/event_detail_provider.dart';
+import 'package:event/provider/favouite_provider.dart';
 import 'package:event/screens/user_profile.dart';
 import 'package:event/widgets/dottedBox.dart';
 import 'package:event/widgets/event_detail_speakers_listitems.dart';
@@ -140,6 +141,7 @@ class _EventDetailState extends State<EventDetail> {
                                                       _items[0].seenBy,
                                                       _isFavourite,
                                                       2);
+                                                   
                                             },
                                           ),
                                         ),

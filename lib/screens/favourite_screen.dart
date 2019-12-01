@@ -5,16 +5,14 @@ import 'package:provider/provider.dart';
 
 class FavouriteScreen extends StatelessWidget {
   static const route = "/favourite_screen";
- 
 
   @override
   Widget build(BuildContext context) {
-    final _favouriteProvider=Provider.of<FavouriteProvider>(context,listen: false);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: (){
+          onPressed: () {
             Navigator.of(context).pop();
           },
         ),
@@ -26,28 +24,29 @@ class FavouriteScreen extends StatelessWidget {
             MediaQuery.of(context).padding.top,
         width: double.infinity,
         child: FutureBuilder(
-            future: Provider.of<FavouriteProvider>(context).getData(),
+            future: Provider.of<FavouriteProvider>(context,listen: false).getData(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting ||
                   snapshot.error != null)
                 return Align(
                   alignment: Alignment.center,
-                  child: CircularProgressIndicator(),);
-              else
-              return GridView.builder(
-                itemCount: _favouriteProvider.favouriteList.length,
-                scrollDirection: Axis.vertical,
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 180,
-                    childAspectRatio: 2/2.78,
-                    mainAxisSpacing: 1,
-                    crossAxisSpacing: 1),
-                itemBuilder: (context, index) {
-                  return HelperFunction().recFavItems(
-                        context,
-                        _favouriteProvider.favouriteList[index],3
-                      );
-                },
+                  child: CircularProgressIndicator(),
+                );
+              else 
+              return Consumer<FavouriteProvider>(
+                builder: (_,favProd,child)=>GridView.builder(
+                  itemCount: favProd.favouriteList.length,
+                  scrollDirection: Axis.vertical,
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 180,
+                      childAspectRatio: 2 / 2.78,
+                      mainAxisSpacing: 1,
+                      crossAxisSpacing: 1),
+                  itemBuilder: (context, index) {
+                    return HelperFunction().recFavItems(
+                        context, favProd.favouriteList[index], 3);
+                  },
+                )
               );
             }),
       ),

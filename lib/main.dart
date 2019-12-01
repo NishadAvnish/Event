@@ -53,8 +53,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: CurrentUserProvider(),
         ),
-        ChangeNotifierProxyProvider<CurrentUserProvider,ConnectProvider>(
-          builder: (_, currentUserProvider, __) => ConnectProvider(currentUserProvider.currentUser),
+        ChangeNotifierProxyProvider<CurrentUserProvider, ConnectProvider>(
+          builder: (_, currentUserProvider, __) =>
+              ConnectProvider(currentUserProvider.currentUser),
         ),
         ChangeNotifierProvider.value(
           value: EventDetailProvider(),
@@ -83,13 +84,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: FavouriteProvider(),
         ),
-       
-      
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: SplashScreen(),
-        
         theme: ThemeData(
           primaryColor: Colors.blue,
           primaryColorDark: Colors.blue[900],
@@ -104,7 +102,7 @@ class MyApp extends StatelessWidget {
           EventDetail.route: (_) => EventDetail(),
           UserProfile.route: (_) => UserProfile(),
           EditEventScreen.route: (_) => EditEventScreen(),
-          FavouriteScreen.route:(_)=>FavouriteScreen(),
+          FavouriteScreen.route: (_) => FavouriteScreen(),
           ConnectScreen.route: (_) => ConnectScreen(),
           ChatContactsScreen.route: (_) => ChatContactsScreen(),
         },
