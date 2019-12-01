@@ -1,22 +1,22 @@
-import 'package:event/provider/user_profile_provider.dart';
-import 'package:event/screens/event_detail.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:event/screens/edit_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
+import 'event_detail.dart';
+import '../provider/user_profile_provider.dart';
+import '../widgets/user_profile_header.dart';
+import '../provider/current_user_provider.dart';
+
 class UserProfile extends StatefulWidget {
-  static const route = "/usreProfile";
+  static const route = "/user_profile";
 
   @override
   _UserProfileState createState() => _UserProfileState();
 }
 
-class _UserProfileState extends State<UserProfile> {
-  String _currentUserId;
-  String createrId;
-  int i = 0;
-  bool _isloading = true;
+class _UserProfileState extends State<UserProfile>{
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -25,14 +25,12 @@ class _UserProfileState extends State<UserProfile> {
   }
 
   void _init() async {
-    final FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    _currentUserId = user.uid;
-
-    createrId = ModalRoute.of(context).settings.arguments.toString();
-    await Provider.of<UserProfileProvider>(context).fetch(createrId);
+    await Future.delayed(Duration(milliseconds: 0));
+    final userId = Provider.of<CurrentUserProvider>(context, listen: false).currentUser.id;
+    await Provider.of<UserProfileProvider>(context).fetch(userId);
 
     setState(() {
-      _isloading = false;
+      _isLoading = false;
     });
   }
 
@@ -44,84 +42,21 @@ class _UserProfileState extends State<UserProfile> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("profile"),
+        title: Text("Profile"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () => Navigator.of(context).pushNamed(EditProfile.route),
+          ),
+        ],
       ),
-      body: _isloading
+      body: _isLoading
           ? Align(
               alignment: Alignment.center,
               child: Center(child: CircularProgressIndicator()))
           : ListView(
               children: <Widget>[
-                Padding(
-                    padding: EdgeInsets.only(
-                      top: _height * 0.015,
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        height: _height * 0.13,
-                        width: _height * 0.16,
-                        child: Stack(
-                          children: <Widget>[
-                            Positioned.fill(
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Container(
-                                  height: _height * 0.13,
-                                  width: _height * 0.13,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.red,
-                                    image: DecorationImage(
-                                        image: NetworkImage(_items.userItem[0]?.userImage),
-                                        fit: BoxFit.cover),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              right: 0,
-                              bottom: 0,
-                              child: _currentUserId == createrId
-                                  ? IconButton(
-                                      icon: Icon(
-                                        Icons.add_a_photo,
-                                        size: _height * 0.04,
-                                        color: Colors.blue,
-                                      ),
-                                      onPressed: () {},
-                                    )
-                                  : Container(
-                                      color: Colors.transparent,
-                                    ),
-                            )
-                          ],
-                        ),
-                      ),
-                    )),
-                SizedBox(
-                  height: _height * 0.01,
-                ),
-                Text(
-                  _items.userItem[0]?.name,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline
-                      .copyWith(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                        minWidth: _width * 0.3, maxWidth: _width * 0.6),
-                    child: Text(
-                      _items.userItem[0]?.biodata,
-                      style: Theme.of(context).textTheme.subhead,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
+                UserProfileHeader(),
                 SizedBox(
                   height: _height * 0.01,
                 ),
@@ -158,23 +93,25 @@ class _UserProfileState extends State<UserProfile> {
                             itemCount: _items.userItem[0].posts?.length,
                             gridDelegate:
                                 SliverGridDelegateWithMaxCrossAxisExtent(
-                                    crossAxisSpacing: _height * 0.005,
-                                    maxCrossAxisExtent: 170,
-                                    childAspectRatio: 3 / 2.5,
-                                    mainAxisSpacing: _height * 0.005),
+                              crossAxisSpacing: _height * 0.005,
+                              maxCrossAxisExtent: 170,
+                              childAspectRatio: 3 / 2.5,
+                              mainAxisSpacing: _height * 0.005,
+                            ),
                             scrollDirection: Axis.vertical,
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).pushNamed(
                                       EventDetail.route,
-                                      arguments: _items.userItem[0]?.productid[index]);
+                                      arguments:
+                                          _items.userItem[0]?.productid[index]);
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
-                                        image:
-                                            NetworkImage(_items.userItem[0]?.posts[index]),
+                                        image: NetworkImage(
+                                            _items.userItem[0]?.posts[index]),
                                         fit: BoxFit.cover),
                                   ),
                                 ),

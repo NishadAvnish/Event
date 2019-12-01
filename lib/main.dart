@@ -1,5 +1,3 @@
-import 'package:event/provider/current_user_provider.dart';
-import 'package:event/screens/chat_contacts_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +19,9 @@ import 'screens/dashboard.dart';
 import 'provider/choice_chip_provider.dart';
 import 'screens/chat_details_screen.dart';
 import 'screens/splash_screen.dart';
+import 'provider/current_user_provider.dart';
+import 'screens/chat_contacts_screen.dart';
+import 'screens/edit_profile_screen.dart';
 
 main() {
   runApp(MyApp());
@@ -99,6 +100,7 @@ class MyApp extends StatelessWidget {
           EditEventScreen.route: (_) => EditEventScreen(),
           ConnectScreen.route: (_) => ConnectScreen(),
           ChatContactsScreen.route: (_) => ChatContactsScreen(),
+          EditProfile.route: (_) => EditProfile(),
         },
       ),
     );

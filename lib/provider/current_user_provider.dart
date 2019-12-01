@@ -7,8 +7,15 @@ import '../models/connection_model.dart';
 class CurrentUserProvider with ChangeNotifier {
   Connection _currentUser;
 
-  Connection get currentUser{
+  Connection get currentUser {
     return _currentUser;
+  }
+
+  void updateCurrentUser(Connection newData){
+    _currentUser.name = newData.name;
+    _currentUser.userName = newData.userName;
+    _currentUser.imageUrl = newData.imageUrl;
+    notifyListeners();
   }
 
   Future<void> getCurrentUser() async {
@@ -26,12 +33,22 @@ class CurrentUserProvider with ChangeNotifier {
         email: cUser.email,
         role: response.data["role"],
         userName: response.data["user_name"],
-        imageUrl:
-            "https://images.pexels.com/photos/772571/pexels-photo-772571.jpeg?cs=srgb&dl=beautiful-bees-bloom-772571.jpg&fm=jpg",
+        imageUrl: response.data["image_url"] ?? "NA",
       );
       notifyListeners();
     } catch (e) {
       print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<void> updateProfile(Map<String, String> data) async {
+    try {
+      await Firestore.instance
+          .collection("users")
+          .document(_currentUser.id)
+          .updateData(data);
+    } catch (e) {
       throw e;
     }
   }

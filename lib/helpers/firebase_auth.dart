@@ -1,11 +1,16 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event/models/new_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+import 'google_sign_in.dart';
+import '../models/new_user.dart';
 
 abstract class BaseAuth {
   Future<FirebaseUser> signIn(String email, String password);
+
+  Future<FirebaseUser> signInWithGoogle(GoogleSignInAccount account);
 
   Future<String> signUp(String email, String password);
 
@@ -20,6 +25,16 @@ abstract class BaseAuth {
 
 class Auth implements BaseAuth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  Future<FirebaseUser> signInWithGoogle(GoogleSignInAccount account) async {
+    final googleUser = await googleSignIn.signIn();
+    final googleAuth = await googleUser.authentication;
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    return (await _firebaseAuth.signInWithCredential(credential)).user;
+  }
 
   Future<FirebaseUser> signIn(String email, String password) async {
     AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
@@ -59,29 +74,37 @@ class Auth implements BaseAuth {
     return user.isEmailVerified;
   }
 
-  Future<void> checkIfUsernameExists(String userName) async{
-    final response = await Firestore.instance.collection("users").where("user_name", isEqualTo: userName).getDocuments();
-    if(response.documents.isNotEmpty)
-      throw PlatformException(
-        code: "USER_NAME_EXISTS",
-        message: "User name already exists.",
-      );
+  Future<bool> checkIfUsernameExists(String userName) async {
+    try {
+      final response = await Firestore.instance
+          .collection("users")
+          .where("user_name", isEqualTo: userName)
+          .getDocuments();
+      if (response.documents.isNotEmpty) return true;
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 
-  Future<void> addUserToDatabase(String userId,NewUser newUser) async {
-
+  Future<void> addUserToDatabase(String userId, NewUser newUser) async {
     final Map<String, dynamic> userData = {
-      "full_name" : newUser.fullName,
-      "user_name" : newUser.userName,
-      "email" : newUser.email,
-      "role" : newUser.role,
+      "id": userId,
+      "full_name": newUser.fullName,
+      "user_name": newUser.userName,
+      "email": newUser.email,
+      "role": newUser.role,
+      "image_url": "NA",
     };
 
     try {
-      await Firestore.instance.collection("users").document(userId).setData(userData);
+      await Firestore.instance
+          .collection("users")
+          .document(userId)
+          .setData(userData);
     } catch (error) {
       throw error;
     }
   }
-
 }

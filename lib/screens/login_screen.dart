@@ -1,5 +1,3 @@
-import 'package:event/models/new_user.dart';
-import 'package:event/provider/current_user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +8,8 @@ import 'package:provider/provider.dart';
 import 'dashboard.dart';
 import '../helpers/firebase_auth.dart';
 import '../helpers/google_sign_in.dart' show googleSignIn;
+import '../models/new_user.dart';
+import '../provider/current_user_provider.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   static const route = "/login_screen";
@@ -39,14 +39,26 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   void initState() {
     super.initState();
 
-    googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
-      if (account != null)
-        Navigator.of(context).pushReplacementNamed(DashBoard.route);
-    });
-
-    googleSignIn.signInSilently();
+    _setUpGoogleSignInListener();
 
     _checkEmailVerification();
+  }
+
+  void _setUpGoogleSignInListener() {
+    googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
+      if (account != null) _signInWithFirebaseAuthUsingGoogle(account);
+    });
+  }
+
+  Future<void> _signInWithFirebaseAuthUsingGoogle(
+      GoogleSignInAccount account) async {
+    setState(() {
+      _isLoading = true;
+    });
+    await Auth().signInWithGoogle(account);
+    await Provider.of<CurrentUserProvider>(context, listen: false)
+        .getCurrentUser();
+    Navigator.of(context).pushReplacementNamed(DashBoard.route);
   }
 
   Future<void> _handleSignIn() async {
@@ -59,7 +71,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
 
   /////////// Google signin code ends
 
-  void _checkEmailVerification() async {
+  Future<void> _checkEmailVerification() async {
     _currentUser = await _auth.getCurrentUser();
     if (_currentUser != null) {
       if (!_currentUser.isEmailVerified)
@@ -94,22 +106,29 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             _emailVerificationRequired = true;
           });
       } else {
-        await _auth.checkIfUsernameExists(_newUser.userName);
-        String uid = await _auth.signUp(_newUser.email, _newUser.password);
+        if (!await _auth.checkIfUsernameExists(_newUser.userName)) {
+          String uid = await _auth.signUp(_newUser.email, _newUser.password);
 
-        if (uid.length > 0) {
-          await _auth.addUserToDatabase(
-            uid,
-            _newUser,
-          );
-          await _auth.sendEmailVerification();
-          setState(() {
-            _isLoading = false;
-            _emailVerificationRequired = true;
-          });
-        }
+          if (uid.length > 0) {
+            await _auth.addUserToDatabase(
+              uid,
+              _newUser,
+            );
+            await _auth.sendEmailVerification();
+            setState(() {
+              _isLoading = false;
+              _emailVerificationRequired = true;
+            });
+          }
+        }else
+          _showDialog("User name already in use.");
+
+        setState(() {
+          _isLoading = false;
+        });
       }
-      await Provider.of<CurrentUserProvider>(context,listen: false).getCurrentUser();
+      await Provider.of<CurrentUserProvider>(context, listen: false)
+          .getCurrentUser();
     } catch (error) {
       PlatformException e = error;
 
@@ -135,29 +154,30 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         case "ERROR_WRONG_PASSWORD":
           message = "Wrong password.";
           break;
-
-        case "USER_NAME_EXISTS":
-          message = "Username already in use";
-          break;
       }
 
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Icon(
-            Icons.error,
-            color: Theme.of(ctx).errorColor,
-          ),
-          content: Text(
-            message,
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
+      _showDialog(message);
+
       setState(() {
         _isLoading = false;
       });
     }
+  }
+
+  void _showDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Icon(
+          Icons.error,
+          color: Theme.of(ctx).errorColor,
+        ),
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
   }
 
   @override
@@ -224,8 +244,9 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context)
                                           .requestFocus(_userNameFocusNode),
-                                  validator: (value) =>
-                                      _isLoginForm ? null : value.isEmpty ? "Enter name" : null,
+                                  validator: (value) => _isLoginForm
+                                      ? null
+                                      : value.isEmpty ? "Enter name" : null,
                                   onSaved: (value) => _newUser.fullName = value,
                                 ),
                                 TextFormField(
@@ -237,14 +258,16 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                       FocusScope.of(context)
                                           .requestFocus(_emailFocusNode),
                                   focusNode: _userNameFocusNode,
-                                  validator: (value) =>
-                                      _isLoginForm ? null : value.isEmpty ? "Enter username" : null,
+                                  validator: (value) => _isLoginForm
+                                      ? null
+                                      : value.isEmpty ? "Enter username" : null,
                                   onSaved: (value) => _newUser.userName = value,
                                 ),
                                 const SizedBox(height: 10),
                                 DropdownButtonFormField<String>(
-                                  validator: (value) =>
-                                      _isLoginForm ? null : value.isEmpty ? "Select role" : null,
+                                  validator: (value) => _isLoginForm
+                                      ? null
+                                      : value.isEmpty ? "Select role" : null,
                                   value: _newUser.role,
                                   hint: Text("Choose Role"),
                                   onSaved: (value) => _newUser.role = value,

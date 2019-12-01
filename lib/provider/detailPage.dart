@@ -4,6 +4,4 @@ class EventDetails{
   String seenBy;
   String description;
   String timeLine;
-  
-  
 }

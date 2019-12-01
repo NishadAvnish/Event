@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event/models/event_detail_model.dart';
+import '../models/event_detail_model.dart';
 import 'package:flutter/cupertino.dart';
 
 class EventDetailProvider with ChangeNotifier {
@@ -31,7 +31,7 @@ class EventDetailProvider with ChangeNotifier {
 
         try {
           await _documentRef
-              .collection("User")
+              .collection("users")
               .document(snapShot.data["creatorId"])
               .get()
               .then((sShot) {

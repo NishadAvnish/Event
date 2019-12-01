@@ -84,8 +84,7 @@ class ConnectProvider with ChangeNotifier {
               Connection(
                 id: doc.documentID,
                 name: doc.data["full_name"],
-                imageUrl:
-                    "https://images.pexels.com/photos/772571/pexels-photo-772571.jpeg?cs=srgb&dl=beautiful-bees-bloom-772571.jpg&fm=jpg",
+                imageUrl: doc.data["image_url"] ?? "NA",
                 role: doc.data["role"],
                 email: doc.data["email"],
                 userName: doc.data["user_name"],
@@ -99,8 +98,7 @@ class ConnectProvider with ChangeNotifier {
               Connection(
                 id: doc.documentID,
                 name: doc.data["full_name"],
-                imageUrl:
-                    "https://images.pexels.com/photos/772571/pexels-photo-772571.jpeg?cs=srgb&dl=beautiful-bees-bloom-772571.jpg&fm=jpg",
+                imageUrl: doc.data["image_url"] ?? "NA",
                 role: doc.data["role"],
                 email: doc.data["email"],
                 userName: doc.data["user_name"],
@@ -186,11 +184,6 @@ class ConnectProvider with ChangeNotifier {
         "is_group": false,
         "admins": [currentUserId],
         "users": [currentUserId, connection.id],
-        "images": [
-          _currentUserData.imageUrl,
-          connection.imageUrl,
-        ],
-        "names": [_currentUserData.name, connection.name],
       };
 
       final response = await dbRef.collection("chats").add(chatData);
@@ -227,6 +220,5 @@ class ConnectProvider with ChangeNotifier {
       print(connection.email);
       throw e;
     }
-
   }
 }
