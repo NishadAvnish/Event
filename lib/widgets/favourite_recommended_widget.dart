@@ -5,18 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/dash_board_provider.dart' show RecommandedProvider;
 
-class HelperFunction {
-  recFavItems(BuildContext context, DashboardDataModel _event, int flag) {
+  Widget recommendedFavouriteWidget(BuildContext context, DashboardDataModel _event, int flag) {
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () => Navigator.of(context)
           .pushNamed(EventDetail.route, arguments: _event.id),
       child: Card(
+        margin: EdgeInsets.all(2.5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(_width * 0.035),
         ),
-        elevation: 10,
+        elevation: 1,
         child: Container(
           width: _width * 0.4,
           decoration: BoxDecoration(
@@ -32,6 +32,7 @@ class HelperFunction {
                     right: _height * 0.005),
                 child: Container(
                   height: flag == 3 ? _height * 0.15 : _height * 0.2,
+                  width: flag == 3 ? _width * 0.3 : _width * 0.4,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -67,8 +68,10 @@ class HelperFunction {
                             )
                           : Icon(Icons.favorite_border, color: Colors.red),
                       onPressed: () {
-                        if(flag==3){
-                          Provider.of<FavouriteProvider>(context).deleteDatafromList(_event.id);
+                        //flag==3 means the parent is Favourite screen
+                        if (flag == 3) {
+                          Provider.of<FavouriteProvider>(context)
+                              .deleteDatafromList(_event.id);
                         }
                         bool _isFavourite = _event.isfavourite ? true : false;
                         _isFavourite = !_isFavourite;
@@ -86,4 +89,4 @@ class HelperFunction {
       ),
     );
   }
-}
+

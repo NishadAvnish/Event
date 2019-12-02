@@ -1,7 +1,7 @@
 import 'package:event/provider/helper_provider.dart';
 import 'package:event/widgets/choicechip.dart';
 import 'package:event/widgets/choose_category_item.dart';
-import 'package:event/widgets/recommanded_items.dart';
+import 'package:event/widgets/recommended_items.dart';
 import 'package:event/widgets/slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +20,7 @@ class _DashBoardState extends State<DashBoard> {
   bool isRebuildReq;
   @override
   void didChangeDependencies() {
-    isRebuildReq = Provider.of<LoadingData>(context).isRebuildReg;
+    isRebuildReq = Provider.of<ReLoadingData>(context).isRebuildReg;
     super.didChangeDependencies();
   }
 
@@ -112,7 +112,7 @@ class _DashBoardState extends State<DashBoard> {
                   SizedBox(
                     height: 5,
                   ),
-                  RecommandedItem(isRebuildReq: isRebuildReq),
+                  RecommendedItem(isRebuildReq: isRebuildReq),
                 ],
               ),
             ),

@@ -15,13 +15,10 @@ class _SeeMoreState extends State<SeeMore> {
   ScrollController _scrollController = ScrollController();
   List<SeeMoreModel> _items;
   bool isLoading = true;
-  bool isItemPresent = true;
 
-  _getData([String getMore]) {
+  _getData() {
     Future.delayed(Duration(seconds: 0)).then((_) {
-      getMore == null
-          ? Provider.of<SeeMoreProvider>(context).fetchSeeMoreData()
-          : Provider.of<SeeMoreProvider>(context).fetchSeeMoreData(getMore);
+      Provider.of<SeeMoreProvider>(context, listen: false).fetchSeeMoreData();
     }).then((_) {
       setState(() {
         isLoading = false;
@@ -31,63 +28,47 @@ class _SeeMoreState extends State<SeeMore> {
 
   @override
   void initState() {
-    print(isLoading);
-    _getData();
-    _scrollController.addListener(() {
-      final maxExtent = _scrollController.position.maxScrollExtent;
-      final currentPosition = _scrollController.position.pixels;
-      final fetchingPosition = MediaQuery.of(context).size.height * 0.25;
-      if (maxExtent - currentPosition <= fetchingPosition) if (isItemPresent) {
-        _getData();
-      }
-    });
     super.initState();
+    _getData();
   }
 
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
     _items = Provider.of<SeeMoreProvider>(context).seeMoreItems;
-    isItemPresent = Provider.of<SeeMoreProvider>(context).isItemPresent;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          Provider.of<SeeMoreProvider>(context, listen: false).categoryValue,
-          style: TextStyle(color: Colors.white),
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              color: Colors.white,
-            ),
-            onPressed: () {},
+        appBar: AppBar(
+          title: Text(
+            Provider.of<SeeMoreProvider>(context, listen: false).categoryValue,
+            style: TextStyle(color: Colors.white),
           ),
-        ],
-      ),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : Column(
-              children: <Widget>[
-                Expanded(
-                    child: ListView.separated(
-                  controller: _scrollController,
-                  itemCount: _items.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                          onTap: () => Navigator.of(context).pushNamed(
-                              EventDetail.route,
-                              arguments: _items[index].id),
-                          child: SeeMoreItems(_items, index),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(height: _height * 0.002);
-                  },
-                )),
-              ],
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.search,
+                color: Colors.white,
+              ),
+              onPressed: () {},
             ),
-    );
+          ],
+        ),
+        body: ListView.separated(
+          shrinkWrap: true,
+          controller: _scrollController,
+          itemCount: _items.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () => Navigator.of(context)
+                  .pushNamed(EventDetail.route, arguments: _items[index].id),
+              child: isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : SeeMoreItems(_items, index),
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return SizedBox(height: _height * 0.002);
+          },
+        ));
   }
 }

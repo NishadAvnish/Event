@@ -9,7 +9,6 @@ class SeeMoreProvider with ChangeNotifier {
   List<SeeMoreModel> _categoryItems = [];
   final List<String> choiceCategory;
   final value;
-  bool _isItemPresent = true;
 
   SeeMoreProvider(this.choiceCategory, this.value);
 
@@ -19,39 +18,30 @@ class SeeMoreProvider with ChangeNotifier {
     return [..._seeMoreList];
   }
 
-  bool get isItemPresent {
-    return _isItemPresent;
-  }
-
+ 
   String get categoryValue {
     return choiceCategory[value];
   }
 
-  void changeItemPresent() {
-    _isItemPresent = false;
-    notifyListeners();
-  }
 
-  Future<void> fetchSeeMoreData([String getMore]) async {
+
+  Future<void> fetchSeeMoreData() async {
+    int _limit=10;
     List<SeeMoreModel> _tempList = [];
     Query q;
-    if (getMore == null)
+    
       q = docRef
           .collection("Post")
           .where("Category", arrayContains: choiceCategory[value])
-          .limit(5);
-    else {
-      q = docRef
-          .collection("Post")
-          .where("Category", arrayContains: choiceCategory[value])
-          .startAfter([lastSnapshot.data]).limit(5);
-    }
+          .limit(_limit);
+   
 
     try {
-      await q.getDocuments().then((snapShot) {
+      await q.getDocuments().then((snapshot) {
         _categoryItems.clear();
-        if (snapShot != null) {
-          snapShot.documents.forEach((doc) {
+        if (snapshot != null) {
+          snapshot.documents.forEach((doc) {
+
             _tempList.add(
               SeeMoreModel(
                   title: doc.data["title"],
@@ -69,11 +59,7 @@ class SeeMoreProvider with ChangeNotifier {
     } catch (e) {
       print(e);
     }
-
-    QuerySnapshot querySnapshot = await q.getDocuments();
-    lastSnapshot = querySnapshot.documents[querySnapshot.documents.length - 1];
-    _seeMoreList = _tempList;
-
+    _seeMoreList=_tempList;
     notifyListeners();
   }
 }

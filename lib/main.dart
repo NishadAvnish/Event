@@ -1,12 +1,12 @@
 import 'package:event/provider/current_user_provider.dart';
 import 'package:event/provider/favouite_provider.dart';
-import 'package:event/provider/helper_provider.dart';
 import 'package:event/screens/chat_contacts_screen.dart';
 import 'package:event/screens/favourite_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'provider/chat_contact_provider.dart';
 import 'provider/connect_provider.dart';
+import 'provider/helper_provider.dart';
 import 'screens/connect_screen.dart';
 import 'provider/chat_detail_provider.dart';
 import 'provider/event_detail_provider.dart';
@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
           value: ChatContactProvider(),
         ),
         ChangeNotifierProvider.value(
-          value: LoadingData(),
+          value: ReLoadingData(),
         ),
         ChangeNotifierProvider.value(
           value: FavouriteProvider(),

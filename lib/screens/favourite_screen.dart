@@ -1,5 +1,5 @@
 import 'package:event/provider/favouite_provider.dart';
-import 'package:event/widgets/recommande_fav_itesm.dart';
+import 'package:event/widgets/favourite_recommended_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +43,7 @@ class FavouriteScreen extends StatelessWidget {
                       mainAxisSpacing: 1,
                       crossAxisSpacing: 1),
                   itemBuilder: (context, index) {
-                    return HelperFunction().recFavItems(
+                    return recommendedFavouriteWidget(
                         context, favProd.favouriteList[index], 3);
                   },
                 )

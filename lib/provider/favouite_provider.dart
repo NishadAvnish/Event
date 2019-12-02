@@ -45,11 +45,9 @@ class FavouriteProvider with ChangeNotifier{
   }
 
   void deleteDatafromList(String prodId){
-    print(_favouriteList.length);
     int index=_favouriteList.indexWhere((favouriteList)=>favouriteList.id==prodId);
       _favouriteList.removeAt(index);
       notifyListeners();
-    print(_favouriteList.length);  
 
   }
 }
