@@ -8,8 +8,6 @@ class UserProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
     final _currentUser = Provider.of<CurrentUserProvider>(context).currentUser;
-    print("profile: ${_currentUser.name}");
-    print("profile: ${_currentUser.email}");
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

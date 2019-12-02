@@ -1,9 +1,11 @@
-import 'package:event/models/see_more_model.dart';
-import 'package:event/provider/see_more_provider.dart';
-import 'package:event/widgets/seemore_items.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'event_detail.dart';
+import '../models/see_more_model.dart';
+import '../provider/see_more_provider.dart';
+import '../widgets/see_more_app_bar.dart';
+import '../widgets/seemore_items.dart';
 
 class SeeMore extends StatefulWidget {
   static const String route = '/Seemore';
@@ -14,30 +16,30 @@ class SeeMore extends StatefulWidget {
 class _SeeMoreState extends State<SeeMore> {
   ScrollController _scrollController = ScrollController();
   List<SeeMoreModel> _items;
-  bool isLoading = true;
-  bool isItemPresent = true;
+  bool _isLoading = true;
+  bool _isItemPresent = true;
 
-  _getData([String getMore]) {
+  void _getData([String getMore]) {
     Future.delayed(Duration(seconds: 0)).then((_) {
       getMore == null
-          ? Provider.of<SeeMoreProvider>(context).fetchSeeMoreData()
-          : Provider.of<SeeMoreProvider>(context).fetchSeeMoreData(getMore);
+          ? Provider.of<SeeMoreProvider>(context,listen: false).fetchSeeMoreData()
+          : Provider.of<SeeMoreProvider>(context,listen: false).fetchSeeMoreData(getMore);
     }).then((_) {
       setState(() {
-        isLoading = false;
+        _isLoading = false;
       });
     });
   }
 
   @override
   void initState() {
-    print(isLoading);
+    print(_isLoading);
     _getData();
     _scrollController.addListener(() {
       final maxExtent = _scrollController.position.maxScrollExtent;
       final currentPosition = _scrollController.position.pixels;
       final fetchingPosition = MediaQuery.of(context).size.height * 0.25;
-      if (maxExtent - currentPosition <= fetchingPosition) if (isItemPresent) {
+      if (maxExtent - currentPosition <= fetchingPosition) if (_isItemPresent) {
         _getData();
       }
     });
@@ -46,44 +48,30 @@ class _SeeMoreState extends State<SeeMore> {
 
   @override
   Widget build(BuildContext context) {
-    final _width = MediaQuery.of(context).size.shortestSide;
     final _height = MediaQuery.of(context).size.longestSide;
-    _items = Provider.of<SeeMoreProvider>(context).seeMoreItems;
-    isItemPresent = Provider.of<SeeMoreProvider>(context).isItemPresent;
+    _items = Provider.of<SeeMoreProvider>(context).seeMoreItemsToShow;
+    _isItemPresent = Provider.of<SeeMoreProvider>(context, listen: false).isItemPresent;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          Provider.of<SeeMoreProvider>(context, listen: false).categoryValue,
-          style: TextStyle(color: Colors.white),
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              color: Colors.white,
-            ),
-            onPressed: () {},
-          ),
-        ],
+      appBar: PreferredSize(
+        child: SeeMoreAppBar(),
+        preferredSize: Size(double.infinity, _height * 0.07),
       ),
-      body: isLoading
+      body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : Column(
               children: <Widget>[
                 Expanded(
-                  child: ListView.separated(
+                  child: ListView.builder(
                   controller: _scrollController,
                   itemCount: _items.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                        onTap: () => Navigator.of(context).pushNamed(
-                            EventDetail.route,
-                            arguments: _items[index].id),
-                        child: SeeMoreItems(_items, index));
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(height: _height * 0.002);
+                      onTap: () => Navigator.of(context).pushNamed(
+                          EventDetail.route,
+                          arguments: _items[index].id),
+                      child: SeeMoreItem(_items, index),
+                    );
                   },
                 )),
               ],

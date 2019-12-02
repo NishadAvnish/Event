@@ -1,25 +1,14 @@
-import 'package:event/widgets/choicechip.dart';
-import 'package:event/widgets/choose_category_item.dart';
-import 'package:event/widgets/recommanded_items.dart';
-import 'package:event/widgets/slider.dart';
 import 'package:flutter/material.dart';
 
 import 'see_more.dart';
 import '../widgets/dashboard_drawer.dart';
+import '../widgets/choicechip.dart';
+import '../widgets/choose_category_item.dart';
+import '../widgets/recommended_items_list.dart';
+import '../widgets/slider.dart';
 
-class DashBoard extends StatefulWidget {
+class DashBoard extends StatelessWidget {
   static const route = "/dashboard_screen";
-
-  @override
-  _DashBoardState createState() => _DashBoardState();
-}
-
-class _DashBoardState extends State<DashBoard> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,7 +94,7 @@ class _DashBoardState extends State<DashBoard> {
                   SizedBox(
                     height: 5,
                   ),
-                  RecommandedItem(),
+                  RecommendedItemsList(),
                 ],
               ),
             ),

@@ -1,9 +1,9 @@
-import 'package:event/screens/edit_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
 import 'event_detail.dart';
+import 'edit_profile_screen.dart';
 import '../provider/user_profile_provider.dart';
 import '../widgets/user_profile_header.dart';
 import '../provider/current_user_provider.dart';
@@ -67,8 +67,6 @@ class _UserProfileState extends State<UserProfile>{
                   height: _height * 0.01,
                 ),
                 Container(
-                  // padding: EdgeInsets.symmetric(horizontal: _height * 0.02),
-                  // margin: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom+8),
                   child: Column(
                     children: <Widget>[
                       StickyHeader(

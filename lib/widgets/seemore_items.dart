@@ -1,12 +1,13 @@
-import 'package:event/models/see_more_model.dart';
-import 'package:event/widgets/date_card.dart';
-import 'package:event/widgets/see_more_bottom_tile.dart';
 import 'package:flutter/material.dart';
 
-class SeeMoreItems extends StatelessWidget {
+import '../models/see_more_model.dart';
+import '../widgets/date_card.dart';
+import '../widgets/see_more_bottom_tile.dart';
+
+class SeeMoreItem extends StatelessWidget {
   final List<SeeMoreModel> _items;
   final int index;
-  const SeeMoreItems(this._items, this.index);
+  const SeeMoreItem(this._items, this.index);
 
   @override
   Widget build(BuildContext context) {

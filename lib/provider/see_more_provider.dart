@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event/models/see_more_model.dart';
 import 'package:flutter/material.dart';
+
+import '../models/see_more_model.dart';
 
 class SeeMoreProvider with ChangeNotifier {
   final docRef = Firestore.instance;
   DocumentSnapshot lastSnapshot;
 
-  List<SeeMoreModel> _categoryItems = [];
   final List<String> choiceCategory;
   final value;
   bool _isItemPresent = true;
@@ -14,9 +14,14 @@ class SeeMoreProvider with ChangeNotifier {
   SeeMoreProvider(this.choiceCategory, this.value);
 
   List<SeeMoreModel> _seeMoreList = [];
+  List<SeeMoreModel> _seeMoreItemsToShow = [];
 
   List<SeeMoreModel> get seeMoreItems {
     return [..._seeMoreList];
+  }
+
+  List<SeeMoreModel> get seeMoreItemsToShow {
+    return [..._seeMoreItemsToShow];
   }
 
   bool get isItemPresent {
@@ -32,7 +37,23 @@ class SeeMoreProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void searchForValue(String value){
+    _seeMoreItemsToShow.clear();
+    if(value == null)
+      _seeMoreItemsToShow = seeMoreItems;
+    else if(value.isEmpty)
+      _seeMoreItemsToShow = seeMoreItems;
+    else{
+      _seeMoreList.forEach((seeMoreItem){
+        if(seeMoreItem.title.toLowerCase().contains(value.toLowerCase()) || seeMoreItem.place.toLowerCase().contains(value.toLowerCase()))
+          _seeMoreItemsToShow.add(seeMoreItem);
+      });
+    }
+    notifyListeners();
+  }
+
   Future<void> fetchSeeMoreData([String getMore]) async {
+    print("fetchMore called, getMore : $getMore");
     List<SeeMoreModel> _tempList = [];
     Query q;
     if (getMore == null)
@@ -49,7 +70,6 @@ class SeeMoreProvider with ChangeNotifier {
 
     try {
       await q.getDocuments().then((snapShot) {
-        _categoryItems.clear();
         if (snapShot != null) {
           snapShot.documents.forEach((doc) {
             _tempList.add(
@@ -72,7 +92,10 @@ class SeeMoreProvider with ChangeNotifier {
 
     QuerySnapshot querySnapshot = await q.getDocuments();
     lastSnapshot = querySnapshot.documents[querySnapshot.documents.length - 1];
-    _seeMoreList = _tempList;
+    _seeMoreList.clear();
+    _seeMoreItemsToShow.clear();
+    _seeMoreList.addAll(_tempList);
+    _seeMoreItemsToShow.addAll(_tempList);
 
     notifyListeners();
   }
