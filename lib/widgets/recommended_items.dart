@@ -1,14 +1,14 @@
+import 'package:event/provider/dash_board_provider.dart';
+import 'package:event/provider/helper_provider.dart';
+import 'package:event/widgets/favourite_recommended_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/dash_board_provider.dart';
-import '../provider/helper_provider.dart';
-import '../widgets/recommande_fav_itesm.dart';
-
-class RecommandedItem extends StatelessWidget {
+class RecommendedItem extends StatelessWidget {
   final bool isRebuildReq;
 
-  RecommandedItem({Key key, this.isRebuildReq}) : super(key: key);
+  RecommendedItem({Key key, this.isRebuildReq}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,16 +35,15 @@ class RecommandedItem extends StatelessWidget {
                     style: Theme.of(context).textTheme.body2,
                   ));
             else {
-              Provider.of<LoadingData>(context).isRebuild =
-                  false; //setting the rebuild to false
+              Provider.of<ReLoadingData>(context).setRebuildReq=
+                  false; //setting the rebuild to false to avoid rebuilding of widget 
               return Consumer<RecommandedProvider>(
                   builder: (ctx, dashbo, child) {
                 return ListView.builder(
                   itemCount: dashbo.recommandedItems.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    return HelperFunction().recFavItems(
-                        context, dashbo.recommandedItems[index], 1);
+                    return  recommendedFavouriteWidget(context,dashbo.recommandedItems[index],1);
                   },
                 );
               });

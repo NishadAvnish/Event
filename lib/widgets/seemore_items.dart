@@ -4,10 +4,10 @@ import '../models/see_more_model.dart';
 import '../widgets/date_card.dart';
 import '../widgets/see_more_bottom_tile.dart';
 
-class SeeMoreItem extends StatelessWidget {
+class SeeMoreItems extends StatelessWidget {
   final List<SeeMoreModel> _items;
   final int index;
-  const SeeMoreItem(this._items, this.index);
+  const SeeMoreItems(this._items, this.index);
 
   @override
   Widget build(BuildContext context) {

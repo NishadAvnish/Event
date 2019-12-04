@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'provider/chat_contact_provider.dart';
 import 'provider/connect_provider.dart';
+import 'provider/helper_provider.dart';
 import 'screens/connect_screen.dart';
 import 'provider/chat_detail_provider.dart';
 import 'provider/event_detail_provider.dart';
@@ -23,7 +24,6 @@ import 'provider/current_user_provider.dart';
 import 'screens/chat_contacts_screen.dart';
 import 'screens/edit_profile_screen.dart';
 import 'provider/favouite_provider.dart';
-import 'provider/helper_provider.dart';
 import 'screens/favourite_screen.dart';
 
 main() {
@@ -55,8 +55,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: CurrentUserProvider(),
         ),
-        ChangeNotifierProxyProvider<CurrentUserProvider,ConnectProvider>(
-          builder: (_, currentUserProvider, __) => ConnectProvider(currentUserProvider.currentUser),
+        ChangeNotifierProxyProvider<CurrentUserProvider, ConnectProvider>(
+          builder: (_, currentUserProvider, __) =>
+              ConnectProvider(currentUserProvider.currentUser),
         ),
         ChangeNotifierProvider.value(
           value: EventDetailProvider(),
@@ -80,18 +81,15 @@ class MyApp extends StatelessWidget {
           value: ChatContactProvider(),
         ),
         ChangeNotifierProvider.value(
-          value: LoadingData(),
+          value: ReLoadingData(),
         ),
         ChangeNotifierProvider.value(
           value: FavouriteProvider(),
         ),
-       
-      
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: SplashScreen(),
-        
         theme: ThemeData(
           primaryColor: Colors.blue,
           primaryColorDark: Colors.blue[900],
@@ -106,7 +104,7 @@ class MyApp extends StatelessWidget {
           EventDetail.route: (_) => EventDetail(),
           UserProfile.route: (_) => UserProfile(),
           EditEventScreen.route: (_) => EditEventScreen(),
-          FavouriteScreen.route:(_)=>FavouriteScreen(),
+          FavouriteScreen.route: (_) => FavouriteScreen(),
           ConnectScreen.route: (_) => ConnectScreen(),
           ChatContactsScreen.route: (_) => ChatContactsScreen(),
           EditProfile.route: (_) => EditProfile(),

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 class FavouriteProvider with ChangeNotifier{
+  
    List<DashboardDataModel> _favouriteList = [];
    List<DashboardDataModel> get favouriteList{
      return [..._favouriteList];
@@ -12,7 +13,7 @@ class FavouriteProvider with ChangeNotifier{
   Future<void> getData() async {
     _favouriteList.clear();
     String userId;
-    FirebaseAuth.instance.currentUser().then((_idRef) {
+    await FirebaseAuth.instance.currentUser().then((_idRef) {
       userId = _idRef.uid;
     });
     final snapshot = await Firestore.instance
@@ -41,5 +42,12 @@ class FavouriteProvider with ChangeNotifier{
         return false;
     }
     return false;
+  }
+
+  void deleteDatafromList(String prodId){
+    int index=_favouriteList.indexWhere((favouriteList)=>favouriteList.id==prodId);
+      _favouriteList.removeAt(index);
+      notifyListeners();
+
   }
 }

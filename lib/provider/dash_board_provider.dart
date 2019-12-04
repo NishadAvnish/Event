@@ -61,6 +61,7 @@ class RecommandedProvider with ChangeNotifier {
   }
 
   Future<void> recommandedFetch() async {
+    print("recommanded fetch");
     String userId;
     FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
       userId = user.uid;
@@ -109,13 +110,14 @@ class RecommandedProvider with ChangeNotifier {
 
     //if flag is 2 then seenBy is already decrements or increments that's why we need not to change it here
     //!To-Do
+  
     
 
     _recommandedItem[index].seenBy =
         flag == 1 ? isFavourite ? seenBy + 1 : seenBy - 1 : seenBy;
     _recommandedItem[index].isfavourite = !_recommandedItem[index].isfavourite;
 
-    notifyListeners();
+    notifyListeners(); 
 
     if (flag == 1 || flag == 3) {
       try {
@@ -147,8 +149,7 @@ class RecommandedProvider with ChangeNotifier {
       } catch (e) {
         _recommandedItem[index].isfavourite = _tempDashboardModel.isfavourite;
         notifyListeners();
-        throw e;
-      }
+        throw e;  }
     }
   }
 

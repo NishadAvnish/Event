@@ -9,7 +9,6 @@ class SeeMoreProvider with ChangeNotifier {
 
   final List<String> choiceCategory;
   final value;
-  bool _isItemPresent = true;
 
   SeeMoreProvider(this.choiceCategory, this.value);
 
@@ -24,18 +23,14 @@ class SeeMoreProvider with ChangeNotifier {
     return [..._seeMoreItemsToShow];
   }
 
-  bool get isItemPresent {
+  /* bool get isItemPresent {
     return _isItemPresent;
-  }
+  } */
 
   String get categoryValue {
     return choiceCategory[value];
   }
 
-  void changeItemPresent() {
-    _isItemPresent = false;
-    notifyListeners();
-  }
 
   void searchForValue(String value){
     _seeMoreItemsToShow.clear();
@@ -53,20 +48,16 @@ class SeeMoreProvider with ChangeNotifier {
   }
 
   Future<void> fetchSeeMoreData([String getMore]) async {
+    int _limit = 10;
     print("fetchMore called, getMore : $getMore");
     List<SeeMoreModel> _tempList = [];
     Query q;
-    if (getMore == null)
+    
       q = docRef
           .collection("Post")
           .where("Category", arrayContains: choiceCategory[value])
-          .limit(5);
-    else {
-      q = docRef
-          .collection("Post")
-          .where("Category", arrayContains: choiceCategory[value])
-          .startAfter([lastSnapshot.data]).limit(5);
-    }
+          .limit(_limit);
+   
 
     try {
       await q.getDocuments().then((snapShot) {

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -145,6 +144,7 @@ class _EventDetailState extends State<EventDetail> {
                                                       _item[0].seenBy,
                                                       _isFavourite,
                                                       2);
+                                                   
                                             },
                                           ),
                                         ),
