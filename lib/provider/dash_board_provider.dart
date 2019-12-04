@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event/models/dashboard_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 Firestore _documentRef = Firestore.instance;
@@ -19,7 +20,6 @@ class DashBoardProvider with ChangeNotifier {
   }
 
   Future<void> categoryFetch(index) async {
-    print(index);
     List<DashboardDataModel> _tempList = [];
     if (previousIndex != index) {
       try {
@@ -61,6 +61,10 @@ class RecommandedProvider with ChangeNotifier {
   }
 
   Future<void> recommandedFetch() async {
+    String userId;
+    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+      userId = user.uid;
+    });
     List<DashboardDataModel> _tempList1 = [];
     try {
       await _documentRef
@@ -75,6 +79,8 @@ class RecommandedProvider with ChangeNotifier {
               eventName: doc.data["title"],
               id: doc.documentID,
               eventImage: doc.data["EventImages"][0],
+              isfavourite: _checkBool(doc, userId),
+              seenBy: doc.data["Seenby"],
               //category: doc.data["Category"],
             ));
           });
@@ -86,6 +92,75 @@ class RecommandedProvider with ChangeNotifier {
     _recommandedItem = _tempList1;
     notifyListeners();
   }
+
+  Future<void> toggleFavourite(
+      String prodId, int seenBy, bool isFavourite, int flag,) async {
+    //flag=1 from recommanded
+    //flag=2 from event detail
+    //flag=3 from favourite
+    final docRef = Firestore.instance.collection("Post");
+    String userId;
+    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+      userId = user.uid;
+    });
+
+    int index = _recommandedItem.indexWhere((recommanded) => recommanded.id == prodId);
+    DashboardDataModel _tempDashboardModel = _recommandedItem[index];
+
+    //if flag is 2 then seenBy is already decrements or increments that's why we need not to change it here
+    //!To-Do
+    
+
+    _recommandedItem[index].seenBy =
+        flag == 1 ? isFavourite ? seenBy + 1 : seenBy - 1 : seenBy;
+    _recommandedItem[index].isfavourite = !_recommandedItem[index].isfavourite;
+
+    notifyListeners();
+
+    if (flag == 1 || flag == 3) {
+      try {
+        final doc = await docRef.document(prodId).get();
+
+        if (doc.data["likedBy"] != null &&
+            doc.data["likedBy"].contains(userId)) {
+          await docRef.document(prodId).updateData({
+            "likedBy": FieldValue.arrayRemove([userId])
+          });
+
+          await docRef.document(prodId).updateData({
+            "Seenby": (seenBy - 1),
+          });
+        } else {
+          if (doc.data["linkedBy"] == null) {
+            await docRef.document(prodId).setData({
+              "likedBy": [userId]
+            }, merge: true);
+          } else
+            await docRef.document(userId).updateData({
+              "likedBy": FieldValue.arrayUnion([userId])
+            });
+
+          await docRef.document(prodId).updateData({
+            "Seenby": (seenBy + 1),
+          });
+        }
+      } catch (e) {
+        _recommandedItem[index].isfavourite = _tempDashboardModel.isfavourite;
+        notifyListeners();
+        throw e;
+      }
+    }
+  }
+
+  bool _checkBool(DocumentSnapshot snapshot, String userId) {
+    if (snapshot.data["likedBy"] != null) {
+      if (snapshot.data["likedBy"].contains(userId)) {
+        return true;
+      } else
+        return false;
+    }
+    return false;
+  }
 }
 
 class CarouselProvider with ChangeNotifier {
@@ -94,7 +169,7 @@ class CarouselProvider with ChangeNotifier {
     return [..._carouselImage];
   }
 
-  Future<void> carouselFetch() async {
+  Stream<void> carouselFetch() async* {
     List<dynamic> list1 = [];
     try {
       await _documentRef.collection("Carousal").getDocuments().then((ds) {
@@ -107,7 +182,6 @@ class CarouselProvider with ChangeNotifier {
     } catch (e) {
       print(e);
     }
-    _carouselImage = [];
     _carouselImage = [...list1];
     notifyListeners();
   }

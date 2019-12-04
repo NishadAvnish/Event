@@ -22,6 +22,9 @@ import 'screens/splash_screen.dart';
 import 'provider/current_user_provider.dart';
 import 'screens/chat_contacts_screen.dart';
 import 'screens/edit_profile_screen.dart';
+import 'provider/favouite_provider.dart';
+import 'provider/helper_provider.dart';
+import 'screens/favourite_screen.dart';
 
 main() {
   runApp(MyApp());
@@ -76,14 +79,19 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: ChatContactProvider(),
         ),
+        ChangeNotifierProvider.value(
+          value: LoadingData(),
+        ),
+        ChangeNotifierProvider.value(
+          value: FavouriteProvider(),
+        ),
+       
+      
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        //home: SeeMore(),
-        // home: EventDetail(),
-        //home:UserProfile(),
-        //home:DashBoard(),
         home: SplashScreen(),
+        
         theme: ThemeData(
           primaryColor: Colors.blue,
           primaryColorDark: Colors.blue[900],
@@ -98,6 +106,7 @@ class MyApp extends StatelessWidget {
           EventDetail.route: (_) => EventDetail(),
           UserProfile.route: (_) => UserProfile(),
           EditEventScreen.route: (_) => EditEventScreen(),
+          FavouriteScreen.route:(_)=>FavouriteScreen(),
           ConnectScreen.route: (_) => ConnectScreen(),
           ChatContactsScreen.route: (_) => ChatContactsScreen(),
           EditProfile.route: (_) => EditProfile(),

@@ -1,3 +1,4 @@
+import 'package:event/provider/choice_chip_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -47,7 +48,10 @@ class _EditEventScreenState extends State<EditEventScreen> {
     try {
       await _event.addEvent();
       _event.clear();
+      
       Navigator.of(context).pop();
+      Provider.of<ChoiceChipProvider>(context).fetchCategory();
+
     } catch (error) {
       print(error.toString());
     }

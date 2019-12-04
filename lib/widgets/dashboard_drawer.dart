@@ -8,6 +8,7 @@ import '../screens/edit_event_screen.dart';
 import '../screens/connect_screen.dart';
 import '../provider/current_user_provider.dart';
 import '../screens/chat_contacts_screen.dart';
+import '../screens/favourite_screen.dart';
 import '../screens/user_profile.dart';
 
 class DashBoardDrawer extends StatefulWidget {
@@ -128,16 +129,29 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
               ),
               onTap: () => Navigator.of(context).pushNamed(ConnectScreen.route),
             ),
+             ListTile(
+              leading: Icon(
+                Icons.favorite,
+                color: Colors.grey,
+              ),
+              
+              title: Text(
+                "Favourites",
+              ),
+              onTap: () => Navigator.of(context).pushNamed(FavouriteScreen.route),
+            ),
             ListTile(
               leading: Icon(
                 Icons.power_settings_new,
                 color: Colors.grey,
               ),
+              
               title: Text(
                 "Log Out",
               ),
               onTap: () => _handleSignOut(context),
             ),
+           
           ],
         ),
       ),

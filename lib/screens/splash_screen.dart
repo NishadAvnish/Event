@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'dashboard.dart';
 import 'login_screen.dart';
 import '../helpers/firebase_auth.dart';

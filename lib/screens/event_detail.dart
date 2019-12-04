@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -6,6 +7,7 @@ import '../provider/event_detail_provider.dart';
 import 'user_profile.dart';
 import '../widgets/dottedBox.dart';
 import '../widgets/event_detail_speakers_listitems.dart';
+import '../provider/dash_board_provider.dart';
 
 class EventDetail extends StatefulWidget {
   static const route = "/event_screen";
@@ -22,21 +24,20 @@ class _EventDetailState extends State<EventDetail> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration(seconds:0)).then((_)=>_eventFetch());
+    
   }
+ 
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (i == 0) {
-      id = ModalRoute.of(context).settings.arguments as String;
+  void _eventFetch() async {
+    final id = ModalRoute.of(context).settings.arguments as String;
+    await Provider.of<EventDetailProvider>(context, listen: false)
+        .eventFetch(id);
 
-      Provider.of<EventDetailProvider>(context).recommandedFetch(id).then((_) {
-        i++;
-        setState(() {
-          isLoading = false;
-        });
-      });
-    }
+    if (!mounted) return;    
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -117,12 +118,34 @@ class _EventDetailState extends State<EventDetail> {
                                           MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                         Material(
+                                          color: Colors.transparent,
                                           child: IconButton(
-                                            icon: Icon(
-                                              Icons.favorite_border,
-                                              color: Colors.red,
-                                            ),
-                                            onPressed: () {},
+                                            icon: _item[0].isFavorite
+                                                ? Icon(
+                                                    Icons.favorite,
+                                                    color: Colors.red,
+                                                  )
+                                                : Icon(
+                                                    Icons.favorite_border,
+                                                    color: Colors.red,
+                                                  ),
+                                            onPressed: () {
+                                              bool _isFavourite =_item[0].isFavorite ? true : false;
+                                              _isFavourite =!_isFavourite;
+                                              Provider.of<EventDetailProvider>(context,listen: false)
+                                                  .toggleFavourite(
+                                                      _item[0].id,
+                                                      _item[0].seenBy,
+                                                      _isFavourite);
+                                              Provider.of<RecommandedProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .toggleFavourite(
+                                                      _item[0].id,
+                                                      _item[0].seenBy,
+                                                      _isFavourite,
+                                                      2);
+                                            },
                                           ),
                                         ),
                                         SizedBox(

@@ -15,6 +15,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.3.0"
+  baidu_speech_recognition:
+    dependency: "direct main"
+    description:
+      name: baidu_speech_recognition
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.4"
   boolean_selector:
     dependency: transitive
     description:
@@ -42,7 +49,7 @@ packages:
       name: cloud_firestore
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.9+5"
+    version: "0.12.10+2"
   collection:
     dependency: transitive
     description:

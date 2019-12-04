@@ -44,7 +44,7 @@ class _SeeMoreState extends State<SeeMore> {
       }
     });
     super.initState();
-  }
+  } 
 
   @override
   Widget build(BuildContext context) {

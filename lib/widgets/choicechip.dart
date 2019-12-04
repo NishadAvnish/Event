@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ChoiceChipItems extends StatefulWidget {
+  final bool isRebuildReq;
+
+  const ChoiceChipItems({Key key, this.isRebuildReq}) : super(key: key);
   @override
   _ChoiceChipItemsState createState() => _ChoiceChipItemsState();
 }
@@ -31,6 +34,8 @@ class _ChoiceChipItemsState extends State<ChoiceChipItems> {
         _isLoading = false;
       });
     }
+    
+    _isLoading=false;
   }
 
   @override
