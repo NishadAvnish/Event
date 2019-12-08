@@ -32,7 +32,6 @@ class SeeMoreItems extends StatelessWidget {
                     borderRadius: BorderRadius.circular(_width * 0.05)),
 
                 // for date and time
-
                 child: Container(
                   height: _height * 0.27,
                   width: _width,

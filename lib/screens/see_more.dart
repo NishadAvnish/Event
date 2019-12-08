@@ -51,7 +51,7 @@ class _SeeMoreState extends State<SeeMore> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () => Navigator.of(context)
-                  .pushNamed(EventDetail.route, arguments: _items[index].id),
+                  .pushNamed(EventDetail.route, arguments: {"flag":2,"id":_items[index].id}),
               child: _isLoading
                   ? Center(child: CircularProgressIndicator())
                   : SeeMoreItems(_items, index),

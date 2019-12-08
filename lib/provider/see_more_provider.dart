@@ -49,7 +49,6 @@ class SeeMoreProvider with ChangeNotifier {
 
   Future<void> fetchSeeMoreData([String getMore]) async {
     int _limit = 10;
-    print("fetchMore called, getMore : $getMore");
     List<SeeMoreModel> _tempList = [];
     Query q;
     
