@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:intl/intl.dart';
-
 import '../provider/event_detail_provider.dart';
 import 'user_profile.dart';
 import '../widgets/dottedBox.dart';
