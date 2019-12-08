@@ -77,7 +77,6 @@ class _EditEventScreenState extends State<EditEventScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("parent");
     return Scaffold(
       key: _scaffold,
       appBar: AppBar(

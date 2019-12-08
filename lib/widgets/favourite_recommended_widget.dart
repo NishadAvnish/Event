@@ -49,7 +49,7 @@ class FavouriteRecommendedItem extends StatelessWidget {
                     child: FadeInImage.assetNetwork(
                       fadeInCurve: Curves.ease,
                       fit: BoxFit.fill,
-                      placeholder: "asset/images/place.jpg",
+                      placeholder: "asset/images/pic.jpg",
                       image: _event.eventImage,
                     ),
                   ),

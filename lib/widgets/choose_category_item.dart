@@ -33,8 +33,10 @@ class _ChooseItemsState extends State<ChooseItems> {
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
-                Navigator.of(context).pushNamed(EventDetail.route,
-                    arguments: {"flag":2,"id":dashBo.categoryItems[index].id});
+                Navigator.of(context).pushNamed(EventDetail.route, arguments: {
+                  "flag": 2,
+                  "id": dashBo.categoryItems[index].id
+                });
               },
               child: Card(
                 shape: RoundedRectangleBorder(
@@ -51,11 +53,15 @@ class _ChooseItemsState extends State<ChooseItems> {
                       Positioned.fill(
                         child: Container(
                           decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(_width * 0.035),),
+                            
+                          child: ClipRRect(
                             borderRadius: BorderRadius.circular(_width * 0.035),
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                  dashBo.categoryItems[index].eventImage),
+                            child: FadeInImage.assetNetwork(
+                              fadeInCurve: Curves.ease,
+                              fit: BoxFit.fill,
+                              placeholder: "asset/images/pic.jpg",
+                              image: dashBo.categoryItems[index].eventImage,
                             ),
                           ),
                         ),

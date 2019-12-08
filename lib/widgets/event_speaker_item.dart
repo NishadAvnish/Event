@@ -32,7 +32,6 @@ class _EventSpeakerItemState extends State<EventSpeakerItem> {
   }
 
   void _updateImage() {
-    print("focus");
     if (!_imageFocusNode.hasFocus) {
       if ((!_imageController.text.startsWith('http') &&
           !_imageController.text.startsWith('https'))) {
