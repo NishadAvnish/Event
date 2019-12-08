@@ -50,7 +50,7 @@ class EventProvider with ChangeNotifier {
       "Category": _event.categories,
       "Date": _event.date,
       "Description": _event.description,
-      "seenBy":0,
+      "Seenby":0,
       "EventImages": _event.eventImageUrls,
       "creatorId": currentUser.uid,
       "place": _event.place,

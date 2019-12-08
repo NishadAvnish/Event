@@ -176,7 +176,7 @@ class _EventDetailState extends State<EventDetail> {
                               SizedBox(
                                 height: _height * 0.02,
                               ),
-                              Text("Speakers",
+                              Text("Hosts",
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline
@@ -202,7 +202,7 @@ class _EventDetailState extends State<EventDetail> {
 
                               //this is for showing about auther details
 
-                              Text("Authors",
+                              Text("Author",
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline
@@ -221,6 +221,7 @@ class _EventDetailState extends State<EventDetail> {
                                     width: _height * 0.09,
                                     decoration: BoxDecoration(
                                         shape: BoxShape.circle,
+                                        border: Border.all(color: Colors.black),
                                         image: DecorationImage(
                                             image: NetworkImage(
                                               "${_item[0].authorImageUrl}",

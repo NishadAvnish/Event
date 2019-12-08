@@ -39,7 +39,7 @@ class EventDetailProvider with ChangeNotifier {
               .document(snapShot.data["creatorId"])
               .get()
               .then((sShot) {
-              // userProfile = sShot.data["photoUrl"];
+               userProfile = sShot.data["image_url"];
           });
         } catch (e) {
           throw e;
@@ -57,7 +57,7 @@ class EventDetailProvider with ChangeNotifier {
               createrId: snapShot.data["creatorId"],
               speakerList: _tempspeakerlist,
               eventImageUrls: [...snapShot.data["EventImages"]],
-              place: "Place",
+              place:snapShot.data["Place"],
               categories: [],
               isFavorite: _checkBool(snapShot, userId),
             ));

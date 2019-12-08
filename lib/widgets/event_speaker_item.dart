@@ -78,10 +78,10 @@ class _EventSpeakerItemState extends State<EventSpeakerItem> {
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) => FocusScope.of(context)
                               .requestFocus(_imageFocusNode),
-                          validator: (value) {
+                         /* validator: (value) {
                             if (value.isEmpty) return 'Enter name.';
                             return null;
-                          },
+                          },*/
                         ),
                       ),
                     ),
@@ -103,13 +103,13 @@ class _EventSpeakerItemState extends State<EventSpeakerItem> {
                     focusNode: _imageFocusNode,
                     onFieldSubmitted: (_) =>
                         FocusScope.of(context).requestFocus(_aboutFocusNode),
-                    validator: (value) {
+                    /*validator: (value) {
                       if (value.isEmpty) return 'Enter image URL.';
                       if (!value.startsWith('http') &&
                           !value.startsWith('https'))
                         return 'Invalid URL.';
                       return null;
-                    },
+                    },*/
                   ),
                 ),
               ),
@@ -127,10 +127,10 @@ class _EventSpeakerItemState extends State<EventSpeakerItem> {
                     initialValue: widget._speaker.profile,
                     onSaved: (value) => widget._speaker.profile = value,
                     focusNode: _aboutFocusNode,
-                    validator: (value) {
-                      if (value.isEmpty) return 'Enter profile.';
+                   /* validator: (value) {
+                     if (value.isEmpty) return 'Enter profile.';
                       return null;
-                    },
+                    },*/
                   ),
                 ),
               ),

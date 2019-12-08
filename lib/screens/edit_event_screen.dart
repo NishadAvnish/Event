@@ -1,7 +1,6 @@
 import 'package:event/provider/choice_chip_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../widgets/add_event_categories.dart';
 import '../widgets/basic_event_details.dart';
 import '../widgets/event_speakers_list.dart';
@@ -30,14 +29,14 @@ class _EditEventScreenState extends State<EditEventScreen> {
       _showSnackBar("No categories added!");
       return;
     }
-    if (_event.event.eventImageUrls.isEmpty) {
+    if (_event.event.eventImageUrls.isEmpty ||_event.event.eventImageUrls.length<1) {
       _showSnackBar("No images added!");
       return;
     }
-    if (_event.event.speakerList.isEmpty) {
-      _showSnackBar("No speakers added!");
-      return;
-    }
+    // if (_event.event.speakerList.isEmpty) {
+    //   _showSnackBar("No speakers added!");
+    //   return;
+    // }
 
     _form.currentState.save();
 
@@ -50,6 +49,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
       _event.clear();
       
       Navigator.of(context).pop();
+      // for adding the category and post to dashboard choose category screen
       Provider.of<ChoiceChipProvider>(context).fetchCategory();
 
     } catch (error) {

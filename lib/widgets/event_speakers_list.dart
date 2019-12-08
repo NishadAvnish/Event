@@ -22,7 +22,7 @@ class _EventSpeakersListState extends State<EventSpeakersList> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Text(
-              "Event Speakers",
+              "Host",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             FlatButton.icon(

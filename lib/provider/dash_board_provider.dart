@@ -61,7 +61,6 @@ class RecommandedProvider with ChangeNotifier {
   }
 
   Future<void> recommandedFetch() async {
-    print("recommanded fetch");
     String userId;
     FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
       userId = user.uid;
