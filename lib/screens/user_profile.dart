@@ -1,12 +1,11 @@
+import 'package:event/provider/current_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
-
 import 'event_detail.dart';
 import 'edit_profile_screen.dart';
 import '../provider/user_profile_provider.dart';
 import '../widgets/user_profile_header.dart';
-import '../provider/current_user_provider.dart';
 
 class UserProfile extends StatefulWidget {
   static const route = "/user_profile";
@@ -17,6 +16,8 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile>{
   bool _isLoading = true;
+  String _currentUser;
+  String id;
 
   @override
   void initState() {
@@ -26,9 +27,9 @@ class _UserProfileState extends State<UserProfile>{
 
   void _init() async {
     await Future.delayed(Duration(milliseconds: 0));
-    final userId = Provider.of<CurrentUserProvider>(context, listen: false).currentUser.id;
-    await Provider.of<UserProfileProvider>(context).fetch(userId);
-
+    _currentUser=Provider.of<CurrentUserProvider>(context, listen: false).currentUser.id;
+    id=ModalRoute.of(context).settings.arguments;
+    await Provider.of<UserProfileProvider>(context).fetch(id);
     setState(() {
       _isLoading = false;
     });
@@ -46,7 +47,7 @@ class _UserProfileState extends State<UserProfile>{
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.edit),
-            onPressed: () => Navigator.of(context).pushNamed(EditProfile.route),
+            onPressed:_currentUser==id ?() => Navigator.of(context).pushNamed(EditProfile.route):null,
           ),
         ],
       ),
@@ -56,7 +57,7 @@ class _UserProfileState extends State<UserProfile>{
               child: Center(child: CircularProgressIndicator()))
           : ListView(
               children: <Widget>[
-                UserProfileHeader(),
+               _currentUser==id?UserProfileHeader():UserProfileHeader(flag: 1),
                 SizedBox(
                   height: _height * 0.01,
                 ),
@@ -103,7 +104,9 @@ class _UserProfileState extends State<UserProfile>{
                                   Navigator.of(context).pushNamed(
                                       EventDetail.route,
                                       arguments:
-                                          _items.userItem[0]?.productid[index]);
+                                          { "flag":1,
+                                            "id":_items.userItem[0]?.productid[index]
+                                          });
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(

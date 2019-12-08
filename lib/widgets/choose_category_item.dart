@@ -33,9 +33,8 @@ class _ChooseItemsState extends State<ChooseItems> {
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
-                print(dashBo.categoryItems[index].id);
                 Navigator.of(context).pushNamed(EventDetail.route,
-                    arguments: dashBo.categoryItems[index].id);
+                    arguments: {"flag":2,"id":dashBo.categoryItems[index].id});
               },
               child: Card(
                 child: Container(

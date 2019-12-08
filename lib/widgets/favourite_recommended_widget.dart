@@ -18,7 +18,7 @@ class FavouriteRecommendedItem extends StatelessWidget {
     final _width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () => Navigator.of(context)
-          .pushNamed(EventDetail.route, arguments: _event.id),
+          .pushNamed(EventDetail.route, arguments: {"flag":2,"id":_event.id}),
       child: Card(
         margin: EdgeInsets.all(2.5),
         shape: RoundedRectangleBorder(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'event_speaker_item.dart';
 import '../models/event_detail_model.dart';
 import '../provider/event_provider.dart';

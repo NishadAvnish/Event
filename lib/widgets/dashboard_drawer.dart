@@ -53,6 +53,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
     return InkWell(
       onTap: () => Navigator.of(context).pushNamed(
         UserProfile.route,
+        arguments: Provider.of<CurrentUserProvider>(context, listen: false).currentUser.id,
       ),
       child: Container(
         height: _headerHeight,

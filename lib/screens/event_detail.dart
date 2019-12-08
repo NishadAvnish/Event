@@ -19,6 +19,7 @@ class _EventDetailState extends State<EventDetail> {
   bool isLoading = true;
   String id;
   int i = 0;
+  int flag;
 
   @override
   void initState() {
@@ -29,10 +30,13 @@ class _EventDetailState extends State<EventDetail> {
  
 
   void _eventFetch() async {
-    final id = ModalRoute.of(context).settings.arguments as String;
+    final data = ModalRoute.of(context).settings.arguments as Map<String,dynamic>;
+    id=data["id"];
+    flag=data["flag"];
+     
     await Provider.of<EventDetailProvider>(context, listen: false)
         .eventFetch(id);
-
+        
     if (!mounted) return;    
     setState(() {
       isLoading = false;
@@ -213,7 +217,7 @@ class _EventDetailState extends State<EventDetail> {
                               Padding(
                                 padding: EdgeInsets.only(left: _width * 0.03),
                                 child: GestureDetector(
-                                  onTap: () => Navigator.of(context).pushNamed(
+                                  onTap:flag==1?null:() => Navigator.of(context).pushNamed(
                                       UserProfile.route,
                                       arguments: _item[0].createrId),
                                   child: Container(

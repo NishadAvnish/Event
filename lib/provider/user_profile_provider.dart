@@ -16,7 +16,7 @@ class UserProfileProvider with ChangeNotifier {
     List<String> _productId = [];
     String _userName;
     String _imageUrl;
-    String _bioData;
+    String _role;
 
     try {
       final snapshot =
@@ -25,7 +25,7 @@ class UserProfileProvider with ChangeNotifier {
       if (snapshot != null) {
         _userName = snapshot.data["full_name"];
         _imageUrl = snapshot.data["image_url"] ?? "NA";
-        _bioData = snapshot.data["role"];
+        _role = snapshot.data["role"];
       }
     } catch (e) {
       print(e);
@@ -51,7 +51,7 @@ class UserProfileProvider with ChangeNotifier {
     _userItem.insert(
       0,
       UserProfileModel(
-          _imageUrl, _userName, _bioData, _tempPostImage, _productId),
+          _imageUrl, _userName, _role, _tempPostImage, _productId),
     );
 
     notifyListeners();
