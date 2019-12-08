@@ -39,7 +39,6 @@ class ConnectProvider with ChangeNotifier {
 
   Future<void> findConnections() async {
     try {
-      print(_currentUserData.email);
       final currentUser = await Auth().getCurrentUser();
 
       final allUsersResponse = await dbRef.collection("users").getDocuments();
@@ -51,8 +50,7 @@ class ConnectProvider with ChangeNotifier {
           .getDocuments();
 
       final Map<String, ConnectionRequest> connectedConnectionRequestForId = {};
-      final Map<String, ConnectionRequest> notConnectedConnectionRequestForId =
-          {};
+      final Map<String, ConnectionRequest> notConnectedConnectionRequestForId = {};
       connectionsResponse.documents.forEach((snapshot) {
         if (snapshot.data["status"] == "CONNECTED")
           connectedConnectionRequestForId.putIfAbsent(

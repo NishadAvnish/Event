@@ -37,7 +37,7 @@ class _SeeMoreState extends State<SeeMore> {
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
-    _items = Provider.of<SeeMoreProvider>(context).seeMoreItems;
+    _items = Provider.of<SeeMoreProvider>(context).seeMoreItemsToShow;
 
     return Scaffold(
         appBar: PreferredSize(

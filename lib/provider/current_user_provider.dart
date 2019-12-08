@@ -21,6 +21,8 @@ class CurrentUserProvider with ChangeNotifier {
   Future<void> getCurrentUser() async {
     try {
       final cUser = await Auth().getCurrentUser();
+      if(cUser == null)
+        return;
 
       final response = await Firestore.instance
           .collection("users")

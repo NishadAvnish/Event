@@ -22,7 +22,7 @@ class _EventSpeakersListState extends State<EventSpeakersList> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Text(
-              "Host",
+              "Event Host",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             FlatButton.icon(
@@ -39,7 +39,7 @@ class _EventSpeakersListState extends State<EventSpeakersList> {
           ],
         ),
         Container(
-          height: 255,
+          height: 265,
           width: double.infinity,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,

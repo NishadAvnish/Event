@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+import 'package:intl/intl.dart';
 
 import '../provider/event_detail_provider.dart';
 import 'user_profile.dart';
@@ -103,7 +104,7 @@ class _EventDetailState extends State<EventDetail> {
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text(
-                                    "${DateTime.parse(_item[0].date).toString().split(".")[0]}",
+                                    "${DateFormat.yMMMd().format(DateTime.parse(_item[0].date))}",
                                     style: Theme.of(context)
                                         .textTheme
                                         .body2
@@ -176,7 +177,7 @@ class _EventDetailState extends State<EventDetail> {
                               SizedBox(
                                 height: _height * 0.02,
                               ),
-                              Text("Hosts",
+                              Text("Host",
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline

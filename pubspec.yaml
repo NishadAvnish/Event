@@ -38,6 +38,7 @@ dependencies:
   firebase_storage:
   image_picker: ^0.6.2+1
   baidu_speech_recognition: ^0.1.4
+  speech_recognition: 0.3.0+1
 
 dev_dependencies:
   flutter_test:

@@ -23,8 +23,6 @@ class EventDetailModel {
     @required this.categories,
     this.isFavorite=false,
   });
-  
-
 }
 
 

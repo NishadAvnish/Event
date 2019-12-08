@@ -1,8 +1,3 @@
-import 'package:event/provider/helper_provider.dart';
-import 'package:event/widgets/choicechip.dart';
-import 'package:event/widgets/choose_category_item.dart';
-import 'package:event/widgets/recommended_items.dart';
-import 'package:event/widgets/slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +6,8 @@ import '../widgets/dashboard_drawer.dart';
 import '../widgets/choicechip.dart';
 import '../widgets/choose_category_item.dart';
 import '../widgets/slider.dart';
+import '../provider/helper_provider.dart';
+import '../widgets/recommended_items.dart';
 
 class DashBoard extends StatefulWidget {
   static const route = "/dashboard_screen";
@@ -71,38 +68,33 @@ class _DashBoardState extends State<DashBoard> {
 
                   ChooseItems(),
 
-                  SizedBox(
-                    height: 5,
-                  ),
-
-                  //for more button
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
-                          //Navigator.of(context).pushNamed(SeeMore.route);
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SeeMore(),
-                                  maintainState: true));
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SeeMore(),
+                                maintainState: true),
+                          );
                         },
-                        child: Text(
-                          "See More",
-                          style: Theme.of(context)
-                              .textTheme
-                              .body2
-                              .copyWith(color: Colors.red),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: 8,
+                          ),
+                          child: Text(
+                            "See More",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                      ),
+                      )
                     ],
-                  ),
-
-                  //this one is for recommended horizontal listview
-                  SizedBox(
-                    height: 10,
                   ),
 
                   Text(
@@ -115,7 +107,7 @@ class _DashBoardState extends State<DashBoard> {
                   SizedBox(
                     height: 5,
                   ),
-                  RecommendedItem(isRebuildReq: isRebuildReq),
+                  RecommendedItemsList(isRebuildReq: isRebuildReq),
                 ],
               ),
             ),

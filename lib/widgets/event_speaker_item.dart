@@ -62,7 +62,7 @@ class _EventSpeakerItemState extends State<EventSpeakerItem> {
                 child: Row(
                   children: <Widget>[
                     CircleAvatar(
-                      radius: 35,
+                      radius: 40,
                       backgroundImage: widget._speaker.speakerImage.isEmpty
                           ? AssetImage("asset/images/pic2.jpg")
                           : NetworkImage(widget._speaker.speakerImage),

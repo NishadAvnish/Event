@@ -1,4 +1,3 @@
-import 'package:baidu_speech_recognition/baidu_speech_recognition.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,16 +10,6 @@ class SeeMoreAppBar extends StatefulWidget {
 
 class _SeeMoreAppBarState extends State<SeeMoreAppBar> {
   bool _searching = false;
-  BaiduSpeechRecognition _speechRecognition;
-
-  @override
-  void initState() {
-    super.initState();
-    _speechRecognition = BaiduSpeechRecognition();
-    _speechRecognition.speechRecognitionEvents.listen((data) {
-      print("listen: $data");
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,17 +47,6 @@ class _SeeMoreAppBarState extends State<SeeMoreAppBar> {
                     : SizedBox(),
                 IconButton(
                   icon: Icon(
-                    Icons.mic,
-                    color: _searching ? Colors.black : Colors.transparent,
-                  ),
-                  onPressed: () {
-                    _speechRecognition
-                        .start()
-                        .then((value) => print("start: $value"));
-                  },
-                ),
-                IconButton(
-                  icon: Icon(
                     Icons.close,
                     color: _searching ? Colors.black : Colors.transparent,
                   ),
@@ -76,9 +54,6 @@ class _SeeMoreAppBarState extends State<SeeMoreAppBar> {
                     setState(() {
                       _searching = false;
                       _seeMoreData.searchForValue("");
-                      _speechRecognition
-                          .cancel()
-                          .then((value) => print("cancel: $value"));
                     });
                   },
                 ),
@@ -97,7 +72,6 @@ class _SeeMoreAppBarState extends State<SeeMoreAppBar> {
             setState(() {
               _searching = true;
             });
-            _speechRecognition.init().then((value) => print("init: $value"));
           },
         ),
       ],

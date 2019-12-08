@@ -1,4 +1,3 @@
-import 'package:event/provider/choice_chip_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../widgets/add_event_categories.dart';
@@ -6,6 +5,7 @@ import '../widgets/basic_event_details.dart';
 import '../widgets/event_speakers_list.dart';
 import '../widgets/event_image_url_list.dart';
 import '../provider/event_provider.dart';
+import '../provider/choice_chip_provider.dart';
 
 class EditEventScreen extends StatefulWidget {
   static const route = "/edit_event_screen";

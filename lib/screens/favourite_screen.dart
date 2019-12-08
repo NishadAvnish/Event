@@ -1,7 +1,8 @@
-import 'package:event/provider/favouite_provider.dart';
-import 'package:event/widgets/favourite_recommended_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../provider/favouite_provider.dart';
+import '../widgets/favourite_recommended_widget.dart';
 
 class FavouriteScreen extends StatelessWidget {
   static const route = "/favourite_screen";
@@ -24,7 +25,8 @@ class FavouriteScreen extends StatelessWidget {
             MediaQuery.of(context).padding.top,
         width: double.infinity,
         child: FutureBuilder(
-            future: Provider.of<FavouriteProvider>(context,listen: false).getData(),
+            future: Provider.of<FavouriteProvider>(context, listen: false)
+                .getData(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting ||
                   snapshot.error != null)
@@ -32,22 +34,25 @@ class FavouriteScreen extends StatelessWidget {
                   alignment: Alignment.center,
                   child: CircularProgressIndicator(),
                 );
-              else 
-              return Consumer<FavouriteProvider>(
-                builder: (_,favProd,child)=>GridView.builder(
-                  itemCount: favProd.favouriteList.length,
-                  scrollDirection: Axis.vertical,
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 180,
-                      childAspectRatio: 2 / 2.78,
-                      mainAxisSpacing: 1,
-                      crossAxisSpacing: 1),
-                  itemBuilder: (context, index) {
-                    return recommendedFavouriteWidget(
-                        context, favProd.favouriteList[index], 3);
-                  },
-                )
-              );
+              else
+                return Consumer<FavouriteProvider>(
+                    builder: (_, favProd, child) => GridView.builder(
+                          itemCount: favProd.favouriteList.length,
+                          scrollDirection: Axis.vertical,
+                          gridDelegate:
+                              SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 180,
+                            childAspectRatio: 2 / 2.78,
+                            mainAxisSpacing: 1,
+                            crossAxisSpacing: 1,
+                          ),
+                          itemBuilder: (context, index) {
+                            return FavouriteRecommendedItem(
+                              favProd.favouriteList[index],
+                              3,
+                            );
+                          },
+                        ));
             }),
       ),
     );
