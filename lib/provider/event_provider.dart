@@ -48,6 +48,11 @@ class EventProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void removeSpeaker(SpeakersModel speaker){
+    _event.speakerList.remove(speaker);
+    notifyListeners();
+  }
+
   Future<void> addEvent() async {
     final currentUser = await Auth().getCurrentUser();
 

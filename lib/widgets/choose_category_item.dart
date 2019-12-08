@@ -37,6 +37,9 @@ class _ChooseItemsState extends State<ChooseItems> {
                     arguments: {"flag":2,"id":dashBo.categoryItems[index].id});
               },
               child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(_width * 0.035),
+                ),
                 child: Container(
                   height: _height * 0.22,
                   width: _width * 0.5,
