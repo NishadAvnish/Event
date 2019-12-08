@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import 'dashboard.dart';
 import 'login_screen.dart';
 import '../helpers/firebase_auth.dart';
+import '../provider/current_user_provider.dart';
 
 class SplashScreen extends StatefulWidget {
-
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -21,8 +20,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void _checkLogInStatus() async {
     final auth = Auth();
     final user = await auth.getCurrentUser();
+    
     if (user != null) {
       await user.reload();
+      await Provider.of<CurrentUserProvider>(context, listen: false).getCurrentUser();
+
       if (user?.uid != null && user.isEmailVerified)
         Navigator.of(context).pushReplacementNamed(DashBoard.route);
       else

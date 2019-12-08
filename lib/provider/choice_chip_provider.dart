@@ -1,70 +1,42 @@
-import 'package:event/Models/DashBoardModal.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class ChoiceItemProvider with ChangeNotifier{
-  
-  int value=0;
+class ChoiceChipProvider with ChangeNotifier {
+  int _value = 0;
   String name;
   String previousCategory;
-  
-List<String> _category=[
-   "School",
-   "Hospital",
-   "Technology",
-   "Seminar",
- ];
 
- List<String> get categoryItem{
-   return [..._category];
- }
+  List<String> _chooseCategory = [];
 
+  int get value {
+    return _value;
+  }
 
- void changeValue(value1){
-   value=value1;
-   
-   notifyListeners();
-   
+  List<String> get chooseCategoryItem {
+    return [..._chooseCategory];
+  }
+
+  void changeValue(value1) {
+    _value = value1;
+    notifyListeners();
+  }
+
+  Future<void> fetchCategory() async {
+    Set<String> _tempSet = Set();
+
+    try {
+      final snapShot = await Firestore.instance.collection("Post").getDocuments();
+      snapShot.documents.forEach((event) {
+        event.data["Category"].forEach((category) {
+          _tempSet.add(category);
+        });
+      });
+
+      _chooseCategory = _tempSet.toList();
+      notifyListeners();
+    } catch (error) {
+      print("errorrrrr... ${error.toString()}");
+      throw error;
     }
-}
-
-
-class DashBoardProvider with ChangeNotifier{
-   
-    List<String> _carouselImage=[
-      "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-      "https://images.unsplash.com/photo-1517263904808-5dc91e3e7044?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-      
-    ]; 
-
-    List<String> get carouselItem{
-      return [..._carouselImage];
-    }
-
-    
-  
-   List<DashboardDataModel> _dashdataitems=[
-     DashboardDataModel("Event1", "Avnish",DateTime.now().toString(), DateTime.now().toString(), "Delhi", "This is a test","https://images.unsplash.com/photo-1517263904808-5dc91e3e7044?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-     "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSubu9E-kenyCU50qhNJGrFZ4Afpe43-2l_az9oQXleYQ8vF-SF",) ,  
-
-     DashboardDataModel("Event1", "Avnish",DateTime.now().toString(), DateTime.now().toString(), "Delhi", "This is a test","https://images.unsplash.com/photo-1517263904808-5dc91e3e7044?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-     "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSubu9E-kenyCU50qhNJGrFZ4Afpe43-2l_az9oQXleYQ8vF-SF",) ,  
-
-     DashboardDataModel("Event1", "Avnish",DateTime.now().toString(), DateTime.now().toString(), "Delhi", "This is a test","https://images.unsplash.com/photo-1517263904808-5dc91e3e7044?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-     "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSubu9E-kenyCU50qhNJGrFZ4Afpe43-2l_az9oQXleYQ8vF-SF",) ,  
-
-     DashboardDataModel("Event1", "Avnish",DateTime.now().toString(), DateTime.now().toString(), "Delhi", "This is a test","https://images.unsplash.com/photo-1517263904808-5dc91e3e7044?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-     "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSubu9E-kenyCU50qhNJGrFZ4Afpe43-2l_az9oQXleYQ8vF-SF",) ,  
-
-     DashboardDataModel("Event1", "Avnish",DateTime.now().toString(), DateTime.now().toString(), "Delhi", "This is a test","https://images.unsplash.com/photo-1517263904808-5dc91e3e7044?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-     "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSubu9E-kenyCU50qhNJGrFZ4Afpe43-2l_az9oQXleYQ8vF-SF",) ,  
-
-     DashboardDataModel("Event1", "Avnish",DateTime.now().toString(), DateTime.now().toString(), "Delhi", "This is a test","https://images.unsplash.com/photo-1517263904808-5dc91e3e7044?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-     "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSubu9E-kenyCU50qhNJGrFZ4Afpe43-2l_az9oQXleYQ8vF-SF",) ,    
-
-   ];
-
-   List<DashboardDataModel> get dashdataItems{
-     return [..._dashdataitems];
-   }
-    
+  }
 }

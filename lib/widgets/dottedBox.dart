@@ -55,6 +55,7 @@ class _DottedBoxState extends State<DottedBox> {
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                       image: NetworkImage(
+                                        
                                         _item[0].eventImageUrls[index],
                                       ),
                                       fit: BoxFit.cover),
@@ -70,13 +71,15 @@ class _DottedBoxState extends State<DottedBox> {
                             left: _width * 0.06,
                             bottom: _width * 0.02,
                             child: LimitedBox(
-                              maxWidth: _width * 0.2, //0.2
+                              maxWidth: _width * 0.2, 
                               maxHeight: _height * 0.02,
                               child: ListView(
                                 controller:_scrollController,
                                 scrollDirection: Axis.horizontal,
                                 children: List.generate(
-                                    _item[0].eventImageUrls.length , (i) {
+                                    _item[0].eventImageUrls.length ,
+                                    
+                                     (i) {
                                   return widget.index == i
                                       ? Container(
                                           height: 10,

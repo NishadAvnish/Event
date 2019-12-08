@@ -1,67 +1,62 @@
-import 'package:event/provider/see_more_provider.dart';
-import 'package:event/widgets/seemore_items.dart';
-
-import '../provider/choice_chip_provider.dart' show DashBoardProvider;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'event_detail.dart';
-
+import '../models/see_more_model.dart';
+import '../provider/see_more_provider.dart';
+import '../widgets/seemore_items.dart';
+import '../widgets/see_more_app_bar.dart';
 
 class SeeMore extends StatefulWidget {
-  static const String route='/Seemore';
+  static const String route = '/Seemore';
   @override
   _SeeMoreState createState() => _SeeMoreState();
 }
 
 class _SeeMoreState extends State<SeeMore> {
+  ScrollController _scrollController = ScrollController();
+  List<SeeMoreModel> _items;
+  bool _isLoading = true;
+
+  _getData() {
+    Future.delayed(Duration(seconds: 0)).then((_) {
+      Provider.of<SeeMoreProvider>(context, listen: false).fetchSeeMoreData();
+    }).then((_) {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getData();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _width = MediaQuery.of(context).size.shortestSide;
-    final _height = MediaQuery.of(context).size.longestSide;
-    final _items = Provider.of<SeeMoreProvider>(context).seeMoreItems;
+    final _height = MediaQuery.of(context).size.height;
+    _items = Provider.of<SeeMoreProvider>(context).seeMoreItemsToShow;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(
-            Icons.menu,
-            color: Colors.black,
-          ),
-          iconSize: _width * 0.05,
-          onPressed: () {},
+        appBar: PreferredSize(
+          child: SeeMoreAppBar(),
+          preferredSize: Size(double.infinity, _height * 0.07),
         ),
-        title: Text(
-          "CATEGORY",
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              color: Colors.black,
-            ),
-            onPressed: () {},
-          ),
-        ],
-      ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-              child: ListView.separated(
-            itemCount: _items.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(onTap: () => Navigator.of(context)
-                              .pushNamed(EventDetail.route),child: SeeMoreItems(_items, index));
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(height: _height * 0.002);
-            },
-          )),
-        ],
-      ),
-    );
+        body: ListView.builder(
+          shrinkWrap: true,
+          controller: _scrollController,
+          itemCount: _items.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () => Navigator.of(context)
+                  .pushNamed(EventDetail.route, arguments: {"flag":2,"id":_items[index].id}),
+              child: _isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : SeeMoreItems(_items, index),
+            );
+          },
+        ));
   }
 }

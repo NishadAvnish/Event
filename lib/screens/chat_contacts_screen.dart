@@ -1,68 +1,82 @@
-import 'package:event/models/chat_contact_model.dart';
-import 'package:event/widgets/chat_contact_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/chat_contact_model.dart';
+import '../provider/current_user_provider.dart';
+import '../widgets/chat_contact_widget.dart';
 
 class ChatContactsScreen extends StatelessWidget {
-  final _chatContactsList = [
-    ChatContact(
-      id: "1",
-      imageUrl:
-          "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png",
-      name: "Name",
-      latestChat:
-          "This is the latest chat and its length is increased to check.",
-      latestChatTime: "8:30 PM",
-      isRead: true,
-    ),
-    ChatContact(
-      id: "2",
-      imageUrl:
-          "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png",
-      name: "Name",
-      latestChat:
-          "This is the latest chat and its length is increased to check.",
-      latestChatTime: "8:30 PM",
-      isRead: true,
-    ),
-    ChatContact(
-      id: "3",
-      imageUrl:
-          "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png",
-      name: "Name",
-      latestChat:
-          "This is the latest chat and its length is increased to check.",
-      latestChatTime: "8:30 PM",
-      isRead: false,
-    ),
-    ChatContact(
-      id: "4",
-      imageUrl:
-          "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png",
-      name: "Name",
-      latestChat:
-          "This is the latest chat and its length is increased to check.",
-      latestChatTime: "8:30 PM",
-      isRead: true,
-    ),
-    ChatContact(
-      id: "5",
-      imageUrl:
-          "https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png",
-      name: "Name",
-      latestChat:
-          "This is the latest chat and its length is increased to check.",
-      latestChatTime: "8:30 PM",
-      isRead: false,
-    ),
-  ];
+  static const route = "/chat_contacts_screen";
+
+  String otherUserId(Map<String, dynamic> data, String currentUserId) {
+    int index = data["is_group"] ? 0 : 1 - data["users"].indexOf(currentUserId);
+    return data["users"][index];
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ListView.builder(
-        itemCount: _chatContactsList.length,
-        itemBuilder: (_, index) => ChatContactWidget(
-          _chatContactsList[index],
+    String currentUserId =
+        Provider.of<CurrentUserProvider>(context, listen: false).currentUser.id;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Chat"),
+      ),
+      body: Container(
+        child: StreamBuilder<QuerySnapshot>(
+          stream: Firestore.instance
+              .collection('chats')
+              .where("users", arrayContains: currentUserId)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting)
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                ),
+              );
+            if (snapshot.hasError)
+              return Center(
+                child: Text("Something went wrong..."),
+              );
+
+            return ListView.builder(
+                padding: EdgeInsets.all(10.0),
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) =>
+                    StreamBuilder<DocumentSnapshot>(
+                        stream: Firestore.instance
+                            .collection("users")
+                            .document(otherUserId(
+                              snapshot.data.documents[index].data,
+                              currentUserId,
+                            ))
+                            .get()
+                            .asStream(),
+                        builder: (_, snapshot1) {
+                          if (snapshot1.connectionState == ConnectionState.waiting)
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          if (snapshot1.hasError)
+                            return Center(
+                              child: Text("Something went wrong..."),
+                            );
+                          return Column(
+                            children: <Widget>[
+                              ChatContactWidget(
+                                ChatContactModel(
+                                  id: snapshot.data.documents[index].documentID,
+                                  name: snapshot1.data.data["user_name"],
+                                  imageUrl:
+                                      snapshot1.data.data["image_url"] ?? "NA",
+                                ),
+                              ),
+                              Divider(),
+                            ],
+                          );
+                        }));
+          },
         ),
       ),
     );

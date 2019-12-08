@@ -1,16 +1,19 @@
-import 'package:event/models/chat_details_model.dart';
+import 'package:provider/provider.dart';
+
+import '../models/chat_details_model.dart';
 import 'package:flutter/material.dart';
+import '../provider/current_user_provider.dart';
 
 class ChatDetailsWidget extends StatelessWidget {
   final ChatDetails _chat;
-  final _loggedInId = "1";
 
   ChatDetailsWidget(this._chat);
 
   @override
   Widget build(BuildContext context) {
+    final currentUserId = Provider.of<CurrentUserProvider>(context,listen: false).currentUser.id;
+    final isMyChat = _chat.creatorId == currentUserId;
     final screenWidth = MediaQuery.of(context).size.width;
-    final isMyChat = _chat.creatorId == _loggedInId;
 
     return Row(
       mainAxisAlignment:

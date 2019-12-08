@@ -1,4 +1,4 @@
-import 'package:event/models/event_detial_model.dart';
+import 'package:event/models/event_detail_model.dart';
 import 'package:flutter/material.dart';
 
 class SpeakerList extends StatelessWidget {
@@ -44,13 +44,13 @@ class SpeakerList extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       "${_list1[index].speakerName}",
-                      style: Theme.of(context).textTheme.headline,
+                      style: TextStyle(fontSize: _list1[index].speakerName.length > 18 ? 10 : 20),
                     ),
                     SizedBox(
                       height: _height * 0.01,
                     ),
                     Text(
-                      "${_list1[index].about}",
+                      "${_list1[index].profile}",
                       style: Theme.of(context).textTheme.body2,
                     )
                   ],

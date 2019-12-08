@@ -2,8 +2,8 @@ import 'package:event/models/see_more_model.dart';
 import 'package:flutter/material.dart';
 
 class BottomTile extends StatelessWidget {
-  List<SeeMoreModel> _items;
-  int index;
+  final List<SeeMoreModel> _items;
+  final int index;
   BottomTile(this._items,this.index);
 
   @override
@@ -26,18 +26,9 @@ class BottomTile extends StatelessWidget {
                   ),
                   Row(
                     children: <Widget>[
-                      Container(
-                        height: _height * 0.05,
-                        width: _height * 0.05,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image:
-                                    NetworkImage(_items[index].seePersonImage),
-                                fit: BoxFit.cover)),
-                      ),
+                     
                       ChoiceChip(
-                        label: Text("+ ${_items[index].totalSeen}",
+                        label: Text("${_items[index].totalSeen} +",
                             style: Theme.of(context)
                                 .textTheme
                                 .body1

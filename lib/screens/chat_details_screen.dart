@@ -1,44 +1,79 @@
-import 'package:event/models/chat_details_model.dart';
-import 'package:event/widgets/chat_details_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class ChatDetailsScreen extends StatefulWidget {
+import '../widgets/chat_details_widget.dart';
+import '../widgets/send_new_chat_widget.dart';
+import '../models/chat_contact_model.dart';
+import '../models/chat_details_model.dart';
 
+class ChatDetailsScreen extends StatelessWidget {
   static const route = "/chat_details_screen";
 
   @override
-  _ChatDetailsScreenState createState() => _ChatDetailsScreenState();
-}
-
-class _ChatDetailsScreenState extends State<ChatDetailsScreen> {
-
-  final _chats = [
-    ChatDetails(creatorId: "1",time: "9:08 am",content: "Hi"),
-    ChatDetails(creatorId: "0",time: "9:09 am",content: "Hello"),
-    ChatDetails(creatorId: "1",time: "9:10 am",content: "How are you?"),
-    ChatDetails(creatorId: "0",time: "9:11 am",content: "Fine..."),
-    ChatDetails(creatorId: "0",time: "9:12 am",content: "What about you?"),
-    ChatDetails(creatorId: "1",time: "9:13 am",content: "Badhiya... or angrezi jhaadna band kar!"),
-    ChatDetails(creatorId: "0",time: "9:14 am",content: "*hutiye tune shuru ki thi, mar khaega bta rha hu. Kal mil tu fir batata hu tuje."),
-    ChatDetails(creatorId: "1",time: "9:15 am",content: "Hehehehehehehhehe"),
-  ];
-
-  @override
   Widget build(BuildContext context) {
+    final ChatContactModel chatContact =
+        ModalRoute.of(context).settings.arguments;
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Contact Name"),
+        title: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              CircleAvatar(
+                backgroundImage: NetworkImage(chatContact.imageUrl),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(chatContact.name),
+            ],
+          ),
+        ),
       ),
-      body: ListView.separated(
-        separatorBuilder: (_,index) => SizedBox(
-          height: 5,
-        ),
-        itemCount: _chats.length,
-        itemBuilder: (_,index) => ChatDetailsWidget(_chats[index]),
-        padding: EdgeInsets.symmetric(
-          horizontal: 8,
-          vertical: 10,
-        ),
+      body: SingleChildScrollView(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  height: height * 0.8,
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: Firestore.instance
+                          .collection("chats")
+                          .document(chatContact.id)
+                          .collection("messages")
+                          .orderBy("time")
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting)
+                          return Center(child: Text("Loading..."));
+                        if (snapshot.hasError)
+                          return Center(child: Text("An error occurred..."));
+                        return ListView.builder(
+                          reverse: true,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                          ),
+                          itemCount: snapshot.data.documents.length,
+                          itemBuilder: (_, index) => ChatDetailsWidget(
+                            ChatDetails(
+                              creatorId: snapshot
+                                  .data.documents[snapshot.data.documents.length - index - 1].data["creator_id"],
+                              content: snapshot
+                                  .data.documents[snapshot.data.documents.length - index - 1].data["message"],
+                              time: DateFormat.Hm().format(DateTime.parse(
+                                snapshot.data.documents[snapshot.data.documents.length - index - 1].data["time"],
+                              )),
+                              isAdmin: false,
+                            ),
+                          ),
+                        );
+                      }),
+                ),
+                SendNewChat(chatContact.id),
+              ]),
+        
       ),
     );
   }
