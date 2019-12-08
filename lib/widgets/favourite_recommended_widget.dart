@@ -57,7 +57,7 @@ import '../provider/dash_board_provider.dart' show RecommandedProvider;
                   children: <Widget>[
                     Text(
                         _event.eventName.length > 11
-                            ? _event.eventName.substring(0, 7) + "..."
+                            ? _event.eventName.substring(0, 5) + "..."
                             : _event.eventName,
                         style: Theme.of(context).textTheme.subtitle),
                     IconButton(
