@@ -1,11 +1,19 @@
-import 'package:event/models/dashboard_model.dart';
-import 'package:event/provider/favouite_provider.dart';
-import 'package:event/screens/event_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../provider/dash_board_provider.dart' show RecommandedProvider;
 
-  Widget recommendedFavouriteWidget(BuildContext context, DashboardDataModel _event, int flag) {
+import '../models/dashboard_model.dart';
+import '../provider/dash_board_provider.dart';
+import '../provider/favouite_provider.dart';
+import '../screens/event_detail.dart';
+
+class FavouriteRecommendedItem extends StatelessWidget {
+  final DashboardDataModel _event;
+  final int _flag;
+
+  FavouriteRecommendedItem(this._event, this._flag);
+
+  @override
+  Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
     return GestureDetector(
@@ -31,8 +39,8 @@ import '../provider/dash_board_provider.dart' show RecommandedProvider;
                     left: _height * 0.005,
                     right: _height * 0.005),
                 child: Container(
-                  height: flag == 3 ? _height * 0.15 : _height * 0.2,
-                  width: flag == 3 ? _width * 0.3 : _width * 0.4,
+                  height: _flag == 3 ? _height * 0.15 : _height * 0.2,
+                  width: _flag == 3 ? _width * 0.3 : _width * 0.4,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -56,10 +64,11 @@ import '../provider/dash_board_provider.dart' show RecommandedProvider;
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                        _event.eventName.length > 11
-                            ? _event.eventName.substring(0, 9) + "..."
-                            : _event.eventName,
-                        style: Theme.of(context).textTheme.subtitle),
+                      _event.eventName.length > 10
+                          ? _event.eventName.substring(0, 10) + "..."
+                          : _event.eventName,
+                      style: TextStyle(fontSize: _flag == 3 ? 10 : 15),
+                    ),
                     IconButton(
                       icon: _event.isfavourite
                           ? Icon(
@@ -69,7 +78,7 @@ import '../provider/dash_board_provider.dart' show RecommandedProvider;
                           : Icon(Icons.favorite_border, color: Colors.red),
                       onPressed: () {
                         //flag==3 means the parent is Favourite screen
-                        if (flag == 3) {
+                        if (_flag == 3) {
                           Provider.of<FavouriteProvider>(context)
                               .deleteDatafromList(_event.id);
                         }
@@ -77,7 +86,7 @@ import '../provider/dash_board_provider.dart' show RecommandedProvider;
                         _isFavourite = !_isFavourite;
                         Provider.of<RecommandedProvider>(context, listen: false)
                             .toggleFavourite(
-                                _event.id, _event.seenBy, _isFavourite, flag);
+                                _event.id, _event.seenBy, _isFavourite, _flag);
                       },
                     ),
                   ],
@@ -89,4 +98,4 @@ import '../provider/dash_board_provider.dart' show RecommandedProvider;
       ),
     );
   }
-
+}

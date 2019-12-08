@@ -35,9 +35,9 @@ class SeeMoreProvider with ChangeNotifier {
   void searchForValue(String value){
     _seeMoreItemsToShow.clear();
     if(value == null)
-      _seeMoreItemsToShow = seeMoreItems;
+      _seeMoreItemsToShow.addAll(seeMoreItems);
     else if(value.isEmpty)
-      _seeMoreItemsToShow = seeMoreItems;
+      _seeMoreItemsToShow.addAll(seeMoreItems);
     else{
       _seeMoreList.forEach((seeMoreItem){
         if(seeMoreItem.title.toLowerCase().contains(value.toLowerCase()) || seeMoreItem.place.toLowerCase().contains(value.toLowerCase()))

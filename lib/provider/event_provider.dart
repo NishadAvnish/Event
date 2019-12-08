@@ -43,6 +43,11 @@ class EventProvider with ChangeNotifier {
     return _event;
   }
 
+  void removeEventImage(int index){
+    _event.eventImageUrls.removeAt(index);
+    notifyListeners();
+  }
+
   Future<void> addEvent() async {
     final currentUser = await Auth().getCurrentUser();
 
@@ -50,7 +55,7 @@ class EventProvider with ChangeNotifier {
       "Category": _event.categories,
       "Date": _event.date,
       "Description": _event.description,
-      "seenBy":0,
+      "Seenby":0,
       "EventImages": _event.eventImageUrls,
       "creatorId": currentUser.uid,
       "place": _event.place,

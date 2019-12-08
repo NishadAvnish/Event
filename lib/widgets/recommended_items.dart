@@ -1,14 +1,14 @@
-import 'package:event/provider/dash_board_provider.dart';
-import 'package:event/provider/helper_provider.dart';
-import 'package:event/widgets/favourite_recommended_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RecommendedItem extends StatelessWidget {
+import '../provider/dash_board_provider.dart';
+import '../provider/helper_provider.dart';
+import 'favourite_recommended_widget.dart';
+
+class RecommendedItemsList extends StatelessWidget {
   final bool isRebuildReq;
 
-  RecommendedItem({Key key, this.isRebuildReq}) : super(key: key);
+  RecommendedItemsList({Key key, this.isRebuildReq}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class RecommendedItem extends StatelessWidget {
                   itemCount: dashbo.recommandedItems.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    return  recommendedFavouriteWidget(context,dashbo.recommandedItems[index],1);
+                    return  FavouriteRecommendedItem(dashbo.recommandedItems[index],1);
                   },
                 );
               });

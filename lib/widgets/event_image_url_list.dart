@@ -12,7 +12,7 @@ class EventImageUrlList extends StatefulWidget {
 class _EventImageUrlListState extends State<EventImageUrlList> {
   @override
   Widget build(BuildContext context) {
-    final _event = Provider.of<EventProvider>(context, listen: false).event;
+    final _event = Provider.of<EventProvider>(context).event;
 
     print("building");
     return Column(

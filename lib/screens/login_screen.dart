@@ -120,7 +120,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               _emailVerificationRequired = true;
             });
           }
-        }else
+        } else
           _showDialog("User name already in use.");
 
         setState(() {
@@ -187,168 +187,205 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(_isLoginForm ? "Log In" : "Create Account"),
+          actions: <Widget>[
+            _emailVerificationRequired
+                ? PopupMenuButton<String>(
+                    icon: Icon(Icons.more_vert),
+                    itemBuilder: (_) => [
+                      PopupMenuItem<String>(
+                        child: Text("Back to login"),
+                        value: "back_to_login",
+                      ),
+                    ],
+                    onSelected: (value) async{
+                      await _auth.signOut();
+                      setState(() {
+                        _isLoginForm = true;
+                        _emailVerificationRequired = false;
+                      });
+                    },
+                    onCanceled: (){
+                      print("on cancelled");
+                    },
+                  )
+                : SizedBox(),
+          ],
         ),
-        body: _emailVerificationRequired
-            ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      Icons.error,
-                      size: 40,
-                      color: Theme.of(context).accentColor,
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      "Please verify your email to finalize your account setup and restart the app.",
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 20),
-                    RaisedButton(
-                      child: Text("Send verification link"),
-                      onPressed: () {
-                        _currentUser.sendEmailVerification();
-                      },
-                    ),
-                  ],
-                ),
-              )
-            : Padding(
-                padding: const EdgeInsets.all(20),
-                child: Form(
-                  key: _form,
-                  child: SingleChildScrollView(
+        body: Stack(
+          children: <Widget>[
+            _emailVerificationRequired
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        CircleAvatar(
-                          child: Icon(
-                            _isLoginForm ? Icons.person : Icons.person_add,
-                            size: 100,
-                            color: Colors.white,
-                          ),
-                          backgroundColor: Theme.of(context).primaryColor,
-                          radius: 65,
+                        Icon(
+                          Icons.error,
+                          size: 40,
+                          color: Theme.of(context).accentColor,
                         ),
-                        AnimatedContainer(
-                          height: _isLoginForm ? 0 : 177,
-                          duration: Duration(milliseconds: 300),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: <Widget>[
-                                TextFormField(
-                                  decoration: InputDecoration(
-                                    labelText: "Full Name",
-                                  ),
-                                  textInputAction: TextInputAction.next,
-                                  onFieldSubmitted: (_) =>
-                                      FocusScope.of(context)
-                                          .requestFocus(_userNameFocusNode),
-                                  validator: (value) => _isLoginForm
-                                      ? null
-                                      : value.isEmpty ? "Enter name" : null,
-                                  onSaved: (value) => _newUser.fullName = value,
-                                ),
-                                TextFormField(
-                                  decoration: InputDecoration(
-                                    labelText: "Username",
-                                  ),
-                                  textInputAction: TextInputAction.next,
-                                  onFieldSubmitted: (_) =>
-                                      FocusScope.of(context)
-                                          .requestFocus(_emailFocusNode),
-                                  focusNode: _userNameFocusNode,
-                                  validator: (value) => _isLoginForm
-                                      ? null
-                                      : value.isEmpty ? "Enter username" : null,
-                                  onSaved: (value) => _newUser.userName = value,
-                                ),
-                                const SizedBox(height: 10),
-                                DropdownButtonFormField<String>(
-                                  validator: (value) => _isLoginForm
-                                      ? null
-                                      : value.isEmpty ? "Select role" : null,
-                                  value: _newUser.role,
-                                  hint: Text("Choose Role"),
-                                  onSaved: (value) => _newUser.role = value,
-                                  onChanged: (String newValue) {
-                                    setState(() {
-                                      _newUser.role = newValue;
-                                    });
-                                  },
-                                  items: ["Teacher", "Student", "Alumni"]
-                                      .map((value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                ),
-                              ],
-                            ),
-                          ),
+                        SizedBox(height: 20),
+                        Text(
+                          "Please verify your email to finalize your account setup and restart the app.",
+                          textAlign: TextAlign.center,
                         ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            labelText: "Email",
-                          ),
-                          textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (_) => FocusScope.of(context)
-                              .requestFocus(_passwordFocusNode),
-                          validator: (value) =>
-                              value.isEmpty ? "Enter email" : null,
-                          onSaved: (value) => _newUser.email = value,
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            labelText: "Password",
-                          ),
-                          obscureText: true,
-                          focusNode: _passwordFocusNode,
-                          keyboardType: TextInputType.visiblePassword,
-                          validator: (value) =>
-                              value.isEmpty ? "Enter password" : null,
-                          onSaved: (value) => _newUser.password = value,
-                        ),
-                        const SizedBox(height: 20),
-                        Container(
-                          padding: EdgeInsets.only(top: 25),
-                          width: double.infinity,
-                          child: RaisedButton(
-                            color: Theme.of(context).primaryColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Text(
-                              _isLoginForm ? "Log In" : "Sign Up",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            onPressed: _saveForm,
-                          ),
-                        ),
-                        FlatButton(
-                          child:
-                              Text(_isLoginForm ? "Create Account" : "Sign In"),
+                        SizedBox(height: 20),
+                        RaisedButton(
+                          child: Text("Send verification link"),
                           onPressed: () {
-                            setState(() {
-                              _isLoginForm = !_isLoginForm;
-                            });
+                            _currentUser.sendEmailVerification();
                           },
-                        ),
-                        GoogleSignInButton(
-                          onPressed: _handleSignIn,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(10),
-                          child: _isLoading
-                              ? Center(child: CircularProgressIndicator())
-                              : SizedBox(),
                         ),
                       ],
                     ),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Form(
+                      key: _form,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: <Widget>[
+                            CircleAvatar(
+                              child: Icon(
+                                _isLoginForm ? Icons.person : Icons.person_add,
+                                size: 100,
+                                color: Colors.white,
+                              ),
+                              backgroundColor: Theme.of(context).primaryColor,
+                              radius: 65,
+                            ),
+                            AnimatedContainer(
+                              height: _isLoginForm ? 0 : 177,
+                              duration: Duration(milliseconds: 300),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: <Widget>[
+                                    TextFormField(
+                                      decoration: InputDecoration(
+                                        labelText: "Full Name",
+                                      ),
+                                      textInputAction: TextInputAction.next,
+                                      onFieldSubmitted: (_) =>
+                                          FocusScope.of(context)
+                                              .requestFocus(_userNameFocusNode),
+                                      validator: (value) => _isLoginForm
+                                          ? null
+                                          : value.isEmpty ? "Enter name" : null,
+                                      onSaved: (value) =>
+                                          _newUser.fullName = value,
+                                    ),
+                                    TextFormField(
+                                      decoration: InputDecoration(
+                                        labelText: "Username",
+                                      ),
+                                      textInputAction: TextInputAction.next,
+                                      onFieldSubmitted: (_) =>
+                                          FocusScope.of(context)
+                                              .requestFocus(_emailFocusNode),
+                                      focusNode: _userNameFocusNode,
+                                      validator: (value) => _isLoginForm
+                                          ? null
+                                          : value.isEmpty
+                                              ? "Enter username"
+                                              : null,
+                                      onSaved: (value) =>
+                                          _newUser.userName = value,
+                                    ),
+                                    const SizedBox(height: 10),
+                                    DropdownButtonFormField<String>(
+                                      validator: (value) => _isLoginForm
+                                          ? null
+                                          : value.isEmpty
+                                              ? "Select role"
+                                              : null,
+                                      value: _newUser.role,
+                                      hint: Text("Choose Role"),
+                                      onSaved: (value) => _newUser.role = value,
+                                      onChanged: (String newValue) {
+                                        setState(() {
+                                          _newUser.role = newValue;
+                                        });
+                                      },
+                                      items: ["Teacher", "Student", "Alumni"]
+                                          .map((value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                labelText: "Email",
+                              ),
+                              textInputAction: TextInputAction.next,
+                              onFieldSubmitted: (_) => FocusScope.of(context)
+                                  .requestFocus(_passwordFocusNode),
+                              validator: (value) =>
+                                  value.isEmpty ? "Enter email" : null,
+                              onSaved: (value) => _newUser.email = value,
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                labelText: "Password",
+                              ),
+                              obscureText: true,
+                              focusNode: _passwordFocusNode,
+                              keyboardType: TextInputType.visiblePassword,
+                              validator: (value) =>
+                                  value.isEmpty ? "Enter password" : null,
+                              onSaved: (value) => _newUser.password = value,
+                            ),
+                            const SizedBox(height: 20),
+                            Container(
+                              padding: EdgeInsets.only(top: 25),
+                              width: double.infinity,
+                              child: RaisedButton(
+                                color: Theme.of(context).primaryColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Text(
+                                  _isLoginForm ? "Log In" : "Sign Up",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                onPressed: _saveForm,
+                              ),
+                            ),
+                            FlatButton(
+                              child: Text(
+                                  _isLoginForm ? "Create Account" : "Sign In"),
+                              onPressed: () {
+                                setState(() {
+                                  _isLoginForm = !_isLoginForm;
+                                });
+                              },
+                            ),
+                            GoogleSignInButton(
+                              onPressed: _handleSignIn,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
+            Positioned(
+              child: _isLoading
+                  ? Container(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      color: Colors.white.withOpacity(0.8),
+                    )
+                  : Container(),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -15,7 +15,10 @@ class SeeMoreItems extends StatelessWidget {
     final _width = MediaQuery.of(context).size.shortestSide;
     return Padding(
       padding: EdgeInsets.only(
-          left: _width * 0.02, right: _width * 0.02, top: _width * 0.02),
+        left: _width * 0.02,
+        right: _width * 0.02,
+        top: _width * 0.02,
+      ),
       child: Card(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(_width * 0.05)),
@@ -44,23 +47,30 @@ class SeeMoreItems extends StatelessWidget {
                         ),
                       ),
                       Positioned(
-                          left: _width * 0.05,
+                          left: 0,
                           bottom: _height * 0.02,
-                          child: 
-                          ConstrainedBox(
-                            constraints: BoxConstraints(maxWidth: _width*0.75),
-                            child: Text(
-                              "${_items[index].title}",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline
-                                  .copyWith(color: Colors.white),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 5,
+                              horizontal: 10,
+                            ),
+                            color: Colors.black45,
+                            child: ConstrainedBox(
+                              constraints:
+                                  BoxConstraints(maxWidth: _width * 0.75),
+                              child: Text(
+                                "${_items[index].title}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline
+                                    .copyWith(color: Colors.white),
+                              ),
                             ),
                           )),
                       Positioned(
                         left: _width * 0.04,
                         top: _height * 0.015,
-                        child: DateCard(_height, _width,index,_items),
+                        child: DateCard(_height, _width, index, _items),
                       ),
                     ],
                   ),
@@ -70,7 +80,7 @@ class SeeMoreItems extends StatelessWidget {
             Padding(
               padding:
                   EdgeInsets.only(left: _width * 0.04, right: _width * 0.06),
-              child: BottomTile(_items,index),
+              child: BottomTile(_items, index),
             )
           ],
         ),
