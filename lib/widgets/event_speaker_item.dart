@@ -1,3 +1,6 @@
+import 'package:event/provider/event_provider.dart';
+import 'package:provider/provider.dart';
+
 import '../models/event_detail_model.dart';
 import 'package:flutter/material.dart';
 
@@ -51,87 +54,104 @@ class _EventSpeakerItemState extends State<EventSpeakerItem> {
         ),
         child: Container(
           width: _screenWidth * 0.7,
-          child: Column(
+          child: Stack(
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 8,
-                  right: 8,
-                  top: 8,
-                ),
-                child: Row(
-                  children: <Widget>[
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundImage: widget._speaker.speakerImage.isEmpty
-                          ? AssetImage("asset/images/pic2.jpg")
-                          : NetworkImage(widget._speaker.speakerImage),
+              Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 8,
+                      right: 8,
+                      top: 8,
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: TextFormField(
-                          decoration: InputDecoration(labelText: 'Name'),
-                          keyboardType: TextInputType.text,
-                          initialValue: widget._speaker.speakerName,
-                          onSaved: (value) => widget._speaker.speakerName = value,
-                          textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (_) => FocusScope.of(context)
-                              .requestFocus(_imageFocusNode),
-                          validator: (value) {
-                            if (value.isEmpty) return 'Enter name.';
-                            return null;
-                          },
+                    child: Row(
+                      children: <Widget>[
+                        CircleAvatar(
+                          radius: _screenWidth * 0.1,
+                          backgroundImage:
+                              NetworkImage(widget._speaker.speakerImage),
                         ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8),
+                            child: TextFormField(
+                              decoration: InputDecoration(labelText: 'Name'),
+                              keyboardType: TextInputType.text,
+                              initialValue: widget._speaker.speakerName,
+                              onSaved: (value) =>
+                                  widget._speaker.speakerName = value,
+                              textInputAction: TextInputAction.next,
+                              onFieldSubmitted: (_) => FocusScope.of(context)
+                                  .requestFocus(_imageFocusNode),
+                              validator: (value) {
+                                if (value.isEmpty) return 'Enter name.';
+                                return null;
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 8,
+                        right: 8,
+                      ),
+                      child: TextFormField(
+                        decoration: InputDecoration(labelText: 'Image URL'),
+                        keyboardType: TextInputType.url,
+                        textInputAction: TextInputAction.next,
+                        onSaved: (value) =>
+                            widget._speaker.speakerImage = value,
+                        controller: _imageController,
+                        focusNode: _imageFocusNode,
+                        onFieldSubmitted: (_) => FocusScope.of(context)
+                            .requestFocus(_aboutFocusNode),
+                        validator: (value) {
+                          if (value.isEmpty) return 'Enter image URL.';
+                          if (!value.startsWith('http') &&
+                              !value.startsWith('https')) return 'Invalid URL.';
+                          return null;
+                        },
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 8,
+                        left: 8,
+                        bottom: 5,
+                      ),
+                      child: TextFormField(
+                        decoration: InputDecoration(labelText: 'Profile'),
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.done,
+                        initialValue: widget._speaker.profile,
+                        onSaved: (value) => widget._speaker.profile = value,
+                        focusNode: _aboutFocusNode,
+                        validator: (value) {
+                          if (value.isEmpty) return 'Enter profile.';
+                          return null;
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 8,
-                    right: 8,
+              Positioned(
+                top: 5,
+                right: 5,
+                child: InkWell(
+                  child: Icon(
+                    Icons.delete,
+                    color: Colors.red,
                   ),
-                  child: TextFormField(
-                    decoration: InputDecoration(labelText: 'Image URL'),
-                    keyboardType: TextInputType.url,
-                    textInputAction: TextInputAction.next,
-                    onSaved: (value) => widget._speaker.speakerImage = value,
-                    controller: _imageController,
-                    focusNode: _imageFocusNode,
-                    onFieldSubmitted: (_) =>
-                        FocusScope.of(context).requestFocus(_aboutFocusNode),
-                    validator: (value) {
-                      if (value.isEmpty) return 'Enter image URL.';
-                      if (!value.startsWith('http') &&
-                          !value.startsWith('https'))
-                        return 'Invalid URL.';
-                      return null;
-                    },
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    right: 8,
-                    left: 8,
-                    bottom: 5,
-                  ),
-                  child: TextFormField(
-                    decoration: InputDecoration(labelText: 'Profile'),
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.done,
-                    initialValue: widget._speaker.profile,
-                    onSaved: (value) => widget._speaker.profile = value,
-                    focusNode: _aboutFocusNode,
-                    validator: (value) {
-                      if (value.isEmpty) return 'Enter profile.';
-                      return null;
-                    },
-                  ),
+                  onTap: () =>
+                      Provider.of<EventProvider>(context, listen: false)
+                          .removeSpeaker(widget._speaker),
                 ),
               ),
             ],
