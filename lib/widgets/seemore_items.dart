@@ -50,6 +50,7 @@ class SeeMoreItems extends StatelessWidget {
                           left: 0,
                           bottom: _height * 0.02,
                           child: Container(
+                            width: _width * 0.8,
                             padding: EdgeInsets.symmetric(
                               vertical: 5,
                               horizontal: 10,
